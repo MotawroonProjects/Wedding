@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">زفاف</string>
+    <string name="name">الأسم</string>
+    <string name="email">البريد الألكترونى</string>
+    <string name="subject">العنوان</string>
+    <string name="message">الرسالة</string>
+    <string name="send">ارسال</string>
+    <string name="home">الرئيسية</string>
+    <string name="nearby">القريب</string>
+    <string name="reservation">حجوزاتى</string>
+    <string name="profile">حسابي</string>
+    <string name="logout">تسجيل خروج</string>
+    <string name="create_your_account_now">قم بانشاء حسابك الأن</string>
+    <string name="continue1">استمرار</string>
+    <string name="edit_profile">Edit Profile</string>
+    <string name="no_data_to_show">No data to show</string>
+    <string name="phone">Phone</string>
+    <string name="login">Login</string>
+    <string name="terms_and_conditions">Terms and conditions</string>
+    <string name="about_us">About us</string>
+    <string name="privacy_policy">Privacy policy</string>
+    <string name="contact_us">Contact us</string>
+    <string name="wait">Wait</string>
+    <string name="current">Current</string>
+    <string name="prev">Previous</string>
+    <string name="choose_your_language">Choose your language</string>
+    <string name="next">Next</string>
+    <string name="notifications">notifications</string>
+    <string name="sign_up">Sign up</string>
+    <string name="update">Update</string>
+    <string name="please_enter_code_sent_to">please enter code sent to</string>
+    <string name="resend">Resend</string>
+    <string name="confirm">Confirm</string>
+    <string name="confirmation_code">Confirmation code</string>
+    <string name="field_required">field required</string>
+    <string name="inv_email">invaled email</string>
+
+</resources>

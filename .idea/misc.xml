@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/android/FlutterProjects/Wedding/app/src/main/res/drawable/ic_left_arrow.xml" value="0.1125" />
+        <entry key="..\:/android/FlutterProjects/Wedding/app/src/main/res/layout/activity_main.xml" value="0.1935185185185185" />
+        <entry key="..\:/android/FlutterProjects/Wedding/app/src/main/res/layout/activity_splash.xml" value="0.20416666666666666" />
+        <entry key="..\:/android/FlutterProjects/Wedding/app/src/main/res/layout/toolbar.xml" value="0.1935185185185185" />
+        <entry key="..\:/android/Projects/Wedding/app/src/main/res/drawable/btn_change_lang.xml" value="0.2203125" />
+        <entry key="..\:/android/Projects/Wedding/app/src/main/res/drawable/ic_call.xml" value="0.2203125" />
+        <entry key="..\:/android/Projects/Wedding/app/src/main/res/drawable/ic_edit_account.xml" value="0.2203125" />
+        <entry key="..\:/android/Projects/Wedding/app/src/main/res/drawable/ic_empty_user.xml" value="0.2203125" />
+        <entry key="..\:/android/Projects/Wedding/app/src/main/res/drawable/ic_left_arrow.xml" value="0.2203125" />
+        <entry key="..\:/android/Projects/Wedding/app/src/main/res/drawable/ic_line.xml" value="0.2203125" />
+        <entry key="..\:/android/Projects/Wedding/app/src/main/res/drawable/ic_load_avatar.xml" value="0.2203125" />
+        <entry key="..\:/android/Projects/Wedding/app/src/main/res/drawable/ic_nav_home.xml" value="0.2203125" />
+        <entry key="..\:/android/Projects/Wedding/app/src/main/res/drawable/ic_search.xml" value="0.2203125" />
+        <entry key="..\:/android/Projects/Wedding/app/src/main/res/drawable/ic_subject.xml" value="0.2203125" />
+        <entry key="..\:/android/Projects/Wedding/app/src/main/res/drawable/ic_user.xml" value="0.2203125" />
+        <entry key="..\:/android/Projects/Wedding/app/src/main/res/drawable/pin_view_item.xml" value="0.2203125" />
+        <entry key="..\:/android/Projects/Wedding/app/src/main/res/drawable/small_rounded_primary.xml" value="0.2203125" />
+        <entry key="..\:/android/Projects/Wedding/app/src/main/res/drawable/small_rounded_red_strock.xml" value="0.2203125" />
+        <entry key="..\:/android/Projects/Wedding/app/src/main/res/drawable/small_stroke_white.xml" value="0.2203125" />
+        <entry key="..\:/android/Projects/Wedding/app/src/main/res/layout/activity_about_app.xml" value="0.20416666666666666" />
+        <entry key="..\:/android/Projects/Wedding/app/src/main/res/layout/activity_contact_us.xml" value="0.20102564102564102" />
+        <entry key="..\:/android/Projects/Wedding/app/src/main/res/layout/activity_home.xml" value="0.20416666666666666" />
+        <entry key="..\:/android/Projects/Wedding/app/src/main/res/layout/activity_language.xml" value="0.20102564102564102" />
+        <entry key="..\:/android/Projects/Wedding/app/src/main/res/layout/activity_login.xml" value="0.20102564102564102" />
+        <entry key="..\:/android/Projects/Wedding/app/src/main/res/layout/activity_notification.xml" value="0.22" />
+        <entry key="..\:/android/Projects/Wedding/app/src/main/res/layout/activity_splash.xml" value="0.20416666666666666" />
+        <entry key="..\:/android/Projects/Wedding/app/src/main/res/layout/activity_user_sign_up.xml" value="0.20102564102564102" />
+        <entry key="..\:/android/Projects/Wedding/app/src/main/res/layout/activity_verification_code.xml" value="0.20102564102564102" />
+        <entry key="..\:/android/Projects/Wedding/app/src/main/res/layout/fragment_home.xml" value="0.20102564102564102" />
+        <entry key="..\:/android/Projects/Wedding/app/src/main/res/layout/fragment_more.xml" value="0.20416666666666666" />
+        <entry key="..\:/android/Projects/Wedding/app/src/main/res/layout/fragment_order.xml" value="0.20102564102564102" />
+        <entry key="..\:/android/Projects/Wedding/app/src/main/res/layout/fragment_orders.xml" value="0.20416666666666666" />
+        <entry key="..\:/android/Projects/Wedding/app/src/main/res/layout/fragment_profile.xml" value="0.20102564102564102" />
+        <entry key="..\:/android/Projects/Wedding/app/src/main/res/layout/layout_not_sign_in.xml" value="0.20416666666666666" />
+        <entry key="..\:/android/Projects/Wedding/app/src/main/res/layout/layout_user_profile.xml" value="0.20416666666666666" />
+        <entry key="..\:/android/Projects/Wedding/app/src/main/res/layout/notification_row.xml" value="0.20416666666666666" />
+        <entry key="..\:/android/Projects/Wedding/app/src/main/res/layout/order_row.xml" value="0.20416666666666666" />
+        <entry key="..\:/android/Projects/Wedding/app/src/main/res/layout/place_holder_notification.xml" value="0.20416666666666666" />
+        <entry key="..\:/android/Projects/Wedding/app/src/main/res/layout/slider_row.xml" value="0.20416666666666666" />
+        <entry key="..\:/android/Projects/Wedding/app/src/main/res/layout/toolbar.xml" value="0.20416666666666666" />
+        <entry key="..\:/android/Projects/Wedding/app/src/main/res/menu/menu.xml" value="0.20102564102564102" />
+      </map>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="11" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/build/classes" />
+  </component>
+  <component name="ProjectType">
+    <option name="id" value="Android" />
+  </component>
+</project>

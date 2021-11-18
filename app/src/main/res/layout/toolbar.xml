@@ -34,6 +34,7 @@
                     android:layout_height="24dp"
                     android:src="@drawable/ic_left_arrow"
                     app:tint="@color/black"
+                    android:padding="3dp"
                     android:rotation='@{lang.equals("ar")?180:0}'
                     />
                 <TextView

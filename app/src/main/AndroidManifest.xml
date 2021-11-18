@@ -3,19 +3,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.apps.wedding">
 
-    <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission
         android:name="android.permission.WRITE_EXTERNAL_STORAGE"
         tools:ignore="ScopedStorage" />
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
-    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
-    <uses-permission android:name="android.permission.GET_TASKS" />
 
     <application
         android:name=".share.App"
@@ -27,57 +21,21 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
+        tools:ignore="AllowBackup"
         tools:targetApi="q">
-
         <activity
-            android:name=".activities_fragments.activity_notifications.NotificationActivity"
+            android:name=".uis.activity_contact_us.ContactUsActivity"
+            android:exported="true" />
+        <activity
+            android:name=".uis.activity_notification.NotificationActivity"
+            android:exported="true" />
+        <activity
+            android:name=".uis.activity_home.HomeActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan"
-            tools:ignore="Instantiatable" />
-
-
-
+            android:windowSoftInputMode="adjustPan|adjustResize" />
         <activity
-            android:name=".activities_fragments.activity_login.LoginActivity"
-            android:configChanges="orientation|screenSize|keyboardHidden"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan"
-            tools:ignore="Instantiatable" />
-        <activity
-            android:name=".activities_fragments.activity_verification_code.VerificationCodeActivity"
-            android:configChanges="orientation|screenSize|keyboardHidden"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan"
-            tools:ignore="Instantiatable" />
-
-
-        <activity
-            android:name=".activities_fragments.activity_language.LanguageActivity"
-            android:configChanges="orientation|screenSize|keyboardHidden"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan" />
-        <activity
-            android:name=".activities_fragments.activity_home.HomeActivity"
-            android:configChanges="orientation|screenSize|keyboardHidden"
-            android:windowSoftInputMode="adjustPan|adjustResize"
-            tools:ignore="Instantiatable" />
-        <activity
-            android:name=".activities_fragments.activity_about_app.AboutAppActivity"
-            android:configChanges="orientation|screenSize|keyboardHidden"
-            android:windowSoftInputMode="adjustPan|adjustResize"
-            tools:ignore="Instantiatable" />
-
-        <activity
-            android:name=".activities_fragments.activity_contactus.ContactUsActivity"
-            android:configChanges="orientation|screenSize|keyboardHidden"
-            android:windowSoftInputMode="adjustResize"
-            tools:ignore="Instantiatable" />
-
-        <activity
-            android:name=".activities_fragments.activity_splash.SplashActivity"
-            android:exported="true"
-            tools:ignore="Instantiatable">
+            android:name=".uis.activity_splash.SplashActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -85,8 +43,16 @@
             </intent-filter>
         </activity>
 
+        <uses-library
+            android:name="org.apache.http.legacy"
+            android:required="false" />
 
-
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/map_api_key" />
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
     </application>
 
 </manifest>

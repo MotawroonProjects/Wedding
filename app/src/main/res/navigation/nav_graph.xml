@@ -4,25 +4,40 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
     app:startDestination="@id/home">
+
+
     <fragment
         android:id="@+id/home"
-        android:name="com.apps.wedding.activities_fragments.activity_home.fragments.FragmentHome"
-        android:label="@string/home"
+        android:name="com.apps.wedding.uis.activity_home.fragments_home_navigaion.FragmentHome"
+        android:label=""
         tools:layout="@layout/fragment_home" />
     <fragment
         android:id="@+id/nearby"
-        android:name="com.apps.wedding.activities_fragments.activity_home.fragments.FragmentOrders"
-        android:label="@string/nearby"
+        android:name="com.apps.wedding.uis.activity_home.fragments_home_navigaion.FragmentNearby"
+        android:label=""
         tools:layout="@layout/fragment_nearby" />
     <fragment
         android:id="@+id/reservation"
-        android:name="com.apps.wedding.activities_fragments.activity_home.fragments.FragmentProfile"
-        android:label="@string/reservation"
-        tools:layout="@layout/fragment_orders" />
+        android:name="com.apps.wedding.uis.activity_home.fragments_home_navigaion.FragmentMyReservations"
+        android:label=""
+        tools:layout="@layout/fragment_my_reservations" />
     <fragment
         android:id="@+id/profile"
-        android:name="com.apps.wedding.activities_fragments.activity_home.fragments.FragmentReservation"
-        android:label="@string/profile"
+        android:name="com.apps.wedding.uis.activity_home.fragments_home_navigaion.FragmentProfile"
+        android:label=""
         tools:layout="@layout/fragment_profile" />
+    <activity
+        android:id="@+id/activity_notification"
+        android:name="com.apps.wedding.uis.activity_notification.NotificationActivity"
+        android:label=""
+        tools:layout="@layout/activity_notification"
 
+        />
+    <activity
+        android:id="@+id/activity_contact_us"
+        android:name="com.apps.wedding.uis.activity_contact_us.ContactUsActivity"
+        android:label=""
+        tools:layout="@layout/activity_contact_us"
+
+        />
 </navigation>

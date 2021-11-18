@@ -22,7 +22,7 @@
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            tools:context=".activities_fragments.activity_about_app.SignUpDelegateActivity">
+            tools:context=".uis.activity_about_app.SignUpDelegateActivity">
 
             <WebView
                 android:id="@+id/webView"

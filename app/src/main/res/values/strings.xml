@@ -1,9 +1,11 @@
 <resources>
     <string name="app_name">Wedding</string>
+    <string name="map_api_key">AIzaSyAnjvMAJEmiAv3yeCDUXWv-PboXiT_uaoQ</string>
+    <string name="search_key">AIzaSyAnjvMAJEmiAv3yeCDUXWv-PboXiT_uaoQ</string>
     <string name="name">Name</string>
     <string name="email">Email</string>
     <string name="subject">Subject</string>
-    <string name="message">Messege</string>
+    <string name="message">Message</string>
     <string name="send">Send</string>
     <string name="home">Home</string>
     <string name="nearby">Nearby</string>
@@ -34,5 +36,14 @@
     <string name="confirmation_code">Confirmation code</string>
     <string name="field_required">field required</string>
     <string name="inv_email">invaled email</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="search">Search...</string>
+    <string name="rate_app">Rate App</string>
+    <string name="settings">Settings</string>
+    <string name="change_language">Change language</string>
+    <string name="no_reservation_to_show">No reservation to show</string>
+    <string name="sorry">Sorry !</string>
+    <string name="no_notifications_to_show">No notifications to show</string>
 
 </resources>

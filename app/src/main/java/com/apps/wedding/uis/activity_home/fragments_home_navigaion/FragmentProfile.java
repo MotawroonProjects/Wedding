@@ -30,7 +30,25 @@ public class FragmentProfile extends BaseFragment {
     private void initView() {
         binding.setLang(getLang());
         binding.llContactUs.setOnClickListener(v -> {
+
             Navigation.findNavController(v).navigate(R.id.activity_contact_us);
         });
+        binding.llAbout.setOnClickListener(v -> {
+
+            navigateToFragmentApp(v,"about");
+        });
+        binding.llPrivacy.setOnClickListener(v -> {
+            navigateToFragmentApp(v,"policy");
+        });
+        binding.llTerms.setOnClickListener(v -> {
+            navigateToFragmentApp(v,"terms");
+        });
+    }
+
+    private void navigateToFragmentApp(View v ,String type) {
+        Bundle bundle = new Bundle();
+        bundle.putString("data",type);
+        Navigation.findNavController(v).navigate(R.id.appFragment,bundle);
+
     }
 }

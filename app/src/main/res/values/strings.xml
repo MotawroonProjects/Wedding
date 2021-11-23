@@ -45,5 +45,6 @@
     <string name="no_reservation_to_show">No reservation to show</string>
     <string name="sorry">Sorry !</string>
     <string name="no_notifications_to_show">No notifications to show</string>
+    <string name="map_key" />
 
 </resources>

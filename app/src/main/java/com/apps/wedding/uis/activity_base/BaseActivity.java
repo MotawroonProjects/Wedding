@@ -22,6 +22,7 @@ public class BaseActivity extends AppCompatActivity {
     public static final String READ_REQ = Manifest.permission.READ_EXTERNAL_STORAGE;
     public static final String WRITE_REQ = Manifest.permission.WRITE_EXTERNAL_STORAGE;
     public static final String CAM_REQ = Manifest.permission.CAMERA;
+    public static final String fineLocPerm = Manifest.permission.ACCESS_FINE_LOCATION;
 
 
     @Override

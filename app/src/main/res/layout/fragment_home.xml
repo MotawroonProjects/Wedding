@@ -6,7 +6,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/gray9"
+        android:background="@color/gray13"
         android:orientation="vertical">
 
         <com.google.android.material.appbar.AppBarLayout
@@ -42,7 +42,7 @@
                             android:layout_height="24dp"
                             android:padding="2dp"
                             android:src="@drawable/ic_search"
-                            app:tint="@color/gray5" />
+                            app:tint="@color/white" />
 
                         <androidx.legacy.widget.Space
                             android:layout_width="12dp"
@@ -52,7 +52,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/search"
-                            android:textColor="@color/gray5"
+                            android:textColor="@color/white"
                             android:textSize="15sp" />
                     </LinearLayout>
 
@@ -88,11 +88,13 @@
                 android:orientation="vertical">
 
                 <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recViewCategory"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="3dp" />
 
                 <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recViewHall"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginTop="3dp" />

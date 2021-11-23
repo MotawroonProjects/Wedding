@@ -26,6 +26,13 @@
         android:name="com.apps.wedding.uis.activity_home.fragments_home_navigaion.FragmentProfile"
         android:label=""
         tools:layout="@layout/fragment_profile" />
+
+    <fragment
+        android:id="@+id/appFragment"
+        android:name="com.apps.wedding.uis.activity_home.fragments.AppFragment"
+        android:label=""
+        tools:layout="@layout/fragment_app" />
+
     <activity
         android:id="@+id/activity_notification"
         android:name="com.apps.wedding.uis.activity_notification.NotificationActivity"
@@ -40,4 +47,5 @@
         tools:layout="@layout/activity_contact_us"
 
         />
+
 </navigation>

@@ -44,5 +44,6 @@
     <string name="no_reservation_to_show">لا توجد حجوزات لعرضها</string>
     <string name="sorry">عفوا !</string>
     <string name="no_notifications_to_show">لا توجد إشعارات لعرضها</string>
+    <string name="map_key" />
 
 </resources>

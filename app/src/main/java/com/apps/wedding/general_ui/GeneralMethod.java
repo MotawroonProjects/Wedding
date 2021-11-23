@@ -1,4 +1,4 @@
-package com.apps.wedding;
+package com.apps.wedding.general_ui;
 
 import android.net.Uri;
 import android.view.View;

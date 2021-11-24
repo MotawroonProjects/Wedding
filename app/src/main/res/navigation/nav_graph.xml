@@ -47,5 +47,10 @@
         tools:layout="@layout/activity_contact_us"
 
         />
+    <fragment
+        android:id="@+id/serviceDetqailsFragment"
+        android:name="com.apps.wedding.uis.activity_home.fragments_home_navigaion.ServiceDetailsFragment"
+        android:label="fragment_service_detqails"
+        tools:layout="@layout/fragment_service_details" />
 
 </navigation>

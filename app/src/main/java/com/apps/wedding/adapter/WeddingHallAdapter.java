@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.apps.wedding.R;
 import com.apps.wedding.databinding.WeddingHallRowBinding;
+import com.apps.wedding.model.DepartmentModel;
 import com.apps.wedding.model.WeddingHallModel;
 
 import java.util.List;
@@ -23,8 +24,7 @@ public class WeddingHallAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     private AppCompatActivity appCompatActivity;
 
 
-    public WeddingHallAdapter(List<WeddingHallModel> list, Context context) {
-        this.list = list;
+    public WeddingHallAdapter(Context context) {
         this.context = context;
         inflater = LayoutInflater.from(context);
         appCompatActivity = (AppCompatActivity) context;
@@ -51,7 +51,11 @@ public class WeddingHallAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     @Override
     public int getItemCount() {
-        return 8;
+        if (list!=null){
+         return list.size();
+        }else {
+            return 8;
+        }
     }
 
     public static class MyHolder extends RecyclerView.ViewHolder {
@@ -62,6 +66,11 @@ public class WeddingHallAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             this.binding = binding;
 
         }
+    }
+
+    public void updateList(List<WeddingHallModel> list){
+        this.list=list;
+        notifyDataSetChanged();
     }
 
 }

@@ -25,8 +25,7 @@ public class WeddingHallDepartmentAdapter extends RecyclerView.Adapter<RecyclerV
     private AppCompatActivity appCompatActivity;
 
 
-    public WeddingHallDepartmentAdapter(List<DepartmentModel> list, Context context) {
-        this.list = list;
+    public WeddingHallDepartmentAdapter(Context context) {
         this.context = context;
         inflater = LayoutInflater.from(context);
         appCompatActivity = (AppCompatActivity) context;
@@ -53,7 +52,11 @@ public class WeddingHallDepartmentAdapter extends RecyclerView.Adapter<RecyclerV
 
     @Override
     public int getItemCount() {
-        return 8;
+        if (list!=null){
+            return list.size();
+        }else {
+            return 8;
+        }
     }
 
     public static class MyHolder extends RecyclerView.ViewHolder {
@@ -66,4 +69,8 @@ public class WeddingHallDepartmentAdapter extends RecyclerView.Adapter<RecyclerV
         }
     }
 
+    public void updateList(List<DepartmentModel> list){
+        this.list = list;
+        notifyDataSetChanged();
+    }
 }

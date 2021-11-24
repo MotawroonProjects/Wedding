@@ -9,14 +9,18 @@
         <entry key="..\:/Users/Arb Develpor/Desktop/emad/Projects/Wedding/app/src/main/res/drawable/ic_language.xml" value="0.2203125" />
         <entry key="..\:/Users/Arb Develpor/Desktop/emad/Projects/Wedding/app/src/main/res/drawable/ic_mask_group_3.xml" value="0.2203125" />
         <entry key="..\:/Users/Arb Develpor/Desktop/emad/Projects/Wedding/app/src/main/res/drawable/ic_rate.xml" value="0.2203125" />
+        <entry key="..\:/Users/Arb Develpor/Desktop/emad/Projects/Wedding/app/src/main/res/drawable/ic_start_fill.xml" value="0.2203125" />
         <entry key="..\:/Users/Arb Develpor/Desktop/emad/Projects/Wedding/app/src/main/res/drawable/line.xml" value="0.2203125" />
         <entry key="..\:/Users/Arb Develpor/Desktop/emad/Projects/Wedding/app/src/main/res/drawable/pin_view_item.xml" value="0.2203125" />
         <entry key="..\:/Users/Arb Develpor/Desktop/emad/Projects/Wedding/app/src/main/res/drawable/rounded_colo1.xml" value="0.2203125" />
         <entry key="..\:/Users/Arb Develpor/Desktop/emad/Projects/Wedding/app/src/main/res/drawable/rounded_color1.xml" value="0.2203125" />
         <entry key="..\:/Users/Arb Develpor/Desktop/emad/Projects/Wedding/app/src/main/res/drawable/rounded_primary.xml" value="0.2203125" />
+        <entry key="..\:/Users/Arb Develpor/Desktop/emad/Projects/Wedding/app/src/main/res/drawable/rounded_top.xml" value="0.2203125" />
         <entry key="..\:/Users/Arb Develpor/Desktop/emad/Projects/Wedding/app/src/main/res/drawable/smakk_rounded_primary.xml" value="0.2203125" />
         <entry key="..\:/Users/Arb Develpor/Desktop/emad/Projects/Wedding/app/src/main/res/drawable/small_rounded_primary.xml" value="0.2203125" />
         <entry key="..\:/Users/Arb Develpor/Desktop/emad/Projects/Wedding/app/src/main/res/drawable/small_stroke_white.xml" value="0.1125" />
+        <entry key="..\:/Users/Arb Develpor/Desktop/emad/Projects/Wedding/app/src/main/res/drawable/stroke_fill_color2.xml" value="0.2203125" />
+        <entry key="..\:/Users/Arb Develpor/Desktop/emad/Projects/Wedding/app/src/main/res/drawable/stroke_gray.xml" value="0.2203125" />
         <entry key="..\:/Users/Arb Develpor/Desktop/emad/Projects/Wedding/app/src/main/res/layout/activity_about_app.xml" value="0.20416666666666666" />
         <entry key="..\:/Users/Arb Develpor/Desktop/emad/Projects/Wedding/app/src/main/res/layout/activity_contact_us.xml" value="0.20416666666666666" />
         <entry key="..\:/Users/Arb Develpor/Desktop/emad/Projects/Wedding/app/src/main/res/layout/activity_home.xml" value="0.22" />
@@ -24,7 +28,9 @@
         <entry key="..\:/Users/Arb Develpor/Desktop/emad/Projects/Wedding/app/src/main/res/layout/activity_login.xml" value="0.20416666666666666" />
         <entry key="..\:/Users/Arb Develpor/Desktop/emad/Projects/Wedding/app/src/main/res/layout/activity_notification.xml" value="0.20416666666666666" />
         <entry key="..\:/Users/Arb Develpor/Desktop/emad/Projects/Wedding/app/src/main/res/layout/activity_splash.xml" value="0.20416666666666666" />
+        <entry key="..\:/Users/Arb Develpor/Desktop/emad/Projects/Wedding/app/src/main/res/layout/bottom_sheet_dialog.xml" value="0.45180722891566266" />
         <entry key="..\:/Users/Arb Develpor/Desktop/emad/Projects/Wedding/app/src/main/res/layout/category_row.xml" value="0.20416666666666666" />
+        <entry key="..\:/Users/Arb Develpor/Desktop/emad/Projects/Wedding/app/src/main/res/layout/filter_rate_row.xml" value="0.67" />
         <entry key="..\:/Users/Arb Develpor/Desktop/emad/Projects/Wedding/app/src/main/res/layout/fragment_app.xml" value="0.20416666666666666" />
         <entry key="..\:/Users/Arb Develpor/Desktop/emad/Projects/Wedding/app/src/main/res/layout/fragment_current_reservation.xml" value="0.19010416666666666" />
         <entry key="..\:/Users/Arb Develpor/Desktop/emad/Projects/Wedding/app/src/main/res/layout/fragment_home.xml" value="0.20416666666666666" />

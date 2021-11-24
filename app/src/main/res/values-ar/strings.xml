@@ -45,5 +45,9 @@
     <string name="sorry">عفوا !</string>
     <string name="no_notifications_to_show">لا توجد إشعارات لعرضها</string>
     <string name="map_key" />
+    <string name="filter">تصفية</string>
+    <string name="rating">التقييم</string>
+    <string name="price">السعر</string>
+    <string name="show_results">عرض النتائج</string>
 
 </resources>

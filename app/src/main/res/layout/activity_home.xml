@@ -94,6 +94,8 @@
             app:itemIconTint="@drawable/bottom_nav_item_bg"
             app:itemTextColor="@drawable/bottom_nav_item_bg"
             />
+
+
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 </layout>

@@ -22,6 +22,7 @@ import com.apps.wedding.R;
 import com.apps.wedding.model.LocationModel;
 import com.apps.wedding.model.PlaceGeocodeData;
 import com.apps.wedding.remote.Api;
+import com.apps.wedding.uis.activity_home.HomeActivity;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
@@ -131,7 +132,7 @@ public class FragmentNearMvvm extends AndroidViewModel implements GoogleApiClien
 
                 case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
                     try {
-                        AppCompatActivity activity = (AppCompatActivity) context;
+                        HomeActivity activity = (HomeActivity) context;
                         status.startResolutionForResult(activity, 100);
                     } catch (IntentSender.SendIntentException e) {
                         e.printStackTrace();

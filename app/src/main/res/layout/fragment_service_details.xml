@@ -4,16 +4,351 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-        <variable
-            name="lang"
-            type="String" />
+
 
     </data>
+
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/gray13"
+        android:background="@color/gray15"
         android:fillViewport="true">
 
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <androidx.viewpager.widget.ViewPager
+                android:id="@+id/pager"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.google.android.material.tabs.TabLayout
+                android:layout_width="0dp"
+                android:layout_height="5dp"
+                android:layout_marginBottom="30dp"
+                android:maxWidth="8dp"
+                app:layout_constraintBottom_toBottomOf="@id/pager"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:tabBackground="@drawable/tab_gallery_indicator"
+                app:tabGravity="start"
+                app:tabIndicatorHeight="0dp"
+                app:tabMode="scrollable" />
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="-16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="16dp"
+                app:cardCornerRadius="5dp"
+                app:cardElevation="2dp"
+                app:contentPadding="8dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/pager">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+
+                    >
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:orientation="horizontal">
+
+                        <androidx.legacy.widget.Space
+                            android:layout_width="65dp"
+                            android:layout_height="0dp" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:ellipsize="end"
+                            android:gravity="start"
+                            android:maxLines="2"
+                            android:text="قاعة الماسة"
+                            android:textAlignment="viewStart"
+                            android:textColor="@color/black"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:ellipsize="end"
+                            android:text="(36)"
+                            android:textColor="@color/gray2"
+                            android:textSize="12sp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="3dp"
+                            android:layout_marginEnd="3dp"
+                            android:ellipsize="end"
+                            android:text="5.0"
+                            android:textColor="@color/black"
+                            android:textSize="14sp"
+                            android:textStyle="bold" />
+
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:padding="3dp"
+                            android:src="@drawable/ic_star" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp">
+
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:padding="3dp"
+                            android:src="@drawable/ic_pin" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:ellipsize="end"
+                            android:gravity="start"
+                            android:text="شبين الكوم / امام نقابة المهندسين"
+                            android:textAlignment="viewStart"
+                            android:textColor="@color/gray2"
+                            android:textSize="14sp" />
+                    </LinearLayout>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_margin="8dp"
+                app:cardBackgroundColor="@color/white"
+                app:cardCornerRadius="30dp"
+                app:cardElevation="3dp"
+                app:contentPadding="1dp"
+                app:layout_constraintBottom_toTopOf="@id/cardView"
+                app:layout_constraintStart_toStartOf="@id/cardView"
+                app:layout_constraintTop_toTopOf="@id/cardView">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/circle_avatar" />
+
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardOffer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                app:contentPadding="2dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/cardView">
+
+                <LinearLayout
+                    android:id="@+id/llOffer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+
+                    >
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="130dp"
+                        android:background="@color/gray9" />
+
+                    <LinearLayout
+                        android:id="@+id/llMore"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="5dp"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="28dp"
+                            android:layout_height="28dp"
+                            android:background="@drawable/stroke_gray"
+                            android:padding="4dp"
+                            android:src="@drawable/ic_arrow_down"
+                            app:tint="@color/colorPrimary" />
+
+                        <androidx.legacy.widget.Space
+                            android:layout_width="5dp"
+                            android:layout_height="0dp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/more"
+                            android:textColor="@color/colorPrimary"
+                            android:textSize="14sp" />
+                    </LinearLayout>
+
+                    <net.cachapa.expandablelayout.ExpandableLayout
+                        android:id="@+id/expandedLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        app:el_duration="300"
+                        app:el_expanded="false"
+                        app:el_parallax=".5">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:ellipsize="end"
+                                android:padding="12dp"
+                                android:text="قاعة مكيفة الهواء - تجهيزات فنية دى جى - وحدة ميكسر - 2 جهاز ووش ليد - وحدة ليزر - كوشة فندقية - البوم 8 صور للعروسين"
+                                android:textColor="@color/gray2"
+                                android:textSize="14sp" />
+                        </LinearLayout>
+                    </net.cachapa.expandablelayout.ExpandableLayout>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardVideo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+
+                app:contentPadding="2dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/cardDetails">
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    >
+                   <!-- <ImageView
+                        android:id="@+id/imageVideo"
+                        android:layout_width="match_parent"
+                        android:layout_height="140dp"
+                        android:background="@color/black"
+                        />
+                    <ImageView
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:src="@drawable/ic_play"
+                        android:layout_gravity="center"
+                        app:tint="@color/white"
+                        android:padding="8dp"
+                        android:alpha=".5"
+                        />
+
+-->
+                    <com.google.android.exoplayer2.ui.StyledPlayerView
+                        android:id="@+id/exoPlayer"
+                        android:layout_width="match_parent"
+                        android:layout_height="200dp"
+                        app:layout_constraintStart_toStartOf="@id/cardView"
+                        app:layout_constraintEnd_toEndOf="@id/cardVideo"
+                        app:layout_constraintTop_toTopOf="@id/cardVideo"
+                        app:layout_constraintBottom_toBottomOf="@id/cardVideo"
+                        app:hide_on_touch="true"
+                        app:use_controller="true"
+                        app:buffered_color="@color/gray2"
+                        app:played_color="@color/colorPrimary"
+                        app:scrubber_color="@color/colorPrimary"
+                        android:visibility="visible"
+                        app:show_buffering="always"
+                        app:show_shuffle_button="false"
+                        app:bar_height="5dp"
+
+                        />
+
+                </FrameLayout>
+
+
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardDetails"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                app:contentPadding="2dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/cardOffer">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="8dp"
+                    >
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/black"
+                        android:textStyle="bold"
+                        android:textSize="16sp"
+                        android:text="@string/details"
+                        />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/gray2"
+                        android:textSize="14sp"
+                        android:text="قاعة مكيفة الهواء - تجهيزات فنية دى جى - وحدة ميكسر - 2 جهاز ووش ليد - وحدة ليزر - كوشة فندقية - البوم 8 صور للعروسين"
+                        android:layout_marginTop="12dp"
+                        />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:minWidth="120dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/cardVideo"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
+                android:textColor="@color/white"
+                android:background="@drawable/rounded_primary"
+                android:text="@string/book_now"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                />
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
 </layout>

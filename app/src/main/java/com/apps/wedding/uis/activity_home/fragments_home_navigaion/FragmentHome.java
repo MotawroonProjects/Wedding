@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.util.Log;
@@ -46,7 +47,6 @@ public class FragmentHome extends BaseFragment {
     private float startRange = 0.0f;
     private float endRange = 100000.0f;
     private float steps = 500.0f;
-    private FilterRangeModel model;
     private FilterRangeModel filterRangeModel;
 
     @Override
@@ -77,7 +77,7 @@ public class FragmentHome extends BaseFragment {
         binding.recViewCategory.setAdapter(weddingHallDepartmentAdapter);
 
         binding.recViewHall.setLayoutManager(new LinearLayoutManager(activity));
-        weddingHallAdapter = new WeddingHallAdapter(activity);
+        weddingHallAdapter = new WeddingHallAdapter(activity,this);
         binding.recViewHall.setAdapter(weddingHallAdapter);
         binding.imageFilter.setOnClickListener(v -> {
             createSheetDialog();
@@ -90,12 +90,15 @@ public class FragmentHome extends BaseFragment {
         filterRangeModel = fragmentHomeMvvm.getFilterRange().getValue();
         if (filterRangeModel==null){
             filterRangeModel = new FilterRangeModel(startRange,endRange);
+
         }
-        model = fragmentHomeMvvm.getFilterRange().getValue();
-        if (model == null) {
-            model = new FilterRangeModel(startRange, endRange);
-            fragmentHomeMvvm.updateFilterRange(model);
+        fragmentHomeMvvm.updateFilterRange(filterRangeModel);
+
+        FilterModel filterModel = fragmentHomeMvvm.getFilter().getValue();
+        if (filterModel==null){
+            filterModel = new FilterModel("all", filterRangeModel.getFromValue()+"", filterRangeModel.getToValue()+"","1");
         }
+        fragmentHomeMvvm.updateFilter(filterModel);
 
     }
 
@@ -106,7 +109,7 @@ public class FragmentHome extends BaseFragment {
         BottomSheetDialog dialog = new BottomSheetDialog(activity);
         BottomSheetDialogBinding binding = DataBindingUtil.inflate(LayoutInflater.from(activity), R.layout.bottom_sheet_dialog, null, false);
         dialog.setContentView(binding.getRoot());
-        binding.slider.setValues(model.getFromValue(), model.getToValue());
+        binding.slider.setValues(filterRangeModel.getFromValue(), filterRangeModel.getToValue());
         binding.slider.setValueFrom(startRange);
         binding.slider.setValueTo(endRange);
         binding.slider.setStepSize(steps);
@@ -133,7 +136,7 @@ public class FragmentHome extends BaseFragment {
 
 
         fragmentHomeMvvm.getFilterModelList().observe(activity, filterRateModels -> {
-            model.setRate(fragmentHomeMvvm.getFilterRateModel().getValue().getTitle());
+            filterRangeModel.setRate(fragmentHomeMvvm.getFilterRateModel().getValue().getTitle());
             rateFilterAdapter.updateData(fragmentHomeMvvm.getFilterModelList().getValue());
 
         });
@@ -153,5 +156,9 @@ public class FragmentHome extends BaseFragment {
 
     public void updateFilterRate(FilterRateModel model) {
         fragmentHomeMvvm.updateFilterRateModel(model);
+    }
+
+    public void setItemWeddingDetails(String s) {
+        Navigation.findNavController(binding.getRoot()).navigate(R.id.serviceDetailsFragment);
     }
 }

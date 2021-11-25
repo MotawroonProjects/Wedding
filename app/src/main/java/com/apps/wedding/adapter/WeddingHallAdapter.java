@@ -5,14 +5,14 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.apps.wedding.R;
 import com.apps.wedding.databinding.WeddingHallRowBinding;
-import com.apps.wedding.model.DepartmentModel;
 import com.apps.wedding.model.WeddingHallModel;
+import com.apps.wedding.uis.activity_home.fragments_home_navigaion.FragmentHome;
 
 import java.util.List;
 
@@ -21,13 +21,13 @@ public class WeddingHallAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     private List<WeddingHallModel> list;
     private Context context;
     private LayoutInflater inflater;
-    private AppCompatActivity appCompatActivity;
+    private Fragment fragment;
 
 
-    public WeddingHallAdapter(Context context) {
+    public WeddingHallAdapter(Context context,Fragment fragment) {
         this.context = context;
         inflater = LayoutInflater.from(context);
-        appCompatActivity = (AppCompatActivity) context;
+        this.fragment = fragment;
     }
 
     @androidx.annotation.NonNull
@@ -45,7 +45,12 @@ public class WeddingHallAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     public void onBindViewHolder(@androidx.annotation.NonNull RecyclerView.ViewHolder holder, int position) {
 
         MyHolder myHolder = (MyHolder) holder;
-
+        myHolder.itemView.setOnClickListener(v -> {
+            if (fragment instanceof FragmentHome){
+                FragmentHome fragmentHome = (FragmentHome) fragment;
+                fragmentHome.setItemWeddingDetails("");
+            }
+        });
 
     }
 

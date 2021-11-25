@@ -49,5 +49,8 @@
     <string name="rating">التقييم</string>
     <string name="price">السعر</string>
     <string name="show_results">عرض النتائج</string>
+    <string name="more">المزيد</string>
+    <string name="details">التفاصيل</string>
+    <string name="book_now">إحجز الان</string>
 
 </resources>

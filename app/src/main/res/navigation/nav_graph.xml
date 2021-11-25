@@ -48,9 +48,9 @@
 
         />
     <fragment
-        android:id="@+id/serviceDetqailsFragment"
-        android:name="com.apps.wedding.uis.activity_home.fragments_home_navigaion.ServiceDetailsFragment"
-        android:label="fragment_service_detqails"
+        android:id="@+id/serviceDetailsFragment"
+        android:name="com.apps.wedding.uis.activity_home.fragments.ServiceDetailsFragment"
+        android:label=""
         tools:layout="@layout/fragment_service_details" />
 
 </navigation>

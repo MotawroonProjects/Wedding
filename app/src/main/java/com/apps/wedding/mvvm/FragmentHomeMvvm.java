@@ -94,6 +94,13 @@ public class FragmentHomeMvvm extends AndroidViewModel {
         return filter;
     }
 
+    public void updateFilter(FilterModel filterModel) {
+        if (filter == null) {
+            filter = new MutableLiveData<>();
+        }
+        filter.setValue(filterModel);
+    }
+
     @SuppressLint("CheckResult")
     public LiveData<List<FilterRateModel>> getFilterModelList() {
         if (filterModelListLiveData == null) {

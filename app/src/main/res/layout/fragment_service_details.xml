@@ -15,6 +15,5 @@
         android:background="@color/gray13"
         android:fillViewport="true">
 
-
     </androidx.core.widget.NestedScrollView>
 </layout>

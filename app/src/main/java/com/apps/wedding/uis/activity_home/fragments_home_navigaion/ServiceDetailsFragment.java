@@ -24,6 +24,7 @@ public class ServiceDetailsFragment extends BaseFragment {
         return binding.getRoot();
     }
 
+
     private void initView() {
         binding.setLang(getLang());
 

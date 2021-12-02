@@ -1,5 +1,6 @@
 package com.apps.wedding.uis.activity_home.fragments;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
@@ -7,8 +8,10 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
 
+import android.system.Os;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -16,8 +19,14 @@ import com.apps.wedding.R;
 import com.apps.wedding.databinding.FragmentServiceDetailsBinding;
 import com.apps.wedding.uis.activity_base.BaseFragment;
 import com.apps.wedding.uis.activity_home.HomeActivity;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.bitmap_recycle.BitmapPool;
+import com.bumptech.glide.load.resource.bitmap.VideoBitmapDecoder;
+import com.bumptech.glide.request.RequestOptions;
 import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.MediaItem;
+import com.google.android.exoplayer2.PlaybackException;
+import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
 import com.google.android.exoplayer2.source.DefaultMediaSourceFactory;
@@ -36,6 +45,8 @@ import com.google.android.exoplayer2.upstream.DefaultDataSource;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSource;
 import com.google.android.exoplayer2.upstream.HttpDataSource;
+import com.google.android.exoplayer2.util.Util;
+import com.google.firebase.installations.Utils;
 
 import java.net.CookiePolicy;
 
@@ -57,9 +68,11 @@ public class ServiceDetailsFragment extends BaseFragment {
     private FragmentServiceDetailsBinding binding;
     private ExoPlayer player;
     private DataSource.Factory dataSourceFactory;
-    private HttpDataSource httpDataSourceFactory;
     private DefaultTrackSelector trackSelector;
     private CompositeDisposable disposable = new CompositeDisposable();
+    private boolean isInFullScreen = false;
+
+
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
@@ -77,91 +90,144 @@ public class ServiceDetailsFragment extends BaseFragment {
 
     private void initView() {
 
-        setupPlayer();
+
+        getVideoImage();
+        binding.flVideo.setOnClickListener(v -> {
+            isInFullScreen = true;
+            binding.motionLayout.transitionToEnd();
+            if (player != null) {
+                player.setPlayWhenReady(true);
+            }
 
 
+        });
     }
 
+    private void getVideoImage() {
+        int microSecond = 6000000;// 6th second as an example
+        Uri uri = Uri.parse("https://media.geeksforgeeks.org/wp-content/uploads/20201217163353/Screenrecorder-2020-12-17-16-32-03-350.mp4");
+        RequestOptions options = new RequestOptions().frame(microSecond);
+
+
+        Glide.with(activity).asBitmap()
+                .load(uri)
+                .apply(options)
+                .into(binding.imageVideo);
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
     private void setupPlayer() {
-        Observable.empty()
-                .flatMap(o -> {
-                    Observable observable = Observable.empty();
-                    observable.subscribeOn(Schedulers.io());
-                    observable.observeOn(Schedulers.io());
-                    observable.subscribe(new Observer() {
-                        @Override
-                        public void onSubscribe(@NonNull Disposable d) {
-                            disposable.add(d);
-                        }
-
-                        @Override
-                        public void onNext(@NonNull Object o) {
-
-                        }
-
-                        @Override
-                        public void onError(@NonNull Throwable e) {
-
-                        }
-
-                        @Override
-                        public void onComplete() {
-                            Log.e("d","f");
-                            trackSelector = new DefaultTrackSelector(activity);
-                            dataSourceFactory = new DefaultDataSource.Factory(activity);
-                            MediaItem mediaItem = MediaItem.fromUri(Uri.parse("https://media.geeksforgeeks.org/wp-content/uploads/20201217163353/Screenrecorder-2020-12-17-16-32-03-350.mp4"));
-                            MediaSourceFactory mediaSourceFactory = new DefaultMediaSourceFactory(dataSourceFactory);
-
-                            player = new ExoPlayer.Builder(activity)
-                                    .setTrackSelector(trackSelector)
-                                    .setMediaSourceFactory(mediaSourceFactory)
-                                    .build();
-                            player.setMediaItem(mediaItem);
-                            player.setPlayWhenReady(true);
-                            player.prepare();
-
-                        }
-                    });
-                    return observable;
-
-                }).subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<Object>() {
-                    @Override
-                    public void onSubscribe(@NonNull Disposable d) {
-                        disposable.add(d);
-                    }
-
-                    @Override
-                    public void onNext(@NonNull Object o) {
-
-                    }
-
-                    @Override
-                    public void onError(@NonNull Throwable e) {
-
-                    }
-
-                    @Override
-                    public void onComplete() {
-                        binding.exoPlayer.setPlayer(player);
-                    }
-                });
 
 
+        trackSelector = new DefaultTrackSelector(activity);
+        dataSourceFactory = new DefaultDataSource.Factory(activity);
+        MediaSourceFactory mediaSourceFactory = new DefaultMediaSourceFactory(dataSourceFactory);
+        MediaItem mediaItem = MediaItem.fromUri(Uri.parse("https://media.geeksforgeeks.org/wp-content/uploads/20201217163353/Screenrecorder-2020-12-17-16-32-03-350.mp4"));
 
+        player = new ExoPlayer.Builder(activity)
+                .setTrackSelector(trackSelector)
+                .setMediaSourceFactory(mediaSourceFactory)
+                .build();
 
+        player.setMediaItem(mediaItem);
+        player.setPlayWhenReady(false);
+        binding.exoPlayer.setPlayer(player);
+        player.prepare();
+
+        binding.exoPlayer.setOnTouchListener((v, event) -> {
+            if (player != null && player.isPlaying()) {
+                player.setPlayWhenReady(false);
+            } else if (player != null && !player.isPlaying()) {
+
+                player.setPlayWhenReady(true);
+
+            }
+            return false;
+        });
+
+        binding.llMore.setOnClickListener(v -> {
+            if (binding.expandedLayout.isExpanded()){
+                binding.expandedLayout.collapse(true);
+                binding.imageArrow.clearAnimation();
+                binding.imageArrow.animate().setDuration(300).rotation(0).start();
+            }else {
+                binding.expandedLayout.expand(true);
+                binding.imageArrow.animate().setDuration(300).rotation(180).start();
+
+            }
+        });
+
+    }
+
+    public boolean isFullScreen(){
+        return isInFullScreen;
+    }
+
+    public void setToNormalScreen() {
+
+        isInFullScreen = false;
+        binding.motionLayout.transitionToStart();
+        if (player != null) {
+            player.setPlayWhenReady(false);
+        }
+
+    }
+
+    @Override
+    public void onResume() {
+        if (Util.SDK_INT <= 23 || player == null) {
+            setupPlayer();
+        }
+        super.onResume();
 
 
     }
 
+    @Override
+    public void onStart() {
+        if (Util.SDK_INT > 23) {
+            if (player==null){
+                setupPlayer();
+                binding.exoPlayer.onResume();
+            }
+
+
+
+        }
+        super.onStart();
+
+
+    }
+
+    @Override
+    public void onPause() {
+        if (Util.SDK_INT <= 23) {
+            if (player != null) {
+               player.setPlayWhenReady(false);
+            }
+        }
+        super.onPause();
+
+
+    }
 
 
 
     @Override
     public void onDestroyView() {
+        if (Util.SDK_INT > 23) {
+            if (player != null) {
+                player.release();
+                player = null;
+            }
+
+        }
         super.onDestroyView();
+
+
         disposable.clear();
 
     }
+
+
 }

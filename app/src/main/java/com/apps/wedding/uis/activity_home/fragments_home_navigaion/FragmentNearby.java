@@ -20,6 +20,10 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.navigation.Navigation;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.PagerSnapHelper;
+import androidx.recyclerview.widget.SnapHelper;
 
 import android.os.Looper;
 import android.util.Log;
@@ -29,6 +33,8 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.apps.wedding.R;
+import com.apps.wedding.adapter.MapWeddingHallAdapter;
+import com.apps.wedding.adapter.WeddingHallAdapter;
 import com.apps.wedding.model.LocationModel;
 import com.apps.wedding.mvvm.FragmentNearMvvm;
 import com.apps.wedding.uis.activity_base.BaseActivity;
@@ -72,6 +78,7 @@ public class FragmentNearby extends BaseFragment implements OnMapReadyCallback {
     private float zoom = 15.0f;
     private ActivityResultLauncher<String> permissionLauncher;
     private FragmentNearMvvm fragmentNearMvvm;
+    private MapWeddingHallAdapter adapter;
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -98,9 +105,17 @@ public class FragmentNearby extends BaseFragment implements OnMapReadyCallback {
 
     private void initView() {
         fragmentNearMvvm = ViewModelProviders.of(this).get(FragmentNearMvvm.class);
+        fragmentNearMvvm.getWeddingHall().observe(activity, weddingHallModels -> adapter.updateList(fragmentNearMvvm.getWeddingHall().getValue()));
+
         fragmentNearMvvm.getLocationData().observe(activity, locationModel -> {
             addMarker(locationModel.getLat(), locationModel.getLng());
         });
+
+        SnapHelper snapHelper = new PagerSnapHelper();
+        snapHelper.attachToRecyclerView(binding.recView);
+        binding.recView.setLayoutManager(new LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false));
+        adapter = new MapWeddingHallAdapter(activity, this);
+        binding.recView.setAdapter(adapter);
 
         updateUI();
         checkPermission();
@@ -161,4 +176,8 @@ public class FragmentNearby extends BaseFragment implements OnMapReadyCallback {
         }
     }
 
+    public void setItemWeddingDetails(String s) {
+        Navigation.findNavController(binding.getRoot()).navigate(R.id.serviceDetailsFragment);
+
+    }
 }

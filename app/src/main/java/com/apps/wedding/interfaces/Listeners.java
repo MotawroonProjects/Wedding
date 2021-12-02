@@ -8,7 +8,9 @@ public interface Listeners {
     {
         void back();
     }
-
+    interface VerificationListener{
+        void onVerificationSuccess();
+    }
 
 
 

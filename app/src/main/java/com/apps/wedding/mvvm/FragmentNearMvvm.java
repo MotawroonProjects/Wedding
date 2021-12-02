@@ -21,6 +21,7 @@ import androidx.lifecycle.MutableLiveData;
 import com.apps.wedding.R;
 import com.apps.wedding.model.LocationModel;
 import com.apps.wedding.model.PlaceGeocodeData;
+import com.apps.wedding.model.WeddingHallModel;
 import com.apps.wedding.remote.Api;
 import com.apps.wedding.uis.activity_home.HomeActivity;
 import com.google.android.gms.common.ConnectionResult;
@@ -38,6 +39,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.Marker;
 
 import java.io.IOException;
+import java.util.List;
 
 import io.reactivex.Scheduler;
 import io.reactivex.SingleObserver;
@@ -55,6 +57,7 @@ public class FragmentNearMvvm extends AndroidViewModel implements GoogleApiClien
     private LocationCallback locationCallback;
     private MutableLiveData<LocationModel> locationModelMutableLiveData;
     private MutableLiveData<GoogleMap> mMap;
+    private MutableLiveData<List<WeddingHallModel>> weddingHallModelMutableLiveData;
 
     private MutableLiveData<Boolean> isProgressUpdating;
 
@@ -65,7 +68,12 @@ public class FragmentNearMvvm extends AndroidViewModel implements GoogleApiClien
         super(application);
         context = application.getApplicationContext();
     }
-
+    public LiveData<List<WeddingHallModel>> getWeddingHall() {
+        if (weddingHallModelMutableLiveData == null) {
+            weddingHallModelMutableLiveData = new MutableLiveData<>();
+        }
+        return weddingHallModelMutableLiveData;
+    }
     public LiveData<LocationModel> getLocationData() {
         if (locationModelMutableLiveData == null) {
             locationModelMutableLiveData = new MutableLiveData<>();

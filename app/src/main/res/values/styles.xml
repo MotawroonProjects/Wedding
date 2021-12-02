@@ -6,6 +6,7 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:typeface">monospace</item>
+        <item name="fontFamily">@font/ar_font</item>
         <item name="android:windowBackground">@color/white</item>
 
     </style>
@@ -24,6 +25,9 @@
         <item name="android:typeface">monospace</item>
         <item name="android:windowBackground">@color/white</item>
         <item name="sliderStyle">@style/Widget.App.Slider</item>
+        <item name="fontFamily">@font/ar_font</item>
+
+
 
 
     </style>
@@ -63,4 +67,6 @@
     <style name="ButtonBgColor">
         <item name="colorPrimary">@color/color2</item>
     </style>
+
+
 </resources>

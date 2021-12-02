@@ -4,25 +4,32 @@ import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 
 import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.NavOptions;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.NavigationUI;
 
 
+import com.apps.wedding.interfaces.Listeners;
 import com.apps.wedding.uis.activity_base.BaseActivity;
 
 import com.apps.wedding.R;
 
 import com.apps.wedding.databinding.ActivityHomeBinding;
 import com.apps.wedding.language.Language;
+import com.apps.wedding.uis.activity_home.fragments.LoginFragment;
+import com.apps.wedding.uis.activity_home.fragments.ServiceDetailsFragment;
+
+import java.util.List;
 
 import io.paperdb.Paper;
 
-public class HomeActivity extends BaseActivity {
+public class HomeActivity extends BaseActivity implements Listeners.VerificationListener {
     private ActivityHomeBinding binding;
     private NavController navController;
 
@@ -57,7 +64,7 @@ public class HomeActivity extends BaseActivity {
                     .setEnterAnim(R.anim.enter_anim)
                     .setPopExitAnim(R.anim.exit_anim)
                     .build();
-            navController.navigate(R.id.activity_notification,null,navOptions);
+            navController.navigate(R.id.activity_notification, null, navOptions);
 
         });
     }
@@ -80,8 +87,37 @@ public class HomeActivity extends BaseActivity {
 
     @Override
     public void onBackPressed() {
+        int currentFragmentId = navController.getCurrentDestination().getId();
+        if (currentFragmentId == R.id.serviceDetailsFragment) {
+            Fragment fragment = getSupportFragmentManager().getPrimaryNavigationFragment();
+            Fragment childFragment = fragment.getChildFragmentManager().getFragments().get(0);
+            if (childFragment instanceof ServiceDetailsFragment) {
+                ServiceDetailsFragment serviceDetailsFragment = (ServiceDetailsFragment) childFragment;
+                if (serviceDetailsFragment.isFullScreen()) {
+                    serviceDetailsFragment.setToNormalScreen();
+                } else {
+                    finish();
+                }
+            }
 
-        finish();
+        } else {
+            finish();
+        }
+
     }
+
+    @Override
+    public void onVerificationSuccess() {
+        int currentFragmentId = navController.getCurrentDestination().getId();
+        if (currentFragmentId == R.id.loginFragment) {
+            Fragment fragment = getSupportFragmentManager().getPrimaryNavigationFragment();
+            Fragment childFragment = fragment.getChildFragmentManager().getFragments().get(0);
+            if (childFragment instanceof LoginFragment){
+                LoginFragment loginFragment = (LoginFragment) childFragment;
+                
+            }
+        }
+    }
+
 
 }

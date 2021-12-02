@@ -52,5 +52,10 @@
         android:name="com.apps.wedding.uis.activity_home.fragments.ServiceDetailsFragment"
         android:label=""
         tools:layout="@layout/fragment_service_details" />
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="com.apps.wedding.uis.activity_home.fragments.LoginFragment"
+        android:label=""
+        tools:layout="@layout/fragment_login" />
 
 </navigation>

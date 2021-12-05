@@ -7,6 +7,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
+import androidx.navigation.Navigation;
 
 import android.system.Os;
 import android.util.Log;
@@ -156,6 +157,12 @@ public class ServiceDetailsFragment extends BaseFragment {
 
             }
         });
+        binding.btnBook.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                confirmReservision();
+            }
+        });
 
     }
 
@@ -228,6 +235,8 @@ public class ServiceDetailsFragment extends BaseFragment {
         disposable.clear();
 
     }
-
+    public void confirmReservision() {
+        Navigation.findNavController(binding.getRoot()).navigate(R.id.reservationConfirmFragment);
+    }
 
 }

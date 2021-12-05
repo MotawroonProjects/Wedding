@@ -52,5 +52,8 @@
     <string name="more">المزيد</string>
     <string name="details">التفاصيل</string>
     <string name="book_now">إحجز الان</string>
+    <string name="basic_items">بنود اساسيه</string>
+    <string name="extra_items">بنود اضافيه</string>
+    <string name="number_of_people">Number Of People</string>
 
 </resources>

@@ -52,5 +52,8 @@
     <string name="more">More</string>
     <string name="details">Details</string>
     <string name="book_now">Book now</string>
+    <string name="basic_items">Basic Items</string>
+    <string name="extra_items">Extra Items</string>
+    <string name="number_of_people">Number Of People</string>
 
 </resources>

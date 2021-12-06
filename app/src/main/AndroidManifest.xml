@@ -35,7 +35,7 @@
             android:name=".uis.activity_home.HomeActivity"
             android:theme="@style/AppTheme2"
             android:configChanges="orientation|screenSize|keyboardHidden"
-            android:windowSoftInputMode="adjustPan|adjustResize" />
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".uis.activity_splash.SplashActivity"
             android:exported="true">

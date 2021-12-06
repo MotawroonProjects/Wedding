@@ -17,7 +17,7 @@ public class LoginModel extends BaseObservable implements Serializable {
     public ObservableField<String> error_phone = new ObservableField<>();
 
     public LoginModel() {
-        phone_code ="20";
+        phone_code ="+20";
         phone ="";
     }
 

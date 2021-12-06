@@ -54,6 +54,9 @@
     <string name="book_now">إحجز الان</string>
     <string name="basic_items">بنود اساسيه</string>
     <string name="extra_items">بنود اضافيه</string>
-    <string name="number_of_people">Number Of People</string>
+    <string name="number_of_people">عدد الافراد </string>
+    <string name="choose_day">اختر اليوم </string>
+    <string name="please_enter_the_verification_code_sent_to">Please enter the verification code sent to</string>
+    <string name="user_blocked">User Blocked</string>
 
 </resources>

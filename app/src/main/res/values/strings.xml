@@ -55,5 +55,8 @@
     <string name="basic_items">Basic Items</string>
     <string name="extra_items">Extra Items</string>
     <string name="number_of_people">Number Of People</string>
+    <string name="choose_day">Choose Day</string>
+    <string name="please_enter_the_verification_code_sent_to">Please enter the verification code sent to</string>
+    <string name="user_blocked">User Blocked</string>
 
 </resources>

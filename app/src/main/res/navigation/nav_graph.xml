@@ -58,6 +58,11 @@
         android:label=""
         tools:layout="@layout/fragment_login" />
     <fragment
+        android:id="@+id/verificationcodeFragment"
+        android:name="com.apps.wedding.uis.activity_home.fragments.FragmentVerficationCode"
+        android:label=""
+        tools:layout="@layout/fragment_verification_code" />
+    <fragment
         android:id="@+id/reservationConfirmFragment"
         android:name="com.apps.wedding.uis.activity_home.fragments.FragmentReservisionConfirmation"
         android:label=""

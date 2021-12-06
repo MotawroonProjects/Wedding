@@ -11,14 +11,13 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.apps.wedding.R;
+import com.apps.wedding.databinding.AdditionalItemsRowBinding;
 import com.apps.wedding.databinding.BasicItemRowBinding;
-import com.apps.wedding.databinding.WeddingHallRowBinding;
 import com.apps.wedding.model.WeddingHallModel;
-import com.apps.wedding.uis.activity_home.fragments_home_navigaion.FragmentHome;
 
 import java.util.List;
 
-public class BaiscItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class AdditionalItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private List<WeddingHallModel> list;
     private Context context;
@@ -26,7 +25,7 @@ public class BaiscItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     private Fragment fragment;
 
 
-    public BaiscItemAdapter(Context context, Fragment fragment) {
+    public AdditionalItemAdapter(Context context, Fragment fragment) {
         this.context = context;
         inflater = LayoutInflater.from(context);
         this.fragment = fragment;
@@ -37,7 +36,7 @@ public class BaiscItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     public RecyclerView.ViewHolder onCreateViewHolder(@androidx.annotation.NonNull ViewGroup parent, int viewType) {
 
 
-        BasicItemRowBinding binding = DataBindingUtil.inflate(inflater, R.layout.basic_item_row, parent, false);
+        AdditionalItemsRowBinding binding = DataBindingUtil.inflate(inflater, R.layout.additional_items_row, parent, false);
         return new MyHolder(binding);
 
 
@@ -51,7 +50,6 @@ public class BaiscItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             myHolder.binding.view.setVisibility(View.GONE);
         }
 
-
     }
 
     @Override
@@ -64,9 +62,9 @@ public class BaiscItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     }
 
     public static class MyHolder extends RecyclerView.ViewHolder {
-        public BasicItemRowBinding binding;
+        public AdditionalItemsRowBinding binding;
 
-        public MyHolder(BasicItemRowBinding binding) {
+        public MyHolder(AdditionalItemsRowBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
 

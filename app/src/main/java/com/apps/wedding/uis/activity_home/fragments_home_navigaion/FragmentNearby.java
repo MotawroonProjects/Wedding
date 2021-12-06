@@ -17,7 +17,6 @@ import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.Navigation;
@@ -64,7 +63,14 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.io.IOException;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
+import io.reactivex.Observable;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -79,6 +85,7 @@ public class FragmentNearby extends BaseFragment implements OnMapReadyCallback {
     private ActivityResultLauncher<String> permissionLauncher;
     private FragmentNearMvvm fragmentNearMvvm;
     private MapWeddingHallAdapter adapter;
+    private CompositeDisposable disposable = new CompositeDisposable();
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -99,12 +106,44 @@ public class FragmentNearby extends BaseFragment implements OnMapReadyCallback {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_nearby, container, false);
-        initView();
         return binding.getRoot();
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        Observable.timer(130, TimeUnit.MILLISECONDS)
+                .subscribeOn(Schedulers.computation())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<Long>() {
+                    @Override
+                    public void onSubscribe(@NonNull Disposable d) {
+                        disposable.add(d);
+
+                    }
+
+                    @Override
+                    public void onNext(@NonNull Long aLong) {
+                        initView();
+
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+
     }
 
     private void initView() {
         fragmentNearMvvm = ViewModelProviders.of(this).get(FragmentNearMvvm.class);
+        fragmentNearMvvm.setContext(activity);
         fragmentNearMvvm.getWeddingHall().observe(activity, weddingHallModels -> adapter.updateList(fragmentNearMvvm.getWeddingHall().getValue()));
 
         fragmentNearMvvm.getLocationData().observe(activity, locationModel -> {
@@ -132,9 +171,9 @@ public class FragmentNearby extends BaseFragment implements OnMapReadyCallback {
 
 
     private void updateUI() {
-
-        SupportMapFragment fragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
-        fragment.getMapAsync(this);
+        SupportMapFragment supportMapFragment = SupportMapFragment.newInstance();
+        getChildFragmentManager().beginTransaction().replace(R.id.map,supportMapFragment).commit();
+        supportMapFragment.getMapAsync(this);
 
 
     }
@@ -179,5 +218,11 @@ public class FragmentNearby extends BaseFragment implements OnMapReadyCallback {
     public void setItemWeddingDetails(String s) {
         Navigation.findNavController(binding.getRoot()).navigate(R.id.serviceDetailsFragment);
 
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        disposable.clear();
     }
 }

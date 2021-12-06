@@ -52,6 +52,7 @@ import retrofit2.Response;
 public class FragmentNearMvvm extends AndroidViewModel implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
     private static final String TAG = "FragmentNearMvvm";
     private Context context;
+    private HomeActivity activity;
     private GoogleApiClient googleApiClient;
     private LocationRequest locationRequest;
     private LocationCallback locationCallback;
@@ -67,6 +68,10 @@ public class FragmentNearMvvm extends AndroidViewModel implements GoogleApiClien
     public FragmentNearMvvm(@NonNull Application application) {
         super(application);
         context = application.getApplicationContext();
+    }
+
+    public void setContext(Context context){
+        activity = (HomeActivity) context;
     }
     public LiveData<List<WeddingHallModel>> getWeddingHall() {
         if (weddingHallModelMutableLiveData == null) {
@@ -140,7 +145,6 @@ public class FragmentNearMvvm extends AndroidViewModel implements GoogleApiClien
 
                 case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
                     try {
-                        HomeActivity activity = (HomeActivity) context;
                         status.startResolutionForResult(activity, 100);
                     } catch (IntentSender.SendIntentException e) {
                         e.printStackTrace();
@@ -173,7 +177,7 @@ public class FragmentNearMvvm extends AndroidViewModel implements GoogleApiClien
                 onLocationChanged(locationResult.getLastLocation());
             }
         };
-        LocationServices.getFusedLocationProviderClient(context)
+        LocationServices.getFusedLocationProviderClient(activity)
                 .requestLocationUpdates(locationRequest, locationCallback, Looper.myLooper());
     }
 
@@ -185,7 +189,7 @@ public class FragmentNearMvvm extends AndroidViewModel implements GoogleApiClien
         locationModelMutableLiveData.setValue(locationModel);
 
         if (googleApiClient != null) {
-            LocationServices.getFusedLocationProviderClient(context).removeLocationUpdates(locationCallback);
+            LocationServices.getFusedLocationProviderClient(activity).removeLocationUpdates(locationCallback);
             googleApiClient.disconnect();
             googleApiClient = null;
         }
@@ -198,7 +202,7 @@ public class FragmentNearMvvm extends AndroidViewModel implements GoogleApiClien
         disposable.clear();
         if (googleApiClient != null) {
             if (locationCallback != null) {
-                LocationServices.getFusedLocationProviderClient(context).removeLocationUpdates(locationCallback);
+                LocationServices.getFusedLocationProviderClient(activity).removeLocationUpdates(locationCallback);
                 googleApiClient.disconnect();
                 googleApiClient = null;
             }

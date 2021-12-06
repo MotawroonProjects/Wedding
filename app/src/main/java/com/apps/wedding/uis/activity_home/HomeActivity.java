@@ -24,6 +24,7 @@ import com.apps.wedding.databinding.ActivityHomeBinding;
 import com.apps.wedding.language.Language;
 import com.apps.wedding.uis.activity_home.fragments.LoginFragment;
 import com.apps.wedding.uis.activity_home.fragments.ServiceDetailsFragment;
+import com.apps.wedding.uis.activity_home.fragments_home_navigaion.FragmentHome;
 
 import java.util.List;
 
@@ -42,6 +43,8 @@ public class HomeActivity extends BaseActivity implements Listeners.Verification
 
 
     }
+
+
 
 
     private void initView() {
@@ -88,7 +91,10 @@ public class HomeActivity extends BaseActivity implements Listeners.Verification
     @Override
     public void onBackPressed() {
         int currentFragmentId = navController.getCurrentDestination().getId();
-        if (currentFragmentId == R.id.serviceDetailsFragment) {
+        if (currentFragmentId == R.id.home) {
+            finish();
+
+        } else if (currentFragmentId == R.id.serviceDetailsFragment) {
             Fragment fragment = getSupportFragmentManager().getPrimaryNavigationFragment();
             Fragment childFragment = fragment.getChildFragmentManager().getFragments().get(0);
             if (childFragment instanceof ServiceDetailsFragment) {
@@ -96,12 +102,12 @@ public class HomeActivity extends BaseActivity implements Listeners.Verification
                 if (serviceDetailsFragment.isFullScreen()) {
                     serviceDetailsFragment.setToNormalScreen();
                 } else {
-                    finish();
+                    navController.popBackStack();
                 }
             }
 
         } else {
-            finish();
+            navController.popBackStack();
         }
 
     }
@@ -112,9 +118,9 @@ public class HomeActivity extends BaseActivity implements Listeners.Verification
         if (currentFragmentId == R.id.loginFragment) {
             Fragment fragment = getSupportFragmentManager().getPrimaryNavigationFragment();
             Fragment childFragment = fragment.getChildFragmentManager().getFragments().get(0);
-            if (childFragment instanceof LoginFragment){
+            if (childFragment instanceof LoginFragment) {
                 LoginFragment loginFragment = (LoginFragment) childFragment;
-                
+
             }
         }
     }

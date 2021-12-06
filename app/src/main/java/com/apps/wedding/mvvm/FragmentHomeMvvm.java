@@ -36,6 +36,7 @@ public class FragmentHomeMvvm extends AndroidViewModel {
     private MutableLiveData<FilterRateModel> filterRateModelMutableLiveData;
     private MutableLiveData<FilterModel> filter;
 
+
     private CompositeDisposable disposable = new CompositeDisposable();
 
     public FragmentHomeMvvm(@NonNull Application application) {

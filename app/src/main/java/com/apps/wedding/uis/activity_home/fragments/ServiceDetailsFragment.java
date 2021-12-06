@@ -51,6 +51,8 @@ import com.google.android.exoplayer2.util.Util;
 import com.google.firebase.installations.Utils;
 
 import java.net.CookiePolicy;
+import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
@@ -90,7 +92,32 @@ public class ServiceDetailsFragment extends BaseFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        initView();
+        Observable.timer(130, TimeUnit.MILLISECONDS)
+                .subscribeOn(Schedulers.computation())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<Long>() {
+                    @Override
+                    public void onSubscribe(@NonNull Disposable d) {
+                        disposable.add(d);
+
+                    }
+
+                    @Override
+                    public void onNext(@NonNull Long aLong) {
+                        initView();
+
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
 
     }
 
@@ -108,6 +135,7 @@ public class ServiceDetailsFragment extends BaseFragment {
 
 
         });
+
     }
 
     private void getVideoImage() {

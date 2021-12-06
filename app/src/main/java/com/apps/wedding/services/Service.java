@@ -1,6 +1,7 @@
 package com.apps.wedding.services;
 
 
+import com.apps.wedding.model.DepartmentDataModel;
 import com.apps.wedding.model.PlaceGeocodeData;
 
 import io.reactivex.Single;
@@ -13,8 +14,11 @@ public interface Service {
 
     @GET("geocode/json")
     Single<Response<PlaceGeocodeData>> getGeoData(@Query(value = "latlng") String latlng,
-                                                 @Query(value = "language") String language,
-                                                 @Query(value = "key") String key);
+                                                  @Query(value = "language") String language,
+                                                  @Query(value = "key") String key);
+
+    @GET("api/departments")
+    Single<Response<DepartmentDataModel>> getDepartments(@Query(value = "api_key") String api_key);
 
 
 }

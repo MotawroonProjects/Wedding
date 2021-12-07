@@ -10,32 +10,45 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import com.apps.wedding.R;
+import com.apps.wedding.model.DepartmentDataModel;
 import com.apps.wedding.model.DepartmentModel;
 import com.apps.wedding.model.FilterModel;
 import com.apps.wedding.model.FilterRangeModel;
 import com.apps.wedding.model.FilterRateModel;
+import com.apps.wedding.model.WeddingHallDataModel;
 import com.apps.wedding.model.WeddingHallModel;
+import com.apps.wedding.remote.Api;
+import com.apps.wedding.tags.Tags;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.Observable;
 import io.reactivex.Observer;
+import io.reactivex.SingleObserver;
+import io.reactivex.SingleSource;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
+import retrofit2.Response;
 
 public class FragmentHomeMvvm extends AndroidViewModel {
     private static final String TAG = "FragmentHomeMvvm";
+    private float startRange = 0.0f;
+    private float endRange = 100000.0f;
+    private float steps = 500.0f;
     private Context context;
     private MutableLiveData<List<WeddingHallModel>> weddingHallModelMutableLiveData;
     private MutableLiveData<List<DepartmentModel>> departmentLivData;
     private MutableLiveData<List<FilterRateModel>> filterModelListLiveData;
-    private MutableLiveData<FilterRangeModel> filterRangeModelLiveData;
     private MutableLiveData<FilterRateModel> filterRateModelMutableLiveData;
-    private MutableLiveData<FilterModel> filter;
+    private MutableLiveData<FilterRangeModel> filterRangeModelMutableLiveData;
 
+    private MutableLiveData<FilterModel> filter;
+    private MutableLiveData<Boolean> isLoadingLivData;
 
     private CompositeDisposable disposable = new CompositeDisposable();
 
@@ -54,28 +67,28 @@ public class FragmentHomeMvvm extends AndroidViewModel {
     public LiveData<List<DepartmentModel>> getCategoryWeddingHall() {
         if (departmentLivData == null) {
             departmentLivData = new MutableLiveData<>();
+
         }
         return departmentLivData;
     }
 
-    public LiveData<FilterRangeModel> getFilterRange() {
-        if (filterRangeModelLiveData == null) {
-            filterRangeModelLiveData = new MutableLiveData<>();
+    public MutableLiveData<FilterRangeModel> getFilterRangeModel() {
+        if (filterRangeModelMutableLiveData == null) {
+            filterRangeModelMutableLiveData = new MutableLiveData<>();
+            FilterRangeModel model = new FilterRangeModel(startRange, endRange, steps);
+            model.setSelectedFromValue(startRange);
+            model.setSelectedToValue(endRange);
+            filterRangeModelMutableLiveData.setValue(model);
         }
-        return filterRangeModelLiveData;
+        return filterRangeModelMutableLiveData;
     }
 
-
-    public void updateFilterRange(FilterRangeModel model) {
-        if (filterRangeModelLiveData == null) {
-            filterRangeModelLiveData = new MutableLiveData<>();
-        }
-        filterRangeModelLiveData.setValue(model);
-    }
 
     public LiveData<FilterRateModel> getFilterRateModel() {
         if (filterRateModelMutableLiveData == null) {
             filterRateModelMutableLiveData = new MutableLiveData<>();
+            FilterRateModel model = new FilterRateModel("1");
+            filterRateModelMutableLiveData.setValue(model);
         }
         return filterRateModelMutableLiveData;
     }
@@ -91,16 +104,13 @@ public class FragmentHomeMvvm extends AndroidViewModel {
     public MutableLiveData<FilterModel> getFilter() {
         if (filter == null) {
             filter = new MutableLiveData<>();
+            FilterModel filterModel = new FilterModel(null,getFilterRangeModel().getValue().getSelectedFromValue()+"",getFilterRangeModel().getValue().getSelectedToValue()+"",getFilterRateModel().getValue().getTitle());
+            filter.setValue(filterModel);
         }
         return filter;
     }
 
-    public void updateFilter(FilterModel filterModel) {
-        if (filter == null) {
-            filter = new MutableLiveData<>();
-        }
-        filter.setValue(filterModel);
-    }
+
 
     @SuppressLint("CheckResult")
     public LiveData<List<FilterRateModel>> getFilterModelList() {
@@ -134,6 +144,90 @@ public class FragmentHomeMvvm extends AndroidViewModel {
     public void clearFilterModel() {
         filterModelListLiveData = null;
     }
+
+
+    public MutableLiveData<Boolean> getIsLoading() {
+        if (isLoadingLivData == null) {
+            isLoadingLivData = new MutableLiveData<>();
+        }
+        return isLoadingLivData;
+    }
+
+    //_________________________hitting api_________________________________
+
+    public void getDepartment() {
+        isLoadingLivData.postValue(true);
+        Api.getService(Tags.base_url)
+                .getDepartments(Tags.api_key)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+
+                .subscribe(new SingleObserver<Response<DepartmentDataModel>>() {
+                    @Override
+                    public void onSubscribe(@NonNull Disposable d) {
+                        disposable.add(d);
+                    }
+
+                    @Override
+                    public void onSuccess(@NonNull Response<DepartmentDataModel> response) {
+
+                        if (response.isSuccessful() && response.body() != null) {
+                            if (response.body().getStatus() == 200) {
+                                List<DepartmentModel> list = response.body().getData();
+                                if (list.size()>0){
+                                    list.add(0, new DepartmentModel(null, "All", true, ""));
+                                    departmentLivData.setValue(list);
+                                    getWeddingHallData();
+                                }
+
+
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+                        isLoadingLivData.postValue(false);
+                        Log.e(TAG, "onError: ", e);
+                    }
+                });
+
+    }
+
+    public void getWeddingHallData() {
+        filter = getFilter();
+        Api.getService(Tags.base_url)
+                .getWeddingHall(Tags.api_key, filter.getValue().getCategory_id(), filter.getValue().getRate(), filter.getValue().getFromRange(), filter.getValue().getToRange())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+
+                .subscribe(new SingleObserver<Response<WeddingHallDataModel>>() {
+                    @Override
+                    public void onSubscribe(@NonNull Disposable d) {
+                        disposable.add(d);
+                    }
+
+                    @Override
+                    public void onSuccess(@NonNull Response<WeddingHallDataModel> response) {
+                        isLoadingLivData.postValue(false);
+
+                        if (response.isSuccessful() && response.body() != null) {
+                            if (response.body().getStatus() == 200) {
+                                List<WeddingHallModel> list = response.body().getData();
+                                weddingHallModelMutableLiveData.setValue(list);
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+                        isLoadingLivData.postValue(false);
+                        Log.e(TAG, "onError: ", e);
+                    }
+                });
+
+    }
+
 
     @Override
     protected void onCleared() {

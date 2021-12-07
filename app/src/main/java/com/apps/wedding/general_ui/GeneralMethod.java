@@ -11,6 +11,7 @@ import androidx.databinding.BindingAdapter;
 
 import com.apps.wedding.R;
 
+import com.apps.wedding.model.DepartmentModel;
 import com.makeramen.roundedimageview.RoundedImageView;
 import com.squareup.picasso.Picasso;
 
@@ -84,9 +85,38 @@ public class GeneralMethod {
 
     }
 
+    @BindingAdapter("departmentImage")
+    public static void department_image(View view, String imageUrl) {
+        if (view instanceof CircleImageView) {
+            CircleImageView imageView = (CircleImageView) view;
+            if (imageUrl != null && !imageUrl.isEmpty()) {
+                Picasso.get().load(Uri.parse(imageUrl)).into(imageView);
 
+            } else {
+                imageView.setImageResource(R.drawable.ic_all_icon);
+            }
 
+        } else if (view instanceof RoundedImageView) {
+            RoundedImageView imageView = (RoundedImageView) view;
 
+            if (imageUrl != null && !imageUrl.isEmpty()) {
+                Picasso.get().load(Uri.parse(imageUrl)).into(imageView);
+
+            } else {
+                imageView.setImageResource(R.drawable.ic_all_icon);
+            }
+        } else if (view instanceof ImageView) {
+            ImageView imageView = (ImageView) view;
+
+            if (imageUrl != null && !imageUrl.isEmpty()) {
+                Picasso.get().load(Uri.parse(imageUrl)).into(imageView);
+
+            } else {
+                imageView.setImageResource(R.drawable.ic_all_icon);
+            }
+        }
+
+    }
 
 
     @BindingAdapter("createAt")

@@ -3,13 +3,17 @@ package com.apps.wedding.model;
 import java.io.Serializable;
 
 public class FilterRangeModel implements Serializable {
-    private float fromValue=0.0f;
-    private float toValue=100000.0f;
-    private String rate="1";
+    private float fromValue;
+    private float toValue;
+    private float stepValue;
 
-    public FilterRangeModel(float fromValue, float toValue) {
+    private float selectedFromValue;
+    private float selectedToValue;
+
+    public FilterRangeModel(float fromValue, float toValue, float stepValue) {
         this.fromValue = fromValue;
         this.toValue = toValue;
+        this.stepValue = stepValue;
     }
 
     public float getFromValue() {
@@ -28,11 +32,27 @@ public class FilterRangeModel implements Serializable {
         this.toValue = toValue;
     }
 
-    public String getRate() {
-        return rate;
+    public float getStepValue() {
+        return stepValue;
     }
 
-    public void setRate(String rate) {
-        this.rate = rate;
+    public void setStepValue(float stepValue) {
+        this.stepValue = stepValue;
+    }
+
+    public float getSelectedFromValue() {
+        return selectedFromValue;
+    }
+
+    public void setSelectedFromValue(float selectedFromValue) {
+        this.selectedFromValue = selectedFromValue;
+    }
+
+    public float getSelectedToValue() {
+        return selectedToValue;
+    }
+
+    public void setSelectedToValue(float selectedToValue) {
+        this.selectedToValue = selectedToValue;
     }
 }

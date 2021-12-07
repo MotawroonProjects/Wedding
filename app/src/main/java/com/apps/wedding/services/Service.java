@@ -4,6 +4,7 @@ package com.apps.wedding.services;
 import com.apps.wedding.model.DepartmentDataModel;
 import com.apps.wedding.model.PlaceGeocodeData;
 import com.apps.wedding.model.UserModel;
+import com.apps.wedding.model.WeddingHallDataModel;
 
 import io.reactivex.Single;
 import retrofit2.Call;
@@ -23,6 +24,15 @@ public interface Service {
 
     @GET("api/departments")
     Single<Response<DepartmentDataModel>> getDepartments(@Query(value = "api_key") String api_key);
+
+    @GET("api/services")
+    Single<Response<WeddingHallDataModel>> getWeddingHall(@Query(value = "api_key") String api_key,
+                                                          @Query(value = "department_id") String department_id,
+                                                          @Query(value = "rate") String rate,
+                                                          @Query(value = "price_from") String price_from,
+                                                          @Query(value = "price_to") String price_to
+    );
+
     @FormUrlEncoded
     @POST("api/login")
     Single<Response<UserModel>> login(@Field("api_key") String api_key,

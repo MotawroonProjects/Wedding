@@ -9,4 +9,8 @@ public class DepartmentDataModel extends StatusResponse implements Serializable 
     public List<DepartmentModel> getData() {
         return data;
     }
+
+    public void setData(List<DepartmentModel> data) {
+        this.data = data;
+    }
 }

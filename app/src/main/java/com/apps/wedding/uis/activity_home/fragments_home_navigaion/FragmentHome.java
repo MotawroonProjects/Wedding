@@ -52,10 +52,7 @@ public class FragmentHome extends BaseFragment {
     private WeddingHallAdapter weddingHallAdapter;
     private WeddingHallDepartmentAdapter weddingHallDepartmentAdapter;
     private RateFilterAdapter rateFilterAdapter;
-    private float startRange = 0.0f;
-    private float endRange = 100000.0f;
-    private float steps = 500.0f;
-    private FilterRangeModel filterRangeModel;
+
     private CompositeDisposable disposable = new CompositeDisposable();
 
     @Override
@@ -104,42 +101,44 @@ public class FragmentHome extends BaseFragment {
 
     private void initView() {
         fragmentHomeMvvm = ViewModelProviders.of(this).get(FragmentHomeMvvm.class);
-        fragmentHomeMvvm.getWeddingHall().observe(activity, weddingHallModels -> weddingHallAdapter.updateList(fragmentHomeMvvm.getWeddingHall().getValue()));
-        fragmentHomeMvvm.getCategoryWeddingHall().observe(activity, weddingHallModels -> weddingHallDepartmentAdapter.updateList(fragmentHomeMvvm.getCategoryWeddingHall().getValue()));
-        fragmentHomeMvvm.getFilter().observe(activity, filterModel -> {
-            Log.e("data", filterModel.getRate() + "____" + filterModel.getFromRange() + "+" + filterModel.getToRange());
+        fragmentHomeMvvm.getIsLoading().observe(activity, isLoading -> {
+            binding.swipeRefresh.setRefreshing(isLoading);
         });
-        setUpFilter();
+
+        fragmentHomeMvvm.getWeddingHall().observe(activity, weddingHallModels -> weddingHallAdapter.updateList(fragmentHomeMvvm.getWeddingHall().getValue()));
+        fragmentHomeMvvm.getCategoryWeddingHall().observe(activity, weddingHallModels -> {
+            if (weddingHallModels.size() > 0) {
+                weddingHallDepartmentAdapter.updateList(fragmentHomeMvvm.getCategoryWeddingHall().getValue());
+                binding.cardNoData.setVisibility(View.GONE);
+            } else {
+                binding.cardNoData.setVisibility(View.VISIBLE);
+
+            }
+        });
+        /*fragmentHomeMvvm.getFilter().observe(activity, filterModel -> {
+            fragmentHomeMvvm.getDepartment();
+
+            Log.e("data", filterModel.getRate() + "____" + filterModel.getFromRange() + "+" + filterModel.getToRange());
+        });*/
 
         binding.recViewCategory.setLayoutManager(new LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false));
         weddingHallDepartmentAdapter = new WeddingHallDepartmentAdapter(activity);
         binding.recViewCategory.setAdapter(weddingHallDepartmentAdapter);
 
         binding.recViewHall.setLayoutManager(new LinearLayoutManager(activity));
-        weddingHallAdapter = new WeddingHallAdapter(activity,this);
+        weddingHallAdapter = new WeddingHallAdapter(activity, this);
         binding.recViewHall.setAdapter(weddingHallAdapter);
         binding.imageFilter.setOnClickListener(v -> {
             createSheetDialog();
         });
+        binding.swipeRefresh.setOnRefreshListener(() -> {
+            fragmentHomeMvvm.getDepartment();
+        });
 
-
-    }
-
-    private void setUpFilter() {
-        filterRangeModel = fragmentHomeMvvm.getFilterRange().getValue();
-        if (filterRangeModel==null){
-            filterRangeModel = new FilterRangeModel(startRange,endRange);
-
-        }
-        fragmentHomeMvvm.updateFilterRange(filterRangeModel);
-
-        FilterModel filterModel = fragmentHomeMvvm.getFilter().getValue();
-        if (filterModel==null){
-            filterModel = new FilterModel("all", filterRangeModel.getFromValue()+"", filterRangeModel.getToValue()+"","1");
-        }
-        fragmentHomeMvvm.updateFilter(filterModel);
+        fragmentHomeMvvm.getDepartment();
 
     }
+
 
     private void createSheetDialog() {
 
@@ -148,14 +147,15 @@ public class FragmentHome extends BaseFragment {
         BottomSheetDialog dialog = new BottomSheetDialog(activity);
         BottomSheetDialogBinding binding = DataBindingUtil.inflate(LayoutInflater.from(activity), R.layout.bottom_sheet_dialog, null, false);
         dialog.setContentView(binding.getRoot());
-        binding.slider.setValues(filterRangeModel.getFromValue(), filterRangeModel.getToValue());
-        binding.slider.setValueFrom(startRange);
-        binding.slider.setValueTo(endRange);
-        binding.slider.setStepSize(steps);
+
+        binding.slider.setValues(fragmentHomeMvvm.getFilterRangeModel().getValue().getSelectedFromValue(), fragmentHomeMvvm.getFilterRangeModel().getValue().getSelectedToValue());
+        binding.slider.setValueFrom(fragmentHomeMvvm.getFilterRangeModel().getValue().getFromValue());
+        binding.slider.setValueTo(fragmentHomeMvvm.getFilterRangeModel().getValue().getToValue());
+        binding.slider.setStepSize(fragmentHomeMvvm.getFilterRangeModel().getValue().getStepValue());
 
 
-        binding.tvFrom.setText(startRange + currency.getSymbol());
-        binding.tvTo.setText(endRange + currency.getSymbol());
+        binding.tvFrom.setText(fragmentHomeMvvm.getFilterRangeModel().getValue().getFromValue() + currency.getSymbol());
+        binding.tvTo.setText(fragmentHomeMvvm.getFilterRangeModel().getValue().getToValue() + currency.getSymbol());
 
         binding.slider.setLabelFormatter(value -> {
             NumberFormat format = NumberFormat.getCurrencyInstance();
@@ -168,6 +168,7 @@ public class FragmentHome extends BaseFragment {
             fragmentHomeMvvm.clearFilterModel();
             dialog.dismiss();
         });
+
         binding.recView.setLayoutManager(new LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false));
         rateFilterAdapter = new RateFilterAdapter(activity, this);
         binding.recView.setAdapter(rateFilterAdapter);
@@ -175,7 +176,6 @@ public class FragmentHome extends BaseFragment {
 
 
         fragmentHomeMvvm.getFilterModelList().observe(activity, filterRateModels -> {
-            filterRangeModel.setRate(fragmentHomeMvvm.getFilterRateModel().getValue().getTitle());
             rateFilterAdapter.updateData(fragmentHomeMvvm.getFilterModelList().getValue());
 
         });
@@ -184,11 +184,20 @@ public class FragmentHome extends BaseFragment {
 
             float from = binding.slider.getValues().get(0);
             float to = binding.slider.getValues().get(1);
-            filterRangeModel.setFromValue(from);
-            filterRangeModel.setToValue(to);
-            filterRangeModel.setRate(fragmentHomeMvvm.getFilterRateModel().getValue().getTitle());
-            FilterModel filterModel = new FilterModel("",filterRangeModel.getFromValue()+"",filterRangeModel.getToValue()+"",filterRangeModel.getRate());
+            FilterRangeModel filterRangeModel = fragmentHomeMvvm.getFilterRangeModel().getValue();
+            filterRangeModel.setSelectedFromValue(from);
+            filterRangeModel.setSelectedToValue(to);
+            fragmentHomeMvvm.getFilterRangeModel().setValue(filterRangeModel);
+
+
+            FilterModel filterModel = fragmentHomeMvvm.getFilter().getValue();
+            filterModel.setFromRange(filterRangeModel.getSelectedFromValue() + "");
+            filterModel.setToRange(filterRangeModel.getSelectedToValue() + "");
             fragmentHomeMvvm.getFilter().setValue(filterModel);
+
+            fragmentHomeMvvm.getWeddingHallData();
+
+            dialog.dismiss();
         });
         dialog.show();
     }

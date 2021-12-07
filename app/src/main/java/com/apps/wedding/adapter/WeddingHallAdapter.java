@@ -59,7 +59,7 @@ public class WeddingHallAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         if (list!=null){
          return list.size();
         }else {
-            return 8;
+            return 0;
         }
     }
 

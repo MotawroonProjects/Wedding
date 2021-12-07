@@ -11,6 +11,16 @@ public class DepartmentModel implements Serializable {
     private String updated_at;
     private boolean isSelected;
 
+    public DepartmentModel() {
+    }
+
+    public DepartmentModel(String id, String title, boolean isSelected,String icon)  {
+        this.id = id;
+        this.title = title;
+        this.isSelected = isSelected;
+        this.icon = icon;
+    }
+
     public String getId() {
         return id;
     }

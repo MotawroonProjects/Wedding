@@ -110,7 +110,16 @@ public class RateFilterAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
     public void updateData(List<FilterRateModel> list) {
         this.list = list;
+
         notifyDataSetChanged();
+    }
+
+    private int pos(){
+        int pos = 0;
+        for (int index=0;index<list.size();index++){
+
+        }
+        return pos;
     }
 
 }

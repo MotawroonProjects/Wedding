@@ -12,7 +12,7 @@ public class UserModel extends StatusResponse {
         return data;
     }
 
-    public class Data implements Serializable {
+    public static class Data implements Serializable {
         private int id;
         private String user_type;
         private String logo;
@@ -24,6 +24,7 @@ public class UserModel extends StatusResponse {
         private double longitude;
         private String address;
         private String token;
+        private String firebase_token;
 
         public int getId() {
             return id;
@@ -67,6 +68,14 @@ public class UserModel extends StatusResponse {
 
         public String getToken() {
             return token;
+        }
+
+        public String getFirebase_token() {
+            return firebase_token;
+        }
+
+        public void setFirebase_token(String firebase_token) {
+            this.firebase_token = firebase_token;
         }
     }
 

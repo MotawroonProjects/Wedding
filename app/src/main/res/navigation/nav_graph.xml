@@ -62,9 +62,20 @@
         android:name="com.apps.wedding.uis.activity_home.fragments.FragmentVerficationCode"
         android:label=""
         tools:layout="@layout/fragment_verification_code" />
+
     <fragment
         android:id="@+id/reservationConfirmFragment"
         android:name="com.apps.wedding.uis.activity_home.fragments.FragmentReservisionConfirmation"
         android:label=""
         tools:layout="@layout/fragment_reservation_confirmation" />
+    <fragment
+        android:id="@+id/signupFragment"
+        android:name="com.apps.wedding.uis.activity_home.fragments.FragmentSignup"
+        android:label=""
+        tools:layout="@layout/fragment_signup" />
+    <fragment
+        android:id="@+id/editProfileFragment"
+        android:name="com.apps.wedding.uis.activity_home.fragments.FragmentEditProfile"
+        android:label=""
+        tools:layout="@layout/fragment_edit_profile" />
 </navigation>

@@ -56,7 +56,15 @@
     <string name="extra_items">بنود اضافيه</string>
     <string name="number_of_people">عدد الافراد </string>
     <string name="choose_day">اختر اليوم </string>
-    <string name="please_enter_the_verification_code_sent_to">Please enter the verification code sent to</string>
-    <string name="user_blocked">User Blocked</string>
+    <string name="please_enter_the_verification_code_sent_to">من فضلك ادخل رمز التحقق المرسل الي</string>
+    <string name="user_blocked">تم عمل حظر للمستخدم</string>
+    <string name="first_name">الاسم الاول</string>
+    <string name="last_name">الاسم الاخير</string>
+    <string name="gallery">معرض الصور</string>
+    <string name="camera">كاميرا</string>
+    <string name="cancel">الغاء</string>
+    <string name="perm_image_denied">لا يمكنك الوصول للصور</string>
+    <string name="user_found">مستخدم موجود</string>
+    <string name="suc">تم بنجاح</string>
 
 </resources>

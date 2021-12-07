@@ -6,7 +6,6 @@
         <entry key="..\:/Users/Arb Develpor/Desktop/emad/Projects/Wedding/app/src/main/res/drawable/bottom_nav_item_bg.xml" value="0.2203125" />
         <entry key="..\:/Users/Arb Develpor/Desktop/emad/Projects/Wedding/app/src/main/res/drawable/circle_color1.xml" value="0.2203125" />
         <entry key="..\:/Users/Arb Develpor/Desktop/emad/Projects/Wedding/app/src/main/res/drawable/circle_primary.xml" value="0.2203125" />
-        <entry key="..\:/Users/Arb Develpor/Desktop/emad/Projects/Wedding/app/src/main/res/drawable/ic_arrow_down.xml" value="0.2203125" />
         <entry key="..\:/Users/Arb Develpor/Desktop/emad/Projects/Wedding/app/src/main/res/drawable/ic_language.xml" value="0.2203125" />
         <entry key="..\:/Users/Arb Develpor/Desktop/emad/Projects/Wedding/app/src/main/res/drawable/ic_mask_group_3.xml" value="0.2203125" />
         <entry key="..\:/Users/Arb Develpor/Desktop/emad/Projects/Wedding/app/src/main/res/drawable/ic_rate.xml" value="0.2203125" />
@@ -48,6 +47,20 @@
         <entry key="..\:/Users/Arb Develpor/Desktop/emad/Projects/Wedding/app/src/main/res/layout/toolbar.xml" value="0.20416666666666666" />
         <entry key="..\:/Users/Arb Develpor/Desktop/emad/Projects/Wedding/app/src/main/res/layout/wedding_hall_row.xml" value="0.22" />
         <entry key="..\:/Users/Arb Develpor/Desktop/emad/Projects/Wedding/app/src/main/res/menu/menu.xml" value="0.20416666666666666" />
+        <entry key="..\:/Users/HP/Desktop/Wedding/app/src/main/res/drawable/circle_white.xml" value="0.2890625" />
+        <entry key="..\:/Users/HP/Desktop/Wedding/app/src/main/res/drawable/ic_gallery.xml" value="0.2890625" />
+        <entry key="..\:/Users/HP/Desktop/Wedding/app/src/main/res/drawable/tab_gallery_indicator.xml" value="0.15885416666666666" />
+        <entry key="..\:/Users/HP/Desktop/Wedding/app/src/main/res/layout/fragment_app.xml" value="0.27291666666666664" />
+        <entry key="..\:/Users/HP/Desktop/Wedding/app/src/main/res/layout/fragment_edit_profile.xml" value="0.14270833333333333" />
+        <entry key="..\:/Users/HP/Desktop/Wedding/app/src/main/res/layout/fragment_home.xml" value="0.27291666666666664" />
+        <entry key="..\:/Users/HP/Desktop/Wedding/app/src/main/res/layout/fragment_login.xml" value="0.14270833333333333" />
+        <entry key="..\:/Users/HP/Desktop/Wedding/app/src/main/res/layout/fragment_nearby.xml" value="0.14270833333333333" />
+        <entry key="..\:/Users/HP/Desktop/Wedding/app/src/main/res/layout/fragment_profile.xml" value="0.27291666666666664" />
+        <entry key="..\:/Users/HP/Desktop/Wedding/app/src/main/res/layout/fragment_reservation_confirmation.xml" value="0.14270833333333333" />
+        <entry key="..\:/Users/HP/Desktop/Wedding/app/src/main/res/layout/fragment_service_details.xml" value="0.27291666666666664" />
+        <entry key="..\:/Users/HP/Desktop/Wedding/app/src/main/res/layout/fragment_signup.xml" value="0.27291666666666664" />
+        <entry key="..\:/Users/HP/Desktop/Wedding/app/src/main/res/layout/fragment_verification_code.xml" value="0.14270833333333333" />
+        <entry key="..\:/Users/HP/Desktop/Wedding/app/src/main/res/layout/slider.xml" value="0.25885416666666666" />
         <entry key="..\:/android/FlutterProjects/Wedding/app/src/main/res/drawable/ic_left_arrow.xml" value="0.1125" />
         <entry key="..\:/android/FlutterProjects/Wedding/app/src/main/res/layout/activity_main.xml" value="0.1935185185185185" />
         <entry key="..\:/android/FlutterProjects/Wedding/app/src/main/res/layout/activity_splash.xml" value="0.20416666666666666" />

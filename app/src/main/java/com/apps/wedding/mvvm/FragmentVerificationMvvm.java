@@ -1,45 +1,31 @@
 package com.apps.wedding.mvvm;
 
-import android.annotation.SuppressLint;
 import android.app.Application;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.os.CountDownTimer;
 import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.apps.wedding.R;
-import com.apps.wedding.model.DepartmentModel;
-import com.apps.wedding.model.FilterModel;
-import com.apps.wedding.model.FilterRangeModel;
-import com.apps.wedding.model.FilterRateModel;
 import com.apps.wedding.model.UserModel;
-import com.apps.wedding.model.WeddingHallModel;
 import com.apps.wedding.remote.Api;
 import com.apps.wedding.share.Common;
 import com.apps.wedding.tags.Tags;
 import com.apps.wedding.uis.activity_home.HomeActivity;
-import com.google.common.eventbus.Subscribe;
 import com.google.firebase.FirebaseException;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthProvider;
 
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
 import io.reactivex.Observer;
-import io.reactivex.Scheduler;
 import io.reactivex.SingleObserver;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
@@ -61,6 +47,7 @@ public class FragmentVerificationMvvm extends AndroidViewModel {
     public MutableLiveData<Boolean> canresnd = new MutableLiveData<>();
     public MutableLiveData<String> timereturn = new MutableLiveData<>();
     public MutableLiveData<UserModel> userModelMutableLiveData = new MutableLiveData<>();
+    public MutableLiveData<String> found = new MutableLiveData<>();
 
     private CompositeDisposable disposable = new CompositeDisposable();
 
@@ -84,7 +71,7 @@ public class FragmentVerificationMvvm extends AndroidViewModel {
             public void onVerificationCompleted(@NonNull PhoneAuthCredential phoneAuthCredential) {
                 smsCode = phoneAuthCredential.getSmsCode();
                 smscode.postValue(smsCode);
-                checkValidCode(smsCode);
+                checkValidCode(smsCode, activity);
             }
 
             @Override
@@ -159,16 +146,17 @@ public class FragmentVerificationMvvm extends AndroidViewModel {
     }
 
 
-    public void checkValidCode(String code) {
-login();
+    public void checkValidCode(String code, HomeActivity activity) {
+        login(activity);
         if (verificationId != null) {
             PhoneAuthCredential credential = PhoneAuthProvider.getCredential(verificationId, code);
             mAuth.signInWithCredential(credential)
                     .addOnSuccessListener(authResult -> {
-                        login();
+                        login(activity);
                     }).addOnFailureListener(e -> {
                 if (e.getMessage() != null) {
                 } else {
+
                 }
             });
         } else {
@@ -177,35 +165,32 @@ login();
 
     }
 
-    private void login() {
-//        ProgressDialog dialog = Common.createProgressDialog(context, context.getResources().getString(R.string.wait));
-//        dialog.setCancelable(false);
-//        dialog.show();
-        Api.getService(Tags.base_url).login(Tags.api_key,phone_code,phone).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).unsubscribeOn(Schedulers.io()).subscribe(new SingleObserver<Response<UserModel>>() {
+    private void login(Context context) {
+        ProgressDialog dialog = Common.createProgressDialog(context, context.getResources().getString(R.string.wait));
+        dialog.setCancelable(false);
+        dialog.show();
+        Api.getService(Tags.base_url).login(Tags.api_key, phone_code, phone).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).unsubscribeOn(Schedulers.io()).subscribe(new SingleObserver<Response<UserModel>>() {
             @Override
             public void onSubscribe(@NonNull Disposable d) {
-              disposable.add(d);
+                disposable.add(d);
             }
 
             @Override
             public void onSuccess(@NonNull Response<UserModel> userModelResponse) {
-                //dialog.dismiss();
-                Log.e("dkldkdk",userModelResponse.code()+"");
+                dialog.dismiss();
+                Log.e("dkldkdk", userModelResponse.code() + "");
 
-                if(userModelResponse.isSuccessful()){
-                    Log.e("dkldkdk",userModelResponse.body().getStatus()+"");
-                    if(userModelResponse.body().getStatus()==200){
+                if (userModelResponse.isSuccessful()) {
+                    Log.e("dkldkdk", userModelResponse.body().getStatus() + "");
+                    if (userModelResponse.body().getStatus() == 200) {
 
                         userModelMutableLiveData.postValue(userModelResponse.body());
+                    } else if (userModelResponse.body().getStatus() == 401) {
+                        found.postValue("not_found");
+                    } else if (userModelResponse.body().getStatus() == 409) {
+                        Toast.makeText(context, context.getResources().getString(R.string.user_blocked), Toast.LENGTH_LONG).show();
                     }
-                    else if(userModelResponse.body().getStatus()==401){
-
-                    }
-                    else if(userModelResponse.body().getStatus()==409){
-                        Toast.makeText(context,context.getResources().getString(R.string.user_blocked),Toast.LENGTH_LONG).show();
-                    }
-                }
-                else{
+                } else {
 
                 }
 
@@ -213,7 +198,7 @@ login();
 
             @Override
             public void onError(@NonNull Throwable e) {
-                //dialog.dismiss();
+                dialog.dismiss();
 
             }
         });

@@ -3,16 +3,24 @@ package com.apps.wedding.services;
 
 import com.apps.wedding.model.DepartmentDataModel;
 import com.apps.wedding.model.PlaceGeocodeData;
+import com.apps.wedding.model.SingleWeddingHallDataModel;
+import com.apps.wedding.model.StatusResponse;
 import com.apps.wedding.model.UserModel;
 import com.apps.wedding.model.WeddingHallDataModel;
 
+import io.reactivex.Observable;
 import io.reactivex.Single;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Response;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
+import retrofit2.http.Header;
+import retrofit2.http.Multipart;
 import retrofit2.http.POST;
+import retrofit2.http.Part;
 import retrofit2.http.Query;
 
 public interface Service {
@@ -33,10 +41,92 @@ public interface Service {
                                                           @Query(value = "price_to") String price_to
     );
 
+
     @FormUrlEncoded
     @POST("api/login")
     Single<Response<UserModel>> login(@Field("api_key") String api_key,
                                       @Field("phone_code") String phone_code,
                                       @Field("phone") String phone);
+
+    @FormUrlEncoded
+    @POST("api/client-register")
+    Single<Response<UserModel>> signUp(@Field("api_key") String api_key,
+                                       @Field("name") String name,
+                                       @Field("phone_code") String phone_code,
+                                       @Field("phone") String phone,
+                                       @Field("software_type") String software_type
+
+
+    );
+
+
+    @Multipart
+    @POST("api/client-register")
+    Observable<Response<UserModel>> signUpwithImage(@Part("api_key") RequestBody api_key,
+                                                    @Part("name") RequestBody name,
+                                                    @Part("phone_code") RequestBody phone_code,
+                                                    @Part("phone") RequestBody phone,
+                                                    @Part("software_type") RequestBody software_type,
+                                                    @Part MultipartBody.Part logo
+
+
+    );
+
+    @FormUrlEncoded
+    @POST("api/client-update-profile")
+    Single<Response<UserModel>> editProfile(@Header("AUTHORIZATION") String token,
+                                            @Field("api_key") String api_key,
+                                            @Field("name") String name,
+                                            @Field("user_id") String user_id
+
+
+    );
+
+
+    @Multipart
+    @POST("api/client-update-profile")
+    Observable<Response<UserModel>> editProfilewithImage(@Header("AUTHORIZATION") String token,
+                                                         @Part("api_key") RequestBody api_key,
+                                                         @Part("name") RequestBody name,
+                                                         @Part("user_id") RequestBody user_id,
+                                                         @Part MultipartBody.Part logo
+
+
+    );
+
+    @FormUrlEncoded
+    @POST("api/logout")
+    Single<Response<StatusResponse>> logout(@Header("AUTHORIZATION") String token,
+                                            @Field("api_key") String api_key,
+                                            @Field("phone_token") String phone_token
+
+
+    );
+
+    @FormUrlEncoded
+    @POST("api/firebase-tokens")
+    Single<Response<StatusResponse>> updateFirebasetoken(@Header("AUTHORIZATION") String token,
+                                                         @Field("api_key") String api_key,
+                                                         @Field("phone_token") String phone_token,
+                                                         @Field("user_id") String user_id,
+                                                         @Field("software_type") String software_type
+
+
+    );
+
+    @FormUrlEncoded
+    @POST("api/contact-us")
+    Single<Response<StatusResponse>> contactUs(@Field("api_key") String api_key,
+                                               @Field("name") String name,
+                                               @Field("email") String email,
+                                               @Field("phone") String phone,
+                                               @Field("message") String message
+
+
+    );
+    @GET("api/one-service")
+    Single<Response<SingleWeddingHallDataModel>> getSingleWeddingHall(@Query(value = "api_key") String api_key,
+                                                                      @Query(value = "service_id") String service_id
+    );
 
 }

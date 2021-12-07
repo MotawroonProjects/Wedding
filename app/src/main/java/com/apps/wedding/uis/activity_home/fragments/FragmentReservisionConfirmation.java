@@ -66,15 +66,7 @@ public class FragmentReservisionConfirmation extends BaseFragment {
         binding.recViewAdditionalItem.setLayoutManager(new LinearLayoutManager(activity));
         additionalItemAdapter = new AdditionalItemAdapter(activity, this);
         binding.recViewAdditionalItem.setAdapter(additionalItemAdapter);
-        binding.btnBook.setOnClickListener(view -> {
-          //  if(userModel==null){
-                    Navigation.findNavController(binding.getRoot()).navigate(R.id.loginFragment);
-        //}
-//            else{
-//                Log.e("dlld",userModel.getData().getName());
-//            }
-                }
-        );
+
     }
     @Override
     public void onResume() {

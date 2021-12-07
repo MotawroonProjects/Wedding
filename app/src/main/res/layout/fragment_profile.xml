@@ -7,6 +7,10 @@
         <variable
             name="lang"
             type="String" />
+        <import type="android.view.View"/>
+        <variable
+            name="model"
+            type="com.apps.wedding.model.UserModel" />
 
     </data>
     <androidx.core.widget.NestedScrollView
@@ -21,6 +25,8 @@
             android:orientation="vertical">
 
             <LinearLayout
+                android:id="@+id/llProfile"
+
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/white"
@@ -41,6 +47,7 @@
 
                     <ImageView
                         android:id="@+id/image"
+                        image="@{model.Data.logo}"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:adjustViewBounds="true"
@@ -56,6 +63,7 @@
                     android:layout_marginTop="16dp"
                     android:ellipsize="end"
                     android:maxLines="2"
+                    android:text='@{model!=null?model.Data.name:@string/login}'
                     android:textColor="@color/black"
                     android:textSize="18sp"
                     android:textStyle="bold" />
@@ -68,6 +76,7 @@
                     android:layout_marginBottom="24dp"
                     android:ellipsize="end"
                     android:maxLines="1"
+                    android:text='@{model!=null?model.Data.phone_code+model.Data.phone:""}'
                     android:textColor="@color/black"
                     android:textSize="14sp"
 
@@ -91,7 +100,9 @@
                     android:minHeight="56dp"
                     android:orientation="horizontal"
                     android:paddingStart="16dp"
-                    android:paddingEnd="16dp">
+                    android:paddingEnd="16dp"
+                    android:visibility='@{model==null?View.GONE:View.VISIBLE,default=gone}'
+                    >
 
                     <ImageView
                         android:layout_width="24dp"
@@ -323,8 +334,10 @@
                     >
 
                     <LinearLayout
+                        android:id="@+id/lllogout"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:visibility='@{model==null?View.GONE:View.VISIBLE,default=gone}'
                         android:layout_gravity="center_vertical"
                         android:paddingStart="12dp"
                         android:paddingEnd="12dp">

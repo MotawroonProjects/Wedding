@@ -11,14 +11,23 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.SavedStateHandle;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.navigation.NavBackStackEntry;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.NavigationUI;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.apps.wedding.R;
+import com.apps.wedding.model.UserModel;
+import com.apps.wedding.mvvm.FragmentEditProfileMvvm;
+import com.apps.wedding.mvvm.FragmentProfileMvvm;
+import com.apps.wedding.preferences.Preferences;
 import com.apps.wedding.uis.activity_base.BaseFragment;
 import com.apps.wedding.databinding.FragmentProfileBinding;
 import com.apps.wedding.uis.activity_home.HomeActivity;
@@ -29,7 +38,10 @@ import java.util.List;
 public class FragmentProfile extends BaseFragment {
     private HomeActivity activity;
     private FragmentProfileBinding binding;
-
+    private Preferences preferences;
+    private UserModel userModel;
+    private boolean login;
+    private FragmentProfileMvvm fragmentProfileMvvm;
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -52,23 +64,74 @@ public class FragmentProfile extends BaseFragment {
     }
 
     private void initView() {
+        fragmentProfileMvvm = ViewModelProviders.of(this).get(FragmentProfileMvvm.class);
+
+        preferences = Preferences.getInstance();
+        userModel = preferences.getUserData(activity);
+        if (userModel != null) {
+            binding.setModel(userModel);
+        }
         binding.setLang(getLang());
+        fragmentProfileMvvm.logout.observe(activity, new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean aBoolean) {
+                if (aBoolean) {
+                    logout();
+                }
+            }
+        });
         binding.llContactUs.setOnClickListener(v -> {
 
             Navigation.findNavController(v).navigate(R.id.activity_contact_us);
         });
         binding.llAbout.setOnClickListener(v -> {
 
-            navigateToFragmentApp(v,"about");
+            navigateToFragmentApp(v, "about");
         });
         binding.llPrivacy.setOnClickListener(v -> {
-            navigateToFragmentApp(v,"policy");
+            navigateToFragmentApp(v, "policy");
         });
         binding.llTerms.setOnClickListener(v -> {
-            navigateToFragmentApp(v,"terms");
+            navigateToFragmentApp(v, "terms");
         });
 
         binding.llRate.setOnClickListener(v -> rateApp());
+        binding.llProfile.setOnClickListener(view -> {
+                    if (userModel == null) {
+                        Navigation.findNavController(binding.getRoot()).navigate(R.id.loginFragment);
+                    } else {
+                        Navigation.findNavController(binding.getRoot()).navigate(R.id.editProfileFragment);
+
+                        // Log.e("dlld",userModel.getData().getName());
+                    }
+                }
+        );
+        binding.llEditProfile.setOnClickListener(view -> {
+                    if (userModel == null) {
+                        Navigation.findNavController(binding.getRoot()).navigate(R.id.loginFragment);
+                    } else {
+                        Navigation.findNavController(binding.getRoot()).navigate(R.id.editProfileFragment);
+
+                        // Log.e("dlld",userModel.getData().getName());
+                    }
+                }
+        );
+        binding.lllogout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (userModel == null) {
+                    logout();
+                } else {
+                    fragmentProfileMvvm.logout(activity, userModel);
+                }
+
+            }
+        });
+    }
+
+    private void logout() {
+        preferences.createUpdateUserData(activity, null);
+        Navigation.findNavController(binding.getRoot()).navigate(R.id.loginFragment);
     }
 
     private void rateApp() {
@@ -77,7 +140,7 @@ public class FragmentProfile extends BaseFragment {
                 Uri.parse("market://details?id=" + appId));
         boolean marketFound = false;
 
-        final List<ResolveInfo> otherApps =activity. getPackageManager()
+        final List<ResolveInfo> otherApps = activity.getPackageManager()
                 .queryIntentActivities(rateIntent, 0);
         for (ResolveInfo otherApp : otherApps) {
             if (otherApp.activityInfo.applicationInfo.packageName
@@ -107,10 +170,27 @@ public class FragmentProfile extends BaseFragment {
 
     }
 
-    private void navigateToFragmentApp(View v ,String type) {
+    private void navigateToFragmentApp(View v, String type) {
         Bundle bundle = new Bundle();
-        bundle.putString("data",type);
-        Navigation.findNavController(v).navigate(R.id.appFragment,bundle);
+        bundle.putString("data", type);
+        Navigation.findNavController(v).navigate(R.id.appFragment, bundle);
 
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        NavBackStackEntry currentBackStackEntry = Navigation.findNavController(binding.getRoot()).getCurrentBackStackEntry();
+        if (currentBackStackEntry != null) {
+            SavedStateHandle savedStateHandle = currentBackStackEntry.getSavedStateHandle();
+            if (savedStateHandle.contains("data")) {
+                login = savedStateHandle.get("data");
+                if (login) {
+                    userModel = preferences.getUserData(activity);
+                    binding.setModel(userModel);
+                    activity.updatefirebase();
+                }
+            }
+        }
     }
 }

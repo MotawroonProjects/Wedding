@@ -45,10 +45,12 @@ public class WeddingHallAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     public void onBindViewHolder(@androidx.annotation.NonNull RecyclerView.ViewHolder holder, int position) {
 
         MyHolder myHolder = (MyHolder) holder;
+        myHolder.binding.setModel(list.get(position));
         myHolder.itemView.setOnClickListener(v -> {
+            WeddingHallModel weddingHallModel = list.get(holder.getAdapterPosition());
             if (fragment instanceof FragmentHome){
                 FragmentHome fragmentHome = (FragmentHome) fragment;
-                fragmentHome.setItemWeddingDetails("");
+                fragmentHome.setItemWeddingDetails(weddingHallModel.getId());
             }
         });
 

@@ -85,11 +85,21 @@ public class ServiceDetailsFragment extends BaseFragment {
     private SliderAdapter sliderAdapter;
     private SingleWeddingHallDataModel singleWeddingHallDataModel;
     private String video;
+    private String service_id = "";
 
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         activity = (HomeActivity) context;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Bundle bundle = getArguments();
+        if (bundle!=null){
+            service_id = bundle.getString("data");
+        }
     }
 
     @Override
@@ -138,38 +148,32 @@ public class ServiceDetailsFragment extends BaseFragment {
             //binding..setRefreshing(isLoading);
         });
 
-        fragmentServiceDetialsMvvm.getSingleWedding().observe(activity, new androidx.lifecycle.Observer<SingleWeddingHallDataModel>() {
-            @Override
-            public void onChanged(SingleWeddingHallDataModel s) {
-                singleWeddingHallDataModel = s;
-                binding.setModel(singleWeddingHallDataModel.getData());
-                if (singleWeddingHallDataModel.getData().getService_images() != null && singleWeddingHallDataModel.getData().getService_images().size() > 0) {
-                    sliderAdapter = new SliderAdapter(singleWeddingHallDataModel.getData().getService_images(), activity);
-                    binding.pager.setAdapter(sliderAdapter);
-                    binding.tab.setupWithViewPager(binding.pager);
-                    if (singleWeddingHallDataModel.getData().getService_images().size() > 1) {
-                        // Log.e("ldkdkdkjk", "lkjjdjjd");
-                        timer = new Timer();
-                        timerTask = new MyTask();
-                        timer.scheduleAtFixedRate(timerTask, 6000, 6000);
-                    }
-                }
-                if (singleWeddingHallDataModel.getData().getVideo() != null) {
-                    getVideoImage(singleWeddingHallDataModel.getData().getVideo());
-                }
-                if (singleWeddingHallDataModel.getData().getOffer() == null) {
-                    binding.cardOffer.setVisibility(View.GONE);
-                } else {
-                    binding.cardOffer.setVisibility(View.VISIBLE);
-
+        fragmentServiceDetialsMvvm.getSingleWedding().observe(activity, s -> {
+            singleWeddingHallDataModel = s;
+            binding.setModel(singleWeddingHallDataModel.getData());
+            if (singleWeddingHallDataModel.getData().getService_images() != null && singleWeddingHallDataModel.getData().getService_images().size() > 0) {
+                sliderAdapter = new SliderAdapter(singleWeddingHallDataModel.getData().getService_images(), activity);
+                binding.pager.setAdapter(sliderAdapter);
+                binding.tab.setupWithViewPager(binding.pager);
+                if (singleWeddingHallDataModel.getData().getService_images().size() > 1) {
+                    timer = new Timer();
+                    timerTask = new MyTask();
+                    timer.scheduleAtFixedRate(timerTask, 6000, 6000);
                 }
             }
+            if (singleWeddingHallDataModel.getData().getVideo() != null) {
+                getVideoImage(singleWeddingHallDataModel.getData().getVideo());
+            }
+            if (singleWeddingHallDataModel.getData().getOffer() == null) {
+                binding.cardOffer.setVisibility(View.GONE);
+            } else {
+                binding.cardOffer.setVisibility(View.VISIBLE);
 
+            }
         });
-        fragmentServiceDetialsMvvm.getSingleWeddingHallData();
+        fragmentServiceDetialsMvvm.getSingleWeddingHallData(service_id);
 
 
-        // getVideoImage();
         binding.flVideo.setOnClickListener(v -> {
             isInFullScreen = true;
             binding.motionLayout.transitionToEnd();
@@ -196,55 +200,53 @@ public class ServiceDetailsFragment extends BaseFragment {
     @SuppressLint("ClickableViewAccessibility")
     private void setupPlayer() {
 
-        if (video != null){
+        if (video != null) {
             trackSelector = new DefaultTrackSelector(activity);
-        dataSourceFactory = new DefaultDataSource.Factory(activity);
-        MediaSourceFactory mediaSourceFactory = new DefaultMediaSourceFactory(dataSourceFactory);
-        MediaItem mediaItem = MediaItem.fromUri(Uri.parse(video));
+            dataSourceFactory = new DefaultDataSource.Factory(activity);
+            MediaSourceFactory mediaSourceFactory = new DefaultMediaSourceFactory(dataSourceFactory);
+            MediaItem mediaItem = MediaItem.fromUri(Uri.parse(video));
 
-        player = new ExoPlayer.Builder(activity)
-                .setTrackSelector(trackSelector)
-                .setMediaSourceFactory(mediaSourceFactory)
-                .build();
+            player = new ExoPlayer.Builder(activity)
+                    .setTrackSelector(trackSelector)
+                    .setMediaSourceFactory(mediaSourceFactory)
+                    .build();
 
-        player.setMediaItem(mediaItem);
-        player.setPlayWhenReady(false);
-        binding.exoPlayer.setPlayer(player);
-        player.prepare();
+            player.setMediaItem(mediaItem);
+            player.setPlayWhenReady(false);
+            binding.exoPlayer.setPlayer(player);
+            player.prepare();
 
-        binding.exoPlayer.setOnTouchListener((v, event) -> {
-            if (player != null && player.isPlaying()) {
-                player.setPlayWhenReady(false);
-            } else if (player != null && !player.isPlaying()) {
+            binding.exoPlayer.setOnTouchListener((v, event) -> {
+                if (player != null && player.isPlaying()) {
+                    player.setPlayWhenReady(false);
+                } else if (player != null && !player.isPlaying()) {
 
-                player.setPlayWhenReady(true);
+                    player.setPlayWhenReady(true);
 
+                }
+                return false;
+            });
+
+            binding.llMore.setOnClickListener(v -> {
+                if (binding.expandedLayout.isExpanded()) {
+                    binding.expandedLayout.collapse(true);
+                    binding.imageArrow.clearAnimation();
+                    binding.imageArrow.animate().setDuration(300).rotation(0).start();
+                } else {
+                    binding.expandedLayout.expand(true);
+                    binding.imageArrow.animate().setDuration(300).rotation(180).start();
+
+                }
+            });
+        }
+        binding.btnBook.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                confirmReservision();
             }
-            return false;
         });
 
-        binding.llMore.setOnClickListener(v -> {
-            if (binding.expandedLayout.isExpanded()) {
-                binding.expandedLayout.collapse(true);
-                binding.imageArrow.clearAnimation();
-                binding.imageArrow.animate().setDuration(300).rotation(0).start();
-            } else {
-                binding.expandedLayout.expand(true);
-                binding.imageArrow.animate().setDuration(300).rotation(180).start();
-
-            }
-        });
     }
-        binding.btnBook.setOnClickListener(new View.OnClickListener()
-
-    {
-        @Override
-        public void onClick (View view){
-        confirmReservision();
-    }
-    });
-
-}
 
     public boolean isFullScreen() {
         return isInFullScreen;
@@ -302,22 +304,22 @@ public class ServiceDetailsFragment extends BaseFragment {
         Navigation.findNavController(binding.getRoot()).navigate(R.id.reservationConfirmFragment);
     }
 
-public class MyTask extends TimerTask {
-    @Override
-    public void run() {
-        activity.runOnUiThread(() -> {
-            int current_page = binding.pager.getCurrentItem();
-            if (current_page < sliderAdapter.getCount() - 1) {
-                binding.pager.setCurrentItem(binding.pager.getCurrentItem() + 1);
-            } else {
-                binding.pager.setCurrentItem(0);
+    public class MyTask extends TimerTask {
+        @Override
+        public void run() {
+            activity.runOnUiThread(() -> {
+                int current_page = binding.pager.getCurrentItem();
+                if (current_page < sliderAdapter.getCount() - 1) {
+                    binding.pager.setCurrentItem(binding.pager.getCurrentItem() + 1);
+                } else {
+                    binding.pager.setCurrentItem(0);
 
-            }
-        });
+                }
+            });
+
+        }
 
     }
-
-}
 
     @Override
     public void onDestroyView() {

@@ -40,6 +40,7 @@ public class FragmentHomeMvvm extends AndroidViewModel {
     private float startRange = 0.0f;
     private float endRange = 100000.0f;
     private float steps = 500.0f;
+    private String defaultRate ="1";
     private Context context;
     private MutableLiveData<List<WeddingHallModel>> weddingHallModelMutableLiveData;
     private MutableLiveData<List<DepartmentModel>> departmentLivData;
@@ -87,7 +88,11 @@ public class FragmentHomeMvvm extends AndroidViewModel {
     public LiveData<FilterRateModel> getFilterRateModel() {
         if (filterRateModelMutableLiveData == null) {
             filterRateModelMutableLiveData = new MutableLiveData<>();
-            FilterRateModel model = new FilterRateModel("1");
+            String rate = defaultRate;
+            if (getFilter() != null && getFilter().getValue() != null) {
+                rate = getFilter().getValue().getRate();
+            }
+            FilterRateModel model = new FilterRateModel(rate);
             filterRateModelMutableLiveData.setValue(model);
         }
         return filterRateModelMutableLiveData;
@@ -104,12 +109,11 @@ public class FragmentHomeMvvm extends AndroidViewModel {
     public MutableLiveData<FilterModel> getFilter() {
         if (filter == null) {
             filter = new MutableLiveData<>();
-            FilterModel filterModel = new FilterModel(null,getFilterRangeModel().getValue().getSelectedFromValue()+"",getFilterRangeModel().getValue().getSelectedToValue()+"",getFilterRateModel().getValue().getTitle());
+            FilterModel filterModel = new FilterModel(null, getFilterRangeModel().getValue().getSelectedFromValue() + "", getFilterRangeModel().getValue().getSelectedToValue() + "", getFilterRateModel().getValue().getTitle());
             filter.setValue(filterModel);
         }
         return filter;
     }
-
 
 
     @SuppressLint("CheckResult")
@@ -122,9 +126,16 @@ public class FragmentHomeMvvm extends AndroidViewModel {
             }
             Observable.fromArray(list)
                     .filter(list1 -> {
-                        FilterRateModel model = list1.get(0);
+                        int pos = 0;
+                        for (int index = 0; index < list1.size(); index++) {
+                            if (list1.get(index).getTitle().equals(getFilter().getValue().getRate())) {
+                                pos = index;
+                                break;
+                            }
+                        }
+                        FilterRateModel model = list1.get(pos);
                         model.setSelected(true);
-                        list1.set(0, model);
+                        list1.set(pos, model);
                         return true;
                     })
                     .subscribeOn(Schedulers.computation())
@@ -134,12 +145,12 @@ public class FragmentHomeMvvm extends AndroidViewModel {
                     }, error -> {
                         Log.e(TAG, "getFilterModelList: ", error);
                     });
-            FilterRateModel model = list.get(0);
-            updateFilterRateModel(model);
+         
 
         }
         return filterModelListLiveData;
     }
+
 
     public void clearFilterModel() {
         filterModelListLiveData = null;
@@ -174,8 +185,8 @@ public class FragmentHomeMvvm extends AndroidViewModel {
                         if (response.isSuccessful() && response.body() != null) {
                             if (response.body().getStatus() == 200) {
                                 List<DepartmentModel> list = response.body().getData();
-                                if (list.size()>0){
-                                    list.add(0, new DepartmentModel(null, "All", true, ""));
+                                if (list.size() > 0) {
+                                    list.add(0, new DepartmentModel(null, context.getString(R.string.all), true, ""));
                                     departmentLivData.setValue(list);
                                     getWeddingHallData();
                                 }
@@ -195,6 +206,8 @@ public class FragmentHomeMvvm extends AndroidViewModel {
     }
 
     public void getWeddingHallData() {
+        isLoadingLivData.postValue(true);
+
         filter = getFilter();
         Api.getService(Tags.base_url)
                 .getWeddingHall(Tags.api_key, filter.getValue().getCategory_id(), filter.getValue().getRate(), filter.getValue().getFromRange(), filter.getValue().getToRange())

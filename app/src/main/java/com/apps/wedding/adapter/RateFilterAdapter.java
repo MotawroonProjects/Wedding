@@ -5,7 +5,6 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
@@ -13,9 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.apps.wedding.R;
 import com.apps.wedding.databinding.FilterRateRowBinding;
-import com.apps.wedding.databinding.WeddingHallRowBinding;
 import com.apps.wedding.model.FilterRateModel;
-import com.apps.wedding.model.WeddingHallModel;
 import com.apps.wedding.uis.activity_home.fragments_home_navigaion.FragmentHome;
 
 import java.util.List;
@@ -108,17 +105,30 @@ public class RateFilterAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         }
     }
 
-    public void updateData(List<FilterRateModel> list) {
+    public void updateData(List<FilterRateModel> list, String rate) {
         this.list = list;
+        if (list!=null){
+            currentPos = pos(rate);
+            oldPos = currentPos;
+            FilterRateModel model = this.list.get(currentPos);
+            model.setSelected(true);
+            this.list.set(currentPos,model);
+        }
 
         notifyDataSetChanged();
     }
 
-    private int pos(){
+    private int pos(String rate){
         int pos = 0;
-        for (int index=0;index<list.size();index++){
-
+        if (list!=null){
+            for (int index=0;index<list.size();index++){
+                if (list.get(index).getTitle().equals(rate)){
+                    pos = index;
+                    return pos;
+                }
+            }
         }
+
         return pos;
     }
 

@@ -64,10 +64,10 @@ public class FragmentServiceDetialsMvvm extends AndroidViewModel {
     }
 
 
-    public void getSingleWeddingHallData() {
+    public void getSingleWeddingHallData(String id) {
         isLoadingLivData.postValue(true);
         Api.getService(Tags.base_url)
-                .getSingleWeddingHall(Tags.api_key, "11")
+                .getSingleWeddingHall(Tags.api_key, id)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
 

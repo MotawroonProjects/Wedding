@@ -66,5 +66,6 @@
     <string name="perm_image_denied">لا يمكنك الوصول للصور</string>
     <string name="user_found">مستخدم موجود</string>
     <string name="suc">تم بنجاح</string>
+    <string name="all">الكل</string>
 
 </resources>

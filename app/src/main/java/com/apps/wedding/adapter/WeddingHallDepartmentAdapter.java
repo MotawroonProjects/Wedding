@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.apps.wedding.R;
@@ -14,6 +15,7 @@ import com.apps.wedding.databinding.CategoryRowBinding;
 import com.apps.wedding.databinding.WeddingHallRowBinding;
 import com.apps.wedding.model.DepartmentModel;
 import com.apps.wedding.model.WeddingHallModel;
+import com.apps.wedding.uis.activity_home.fragments_home_navigaion.FragmentHome;
 
 import java.util.List;
 
@@ -22,14 +24,14 @@ public class WeddingHallDepartmentAdapter extends RecyclerView.Adapter<RecyclerV
     private List<DepartmentModel> list;
     private Context context;
     private LayoutInflater inflater;
-    private AppCompatActivity appCompatActivity;
+    private Fragment fragment;
     private int currentPos = 0;
     private int oldPos = currentPos;
 
-    public WeddingHallDepartmentAdapter(Context context) {
+    public WeddingHallDepartmentAdapter(Context context,Fragment fragment) {
         this.context = context;
         inflater = LayoutInflater.from(context);
-        appCompatActivity = (AppCompatActivity) context;
+        this.fragment = fragment;
     }
 
     @androidx.annotation.NonNull
@@ -62,6 +64,11 @@ public class WeddingHallDepartmentAdapter extends RecyclerView.Adapter<RecyclerV
                 model.setSelected(true);
                 list.set(currentPos, model);
                 notifyItemChanged(currentPos);
+
+                if (fragment instanceof FragmentHome){
+                    FragmentHome fragmentHome = (FragmentHome) fragment;
+                    fragmentHome.setItemDepartment(model);
+                }
 
             }
 

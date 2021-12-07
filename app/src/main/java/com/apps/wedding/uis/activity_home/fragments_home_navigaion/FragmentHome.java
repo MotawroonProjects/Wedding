@@ -10,7 +10,6 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,21 +19,18 @@ import com.apps.wedding.adapter.RateFilterAdapter;
 import com.apps.wedding.adapter.WeddingHallAdapter;
 import com.apps.wedding.adapter.WeddingHallDepartmentAdapter;
 import com.apps.wedding.databinding.BottomSheetDialogBinding;
+import com.apps.wedding.model.DepartmentModel;
 import com.apps.wedding.model.FilterModel;
 import com.apps.wedding.model.FilterRangeModel;
 import com.apps.wedding.model.FilterRateModel;
-import com.apps.wedding.model.WeddingHallModel;
 import com.apps.wedding.mvvm.FragmentHomeMvvm;
 import com.apps.wedding.uis.activity_base.BaseFragment;
 import com.apps.wedding.databinding.FragmentHomeBinding;
 import com.apps.wedding.uis.activity_home.HomeActivity;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
-import com.google.android.material.slider.LabelFormatter;
 
 import java.text.NumberFormat;
 import java.util.Currency;
-import java.util.List;
-import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
@@ -102,10 +98,23 @@ public class FragmentHome extends BaseFragment {
     private void initView() {
         fragmentHomeMvvm = ViewModelProviders.of(this).get(FragmentHomeMvvm.class);
         fragmentHomeMvvm.getIsLoading().observe(activity, isLoading -> {
+            if (isLoading) {
+                binding.cardNoData.setVisibility(View.GONE);
+
+            }
             binding.swipeRefresh.setRefreshing(isLoading);
         });
 
-        fragmentHomeMvvm.getWeddingHall().observe(activity, weddingHallModels -> weddingHallAdapter.updateList(fragmentHomeMvvm.getWeddingHall().getValue()));
+        fragmentHomeMvvm.getWeddingHall().observe(activity, weddingHallModels -> {
+            if (weddingHallModels.size() > 0) {
+                weddingHallAdapter.updateList(fragmentHomeMvvm.getWeddingHall().getValue());
+                binding.cardNoData.setVisibility(View.GONE);
+            } else {
+                binding.cardNoData.setVisibility(View.VISIBLE);
+
+            }
+
+        });
         fragmentHomeMvvm.getCategoryWeddingHall().observe(activity, weddingHallModels -> {
             if (weddingHallModels.size() > 0) {
                 weddingHallDepartmentAdapter.updateList(fragmentHomeMvvm.getCategoryWeddingHall().getValue());
@@ -115,14 +124,10 @@ public class FragmentHome extends BaseFragment {
 
             }
         });
-        /*fragmentHomeMvvm.getFilter().observe(activity, filterModel -> {
-            fragmentHomeMvvm.getDepartment();
 
-            Log.e("data", filterModel.getRate() + "____" + filterModel.getFromRange() + "+" + filterModel.getToRange());
-        });*/
 
         binding.recViewCategory.setLayoutManager(new LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false));
-        weddingHallDepartmentAdapter = new WeddingHallDepartmentAdapter(activity);
+        weddingHallDepartmentAdapter = new WeddingHallDepartmentAdapter(activity, this);
         binding.recViewCategory.setAdapter(weddingHallDepartmentAdapter);
 
         binding.recViewHall.setLayoutManager(new LinearLayoutManager(activity));
@@ -172,11 +177,11 @@ public class FragmentHome extends BaseFragment {
         binding.recView.setLayoutManager(new LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false));
         rateFilterAdapter = new RateFilterAdapter(activity, this);
         binding.recView.setAdapter(rateFilterAdapter);
-        rateFilterAdapter.updateData(fragmentHomeMvvm.getFilterModelList().getValue());
+        rateFilterAdapter.updateData(fragmentHomeMvvm.getFilterModelList().getValue(), fragmentHomeMvvm.getFilter().getValue().getRate());
 
 
         fragmentHomeMvvm.getFilterModelList().observe(activity, filterRateModels -> {
-            rateFilterAdapter.updateData(fragmentHomeMvvm.getFilterModelList().getValue());
+            rateFilterAdapter.updateData(fragmentHomeMvvm.getFilterModelList().getValue(), fragmentHomeMvvm.getFilter().getValue().getRate());
 
         });
 
@@ -191,11 +196,13 @@ public class FragmentHome extends BaseFragment {
 
 
             FilterModel filterModel = fragmentHomeMvvm.getFilter().getValue();
+            filterModel.setRate(fragmentHomeMvvm.getFilterRateModel().getValue().getTitle());
             filterModel.setFromRange(filterRangeModel.getSelectedFromValue() + "");
             filterModel.setToRange(filterRangeModel.getSelectedToValue() + "");
             fragmentHomeMvvm.getFilter().setValue(filterModel);
 
             fragmentHomeMvvm.getWeddingHallData();
+            fragmentHomeMvvm.clearFilterModel();
 
             dialog.dismiss();
         });
@@ -206,13 +213,21 @@ public class FragmentHome extends BaseFragment {
         fragmentHomeMvvm.updateFilterRateModel(model);
     }
 
-    public void setItemWeddingDetails(String s) {
-        Navigation.findNavController(binding.getRoot()).navigate(R.id.serviceDetailsFragment);
+    public void setItemWeddingDetails(String id) {
+        Bundle bundle = new Bundle();
+        bundle.putString("data", id);
+        Navigation.findNavController(binding.getRoot()).navigate(R.id.serviceDetailsFragment, bundle);
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         disposable.clear();
+    }
+
+    public void setItemDepartment(DepartmentModel model) {
+        FilterModel filterModel = fragmentHomeMvvm.getFilter().getValue();
+        filterModel.setCategory_id(model.getId());
+        fragmentHomeMvvm.getWeddingHallData();
     }
 }

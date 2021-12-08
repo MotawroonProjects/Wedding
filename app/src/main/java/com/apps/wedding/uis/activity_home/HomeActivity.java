@@ -9,6 +9,8 @@ import android.util.Log;
 import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.NavController;
 import androidx.navigation.NavOptions;
 import androidx.navigation.Navigation;
@@ -16,6 +18,9 @@ import androidx.navigation.ui.NavigationUI;
 
 
 import com.apps.wedding.interfaces.Listeners;
+import com.apps.wedding.model.UserModel;
+import com.apps.wedding.mvvm.HomeActivityMvvm;
+import com.apps.wedding.preferences.Preferences;
 import com.apps.wedding.uis.activity_base.BaseActivity;
 
 import com.apps.wedding.R;
@@ -33,7 +38,9 @@ import io.paperdb.Paper;
 public class HomeActivity extends BaseActivity implements Listeners.VerificationListener {
     private ActivityHomeBinding binding;
     private NavController navController;
-
+    private HomeActivityMvvm homeActivityMvvm;
+    private Preferences preferences;
+    private UserModel userModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,9 +52,10 @@ public class HomeActivity extends BaseActivity implements Listeners.Verification
     }
 
 
-
-
     private void initView() {
+        preferences=Preferences.getInstance();
+        userModel=preferences.getUserData(this);
+        homeActivityMvvm = ViewModelProviders.of(this).get(HomeActivityMvvm.class);
         setSupportActionBar(binding.toolBar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         navController = Navigation.findNavController(this, R.id.navHostFragment);
@@ -70,6 +78,20 @@ public class HomeActivity extends BaseActivity implements Listeners.Verification
             navController.navigate(R.id.activity_notification, null, navOptions);
 
         });
+        homeActivityMvvm.firebase.observe(this, new Observer<String>() {
+            @Override
+            public void onChanged(String s) {
+                if(userModel!=null){
+                    // Log.e("lldld",s);
+
+                    userModel.getData().setFirebase_token(s);
+                    preferences.createUpdateUserData(HomeActivity.this,userModel);
+                }
+            }
+        });
+        if(userModel!=null){
+            homeActivityMvvm.updatefirebase(this,userModel);
+        }
     }
 
 
@@ -122,6 +144,14 @@ public class HomeActivity extends BaseActivity implements Listeners.Verification
                 LoginFragment loginFragment = (LoginFragment) childFragment;
 
             }
+        }
+    }
+
+
+    public void updatefirebase() {
+        userModel=preferences.getUserData(this);
+        if(userModel!=null){
+            homeActivityMvvm.updatefirebase(this,userModel);
         }
     }
 

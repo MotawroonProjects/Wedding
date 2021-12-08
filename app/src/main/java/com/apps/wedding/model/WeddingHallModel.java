@@ -110,7 +110,7 @@ public class WeddingHallModel implements Serializable {
         return service_rates;
     }
 
-    private static class ServiceMainItem implements Serializable {
+    public static class ServiceMainItem implements Serializable {
         private String id;
         private String item_type;
         private String name;

@@ -19,10 +19,16 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.apps.wedding.R;
+import com.apps.wedding.model.DepartmentModel;
+import com.apps.wedding.model.FilterModel;
+import com.apps.wedding.model.FilterRangeModel;
+import com.apps.wedding.model.FilterRateModel;
 import com.apps.wedding.model.LocationModel;
 import com.apps.wedding.model.PlaceGeocodeData;
+import com.apps.wedding.model.WeddingHallDataModel;
 import com.apps.wedding.model.WeddingHallModel;
 import com.apps.wedding.remote.Api;
+import com.apps.wedding.tags.Tags;
 import com.apps.wedding.uis.activity_home.HomeActivity;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -39,8 +45,10 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.Marker;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
+import io.reactivex.Observable;
 import io.reactivex.Scheduler;
 import io.reactivex.SingleObserver;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -51,6 +59,10 @@ import retrofit2.Response;
 
 public class FragmentNearMvvm extends AndroidViewModel implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
     private static final String TAG = "FragmentNearMvvm";
+    private float startRange = 0.0f;
+    private float endRange = 100000.0f;
+    private float steps = 500.0f;
+    private String defaultRate ="1";
     private Context context;
     private HomeActivity activity;
     private GoogleApiClient googleApiClient;
@@ -59,7 +71,12 @@ public class FragmentNearMvvm extends AndroidViewModel implements GoogleApiClien
     private MutableLiveData<LocationModel> locationModelMutableLiveData;
     private MutableLiveData<GoogleMap> mMap;
     private MutableLiveData<List<WeddingHallModel>> weddingHallModelMutableLiveData;
+    private MutableLiveData<List<FilterRateModel>> filterModelListLiveData;
+    private MutableLiveData<FilterRateModel> filterRateModelMutableLiveData;
+    private MutableLiveData<FilterRangeModel> filterRangeModelMutableLiveData;
+    private MutableLiveData<Boolean> isLoadingLivData;
 
+    private MutableLiveData<FilterModel> filter;
     private MutableLiveData<Boolean> isProgressUpdating;
 
     private CompositeDisposable disposable = new CompositeDisposable();
@@ -68,6 +85,12 @@ public class FragmentNearMvvm extends AndroidViewModel implements GoogleApiClien
     public FragmentNearMvvm(@NonNull Application application) {
         super(application);
         context = application.getApplicationContext();
+    }
+    public MutableLiveData<Boolean> getIsLoading() {
+        if (isLoadingLivData == null) {
+            isLoadingLivData = new MutableLiveData<>();
+        }
+        return isLoadingLivData;
     }
 
     public void setContext(Context context){
@@ -79,6 +102,90 @@ public class FragmentNearMvvm extends AndroidViewModel implements GoogleApiClien
         }
         return weddingHallModelMutableLiveData;
     }
+
+
+    public MutableLiveData<FilterRangeModel> getFilterRangeModel() {
+        if (filterRangeModelMutableLiveData == null) {
+            filterRangeModelMutableLiveData = new MutableLiveData<>();
+            FilterRangeModel model = new FilterRangeModel(startRange, endRange, steps);
+            model.setSelectedFromValue(startRange);
+            model.setSelectedToValue(endRange);
+            filterRangeModelMutableLiveData.setValue(model);
+        }
+        return filterRangeModelMutableLiveData;
+    }
+
+
+    public LiveData<FilterRateModel> getFilterRateModel() {
+        if (filterRateModelMutableLiveData == null) {
+            filterRateModelMutableLiveData = new MutableLiveData<>();
+            String rate = defaultRate;
+            if (getFilter() != null && getFilter().getValue() != null) {
+                rate = getFilter().getValue().getRate();
+            }
+            FilterRateModel model = new FilterRateModel(rate);
+            filterRateModelMutableLiveData.setValue(model);
+        }
+        return filterRateModelMutableLiveData;
+    }
+
+    public void updateFilterRateModel(FilterRateModel model) {
+        if (filterRateModelMutableLiveData == null) {
+            filterRateModelMutableLiveData = new MutableLiveData<>();
+        }
+
+        filterRateModelMutableLiveData.setValue(model);
+    }
+
+    public MutableLiveData<FilterModel> getFilter() {
+        if (filter == null) {
+            filter = new MutableLiveData<>();
+            FilterModel filterModel = new FilterModel(null, getFilterRangeModel().getValue().getSelectedFromValue() + "", getFilterRangeModel().getValue().getSelectedToValue() + "", getFilterRateModel().getValue().getTitle());
+            filter.setValue(filterModel);
+        }
+        return filter;
+    }
+
+
+    @SuppressLint("CheckResult")
+    public LiveData<List<FilterRateModel>> getFilterModelList() {
+        if (filterModelListLiveData == null) {
+            filterModelListLiveData = new MutableLiveData<>();
+            List<FilterRateModel> list = new ArrayList<>();
+            for (int x = 1; x < 6; x++) {
+                list.add(new FilterRateModel(String.valueOf(x)));
+            }
+            Observable.fromArray(list)
+                    .filter(list1 -> {
+                        int pos = 0;
+                        for (int index = 0; index < list1.size(); index++) {
+                            if (list1.get(index).getTitle().equals(getFilter().getValue().getRate())) {
+                                pos = index;
+                                break;
+                            }
+                        }
+                        FilterRateModel model = list1.get(pos);
+                        model.setSelected(true);
+                        list1.set(pos, model);
+                        return true;
+                    })
+                    .subscribeOn(Schedulers.computation())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(listData -> {
+                        filterModelListLiveData.setValue(listData);
+                    }, error -> {
+                        Log.e(TAG, "getFilterModelList: ", error);
+                    });
+
+
+        }
+        return filterModelListLiveData;
+    }
+
+    public void clearFilterModel() {
+        filterModelListLiveData = null;
+    }
+
     public LiveData<LocationModel> getLocationData() {
         if (locationModelMutableLiveData == null) {
             locationModelMutableLiveData = new MutableLiveData<>();
@@ -208,4 +315,40 @@ public class FragmentNearMvvm extends AndroidViewModel implements GoogleApiClien
             }
         }
     }
+    public void getWeddingHallData() {
+        isLoadingLivData.postValue(true);
+
+        filter = getFilter();
+        Api.getService(Tags.base_url)
+                .getWeddingHall(Tags.api_key, filter.getValue().getCategory_id(), filter.getValue().getRate(), filter.getValue().getFromRange(), filter.getValue().getToRange())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+
+                .subscribe(new SingleObserver<Response<WeddingHallDataModel>>() {
+                    @Override
+                    public void onSubscribe(@NonNull Disposable d) {
+                        disposable.add(d);
+                    }
+
+                    @Override
+                    public void onSuccess(@NonNull Response<WeddingHallDataModel> response) {
+                        isLoadingLivData.postValue(false);
+
+                        if (response.isSuccessful() && response.body() != null) {
+                            if (response.body().getStatus() == 200) {
+                                List<WeddingHallModel> list = response.body().getData();
+                                weddingHallModelMutableLiveData.setValue(list);
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+                        isLoadingLivData.postValue(false);
+                        Log.e(TAG, "onError: ", e);
+                    }
+                });
+
+    }
+
 }

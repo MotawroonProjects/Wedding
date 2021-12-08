@@ -73,6 +73,7 @@ dependencies {
     implementation 'com.squareup.retrofit2:adapter-rxjava2:2.7.1'
     implementation 'net.cachapa.expandablelayout:expandablelayout:2.9.2'
     implementation 'com.google.android.exoplayer:exoplayer:2.16.1'
+    implementation 'com.applandeo:material-calendar-view:1.7.0'
 
 
 }

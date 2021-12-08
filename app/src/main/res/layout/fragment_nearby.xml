@@ -68,6 +68,8 @@
 
 
             <androidx.cardview.widget.CardView
+                android:id="@+id/cardFilter"
+
                 android:layout_width="44dp"
                 android:layout_height="50dp"
                 android:background="@color/white"
@@ -94,6 +96,7 @@
             android:layout_gravity="bottom"
             android:layout_marginBottom="110dp"
             />
+
 
     </FrameLayout>
 </layout>

@@ -146,11 +146,22 @@ public class ServiceDetailsFragment extends BaseFragment {
         fragmentServiceDetialsMvvm = ViewModelProviders.of(this).get(FragmentServiceDetialsMvvm.class);
         fragmentServiceDetialsMvvm.getIsLoading().observe(activity, isLoading -> {
             //binding..setRefreshing(isLoading);
+            if(isLoading){
+                binding.progBar.setVisibility(View.VISIBLE);
+                binding.nested.setVisibility(View.GONE);
+
+            }
+            else {
+                binding.progBar.setVisibility(View.GONE);
+                binding.nested.setVisibility(View.VISIBLE);
+            }
+
         });
 
         fragmentServiceDetialsMvvm.getSingleWedding().observe(activity, s -> {
             singleWeddingHallDataModel = s;
             binding.setModel(singleWeddingHallDataModel.getData());
+            if(singleWeddingHallDataModel!=null&&singleWeddingHallDataModel.getData()!=null){
             if (singleWeddingHallDataModel.getData().getService_images() != null && singleWeddingHallDataModel.getData().getService_images().size() > 0) {
                 sliderAdapter = new SliderAdapter(singleWeddingHallDataModel.getData().getService_images(), activity);
                 binding.pager.setAdapter(sliderAdapter);
@@ -169,7 +180,7 @@ public class ServiceDetailsFragment extends BaseFragment {
             } else {
                 binding.cardOffer.setVisibility(View.VISIBLE);
 
-            }
+            }}
         });
         fragmentServiceDetialsMvvm.getSingleWeddingHallData(service_id);
 
@@ -182,6 +193,23 @@ public class ServiceDetailsFragment extends BaseFragment {
             }
 
 
+        });
+        binding.llMore.setOnClickListener(v -> {
+            if (binding.expandedLayout.isExpanded()) {
+                binding.expandedLayout.collapse(true);
+                binding.imageArrow.clearAnimation();
+                binding.imageArrow.animate().setDuration(300).rotation(0).start();
+            } else {
+                binding.expandedLayout.expand(true);
+                binding.imageArrow.animate().setDuration(300).rotation(180).start();
+
+            }
+        });
+        binding.btnBook.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                confirmReservision();
+            }
         });
 
     }
@@ -227,24 +255,9 @@ public class ServiceDetailsFragment extends BaseFragment {
                 return false;
             });
 
-            binding.llMore.setOnClickListener(v -> {
-                if (binding.expandedLayout.isExpanded()) {
-                    binding.expandedLayout.collapse(true);
-                    binding.imageArrow.clearAnimation();
-                    binding.imageArrow.animate().setDuration(300).rotation(0).start();
-                } else {
-                    binding.expandedLayout.expand(true);
-                    binding.imageArrow.animate().setDuration(300).rotation(180).start();
 
-                }
-            });
         }
-        binding.btnBook.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                confirmReservision();
-            }
-        });
+
 
     }
 
@@ -301,7 +314,9 @@ public class ServiceDetailsFragment extends BaseFragment {
 
 
     public void confirmReservision() {
-        Navigation.findNavController(binding.getRoot()).navigate(R.id.reservationConfirmFragment);
+        Bundle bundle=new Bundle();
+        bundle.putSerializable("data",singleWeddingHallDataModel);
+        Navigation.findNavController(binding.getRoot()).navigate(R.id.reservationConfirmFragment,bundle);
     }
 
     public class MyTask extends TimerTask {

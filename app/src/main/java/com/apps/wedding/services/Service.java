@@ -8,6 +8,8 @@ import com.apps.wedding.model.StatusResponse;
 import com.apps.wedding.model.UserModel;
 import com.apps.wedding.model.WeddingHallDataModel;
 
+import java.util.List;
+
 import io.reactivex.Observable;
 import io.reactivex.Single;
 import okhttp3.MultipartBody;
@@ -128,5 +130,14 @@ public interface Service {
     Single<Response<SingleWeddingHallDataModel>> getSingleWeddingHall(@Query(value = "api_key") String api_key,
                                                                       @Query(value = "service_id") String service_id
     );
+    @FormUrlEncoded
+    @POST("api/book-service")
+    Single<Response<StatusResponse>> reserve(@Header("AUTHORIZATION") String token,
+                                             @Field("api_key") String api_key,
+                                             @Field("service_id") String service_id,
+                                             @Field("user_id") String user_id,
+                                             @Field("date") String date,
+                                             @Field("day") String day,
+                                             @Field("service_item_ids[]") List<String> service_item_ids);
 
 }

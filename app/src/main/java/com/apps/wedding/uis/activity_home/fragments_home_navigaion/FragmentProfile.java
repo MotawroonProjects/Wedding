@@ -188,7 +188,7 @@ public class FragmentProfile extends BaseFragment {
                 if (login) {
                     userModel = preferences.getUserData(activity);
                     binding.setModel(userModel);
-                    //activity.updatefirebase();
+                    activity.updatefirebase();
                 }
             }
         }

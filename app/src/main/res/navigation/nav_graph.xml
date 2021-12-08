@@ -78,4 +78,9 @@
         android:name="com.apps.wedding.uis.activity_home.fragments.FragmentEditProfile"
         android:label=""
         tools:layout="@layout/fragment_edit_profile" />
+    <fragment
+        android:id="@+id/chooseDayFragment"
+        android:name="com.apps.wedding.uis.activity_home.fragments.FragmentChooseDay"
+        android:label=""
+        tools:layout="@layout/fragment_choose_day" />
 </navigation>

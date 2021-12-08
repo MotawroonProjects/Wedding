@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-
+<data>
+    <variable
+        name="model"
+        type="com.apps.wedding.model.WeddingHallModel.ServiceExtraItem" />
+</data>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -21,7 +25,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
-                android:text="بوفيه"
+                android:text="@{model.name}"
                 android:textColor="@color/gray17"
                 android:textSize="14sp"
                 android:textStyle="bold" />
@@ -37,12 +41,13 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp"
                 android:ellipsize="end"
-                android:text="500"
+                android:text="@{model.details}"
                 android:textColor="@color/black1"
                 android:textSize="14sp"
                 android:textStyle="bold" />
 
             <CheckBox
+                android:id="@+id/checkbox"
                 android:layout_width="35dp"
                 android:layout_height="35dp"
                 android:layout_marginStart="8dp"

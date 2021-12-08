@@ -20,7 +20,7 @@ import java.util.List;
 
 public class BaiscItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private List<WeddingHallModel> list;
+    private List<WeddingHallModel.ServiceMainItem> list;
     private Context context;
     private LayoutInflater inflater;
     private Fragment fragment;
@@ -47,7 +47,8 @@ public class BaiscItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     public void onBindViewHolder(@androidx.annotation.NonNull RecyclerView.ViewHolder holder, int position) {
 
         MyHolder myHolder = (MyHolder) holder;
-        if (position == 7) {
+        myHolder.binding.setModel(list.get(position));
+        if (position == list.size()-1) {
             myHolder.binding.view.setVisibility(View.GONE);
         }
 
@@ -59,7 +60,7 @@ public class BaiscItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         if (list != null) {
             return list.size();
         } else {
-            return 8;
+            return 0;
         }
     }
 
@@ -72,6 +73,9 @@ public class BaiscItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
         }
     }
-
+    public void updateList(List<WeddingHallModel.ServiceMainItem> list){
+        this.list=list;
+        notifyDataSetChanged();
+    }
 
 }

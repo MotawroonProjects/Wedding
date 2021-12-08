@@ -14,6 +14,7 @@ import com.apps.wedding.R;
 import com.apps.wedding.databinding.FilterRateRowBinding;
 import com.apps.wedding.model.FilterRateModel;
 import com.apps.wedding.uis.activity_home.fragments_home_navigaion.FragmentHome;
+import com.apps.wedding.uis.activity_home.fragments_home_navigaion.FragmentNearby;
 
 import java.util.List;
 
@@ -78,6 +79,10 @@ public class RateFilterAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             if (fragment instanceof FragmentHome){
                 FragmentHome fragmentHome = (FragmentHome) fragment;
                 fragmentHome.updateFilterRate(model);
+            }
+            else if(fragment instanceof FragmentNearby){
+                FragmentNearby fragmentNearby=(FragmentNearby) fragment;
+                fragmentNearby.updateFilterRate(model);
             }
         });
 

@@ -47,10 +47,11 @@ public class MapWeddingHallAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     public void onBindViewHolder(@androidx.annotation.NonNull RecyclerView.ViewHolder holder, int position) {
 
         MyHolder myHolder = (MyHolder) holder;
+        myHolder.binding.setModel(list.get(position));
         myHolder.itemView.setOnClickListener(v -> {
             if (fragment instanceof FragmentNearby) {
                 FragmentNearby fragmentNearby = (FragmentNearby) fragment;
-                fragmentNearby.setItemWeddingDetails("");
+                fragmentNearby.setItemWeddingDetails(list.get(holder.getLayoutPosition()).getId());
             }
         });
 
@@ -61,7 +62,7 @@ public class MapWeddingHallAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         if (list != null) {
             return list.size();
         } else {
-            return 8;
+            return 0;
         }
     }
 

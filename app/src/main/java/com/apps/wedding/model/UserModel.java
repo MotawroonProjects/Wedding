@@ -24,7 +24,7 @@ public class UserModel extends StatusResponse {
         private double longitude;
         private String address;
         private String token;
-        private String firebase_token;
+        private static String firebase_token;
 
         public int getId() {
             return id;

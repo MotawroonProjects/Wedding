@@ -1,12 +1,18 @@
 package com.apps.wedding.uis.activity_home.fragments;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
@@ -30,6 +36,7 @@ import com.apps.wedding.mvvm.FragmentChooseDayMvvm;
 import com.apps.wedding.preferences.Preferences;
 import com.apps.wedding.uis.activity_base.BaseFragment;
 import com.apps.wedding.uis.activity_home.HomeActivity;
+import com.apps.wedding.uis.activity_login.LoginActivity;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -43,17 +50,22 @@ public class FragmentChooseDay extends BaseFragment {
     private FragmentChooseDayBinding binding;
     private HomeActivity activity;
     private FragmentChooseDayMvvm fragmentChooseDayMvvm;
-    private UserModel userModel;
-    private Preferences preferences;
-    private boolean login;
     private RequestServiceModel requestServiceModel;
     private String date;
     private String day;
+    private int req;
+    private ActivityResultLauncher<Intent> launcher;
 
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         activity = (HomeActivity) context;
+        launcher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+            if (req == 1 && result.getResultCode() == Activity.RESULT_OK) {
+                fragmentChooseDayMvvm.reserve(activity, requestServiceModel, getUserModel(), date, day);
+
+            }
+        });
     }
 
     @Override
@@ -74,8 +86,7 @@ public class FragmentChooseDay extends BaseFragment {
     private void initView() {
         binding.setLang(getLang());
         requestServiceModel = (RequestServiceModel) getArguments().getSerializable("data");
-        preferences = Preferences.getInstance();
-        userModel = preferences.getUserData(activity);
+
         fragmentChooseDayMvvm = ViewModelProviders.of(this).get(FragmentChooseDayMvvm.class);
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
         SimpleDateFormat simpleDateFormat1 = new SimpleDateFormat("EEE", Locale.ENGLISH);
@@ -84,28 +95,22 @@ public class FragmentChooseDay extends BaseFragment {
         day = simpleDateFormat1.format(System.currentTimeMillis());
         binding.tvDate.setText(date);
 
-        fragmentChooseDayMvvm.suc.observe(activity, new Observer<Boolean>() {
-            @Override
-            public void onChanged(Boolean aBoolean) {
-                if (aBoolean) {
-                    Navigation.findNavController(binding.getRoot()).navigate(R.id.reservation);
+        fragmentChooseDayMvvm.suc.observe(activity, aBoolean -> {
+            if (aBoolean) {
+                Navigation.findNavController(binding.getRoot()).navigate(R.id.reservation);
 
-                }
             }
         });
 
 
-        binding.btnBook.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (userModel == null) {
-                    Navigation.findNavController(binding.getRoot()).navigate(R.id.loginFragment);
+        binding.btnBook.setOnClickListener(view -> {
+            if (getUserModel() == null) {
+                navigateToLoginActivity();
 
-                } else {
-                    fragmentChooseDayMvvm.reserve(activity, requestServiceModel, userModel, date, day);
-                }
-
+            } else {
+                fragmentChooseDayMvvm.reserve(activity, requestServiceModel, getUserModel(), date, day);
             }
+
         });
         binding.calendarView.setOnDayClickListener(eventDay -> {
             Calendar clickedDayCalendar = eventDay.getCalendar();
@@ -117,21 +122,10 @@ public class FragmentChooseDay extends BaseFragment {
         });
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        NavBackStackEntry currentBackStackEntry = Navigation.findNavController(binding.getRoot()).getCurrentBackStackEntry();
-        if (currentBackStackEntry != null) {
-            SavedStateHandle savedStateHandle = currentBackStackEntry.getSavedStateHandle();
-            if (savedStateHandle.contains("data")) {
-                login = savedStateHandle.get("data");
-                if (login) {
-                    userModel = preferences.getUserData(activity);
-                    //Log.e("dldll", userModel.getData().getName());
-                }
-            }
-        }
-
+    private void navigateToLoginActivity() {
+        req = 1;
+        Intent intent = new Intent(activity, LoginActivity.class);
+        launcher.launch(intent);
 
     }
 

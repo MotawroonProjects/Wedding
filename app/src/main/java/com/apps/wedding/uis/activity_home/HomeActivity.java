@@ -4,12 +4,10 @@ import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 
 import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.NavController;
 import androidx.navigation.NavOptions;
@@ -20,18 +18,13 @@ import androidx.navigation.ui.NavigationUI;
 import com.apps.wedding.interfaces.Listeners;
 import com.apps.wedding.model.UserModel;
 import com.apps.wedding.mvvm.HomeActivityMvvm;
-import com.apps.wedding.preferences.Preferences;
 import com.apps.wedding.uis.activity_base.BaseActivity;
 
 import com.apps.wedding.R;
 
 import com.apps.wedding.databinding.ActivityHomeBinding;
 import com.apps.wedding.language.Language;
-import com.apps.wedding.uis.activity_home.fragments.LoginFragment;
 import com.apps.wedding.uis.activity_home.fragments.ServiceDetailsFragment;
-import com.apps.wedding.uis.activity_home.fragments_home_navigaion.FragmentHome;
-
-import java.util.List;
 
 import io.paperdb.Paper;
 
@@ -39,8 +32,7 @@ public class HomeActivity extends BaseActivity implements Listeners.Verification
     private ActivityHomeBinding binding;
     private NavController navController;
     private HomeActivityMvvm homeActivityMvvm;
-    private Preferences preferences;
-    private UserModel userModel;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,8 +45,7 @@ public class HomeActivity extends BaseActivity implements Listeners.Verification
 
 
     private void initView() {
-        preferences=Preferences.getInstance();
-        userModel=preferences.getUserData(this);
+
         homeActivityMvvm = ViewModelProviders.of(this).get(HomeActivityMvvm.class);
         setSupportActionBar(binding.toolBar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
@@ -78,19 +69,15 @@ public class HomeActivity extends BaseActivity implements Listeners.Verification
             navController.navigate(R.id.activity_notification, null, navOptions);
 
         });
-        homeActivityMvvm.firebase.observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(String s) {
-                if(userModel!=null){
-                    // Log.e("lldld",s);
-
-                    userModel.getData().setFirebase_token(s);
-                    preferences.createUpdateUserData(HomeActivity.this,userModel);
-                }
+        homeActivityMvvm.firebase.observe(this, token -> {
+            if (getUserModel() != null) {
+                UserModel userModel = getUserModel();
+                userModel.getData().setFirebase_token(token);
+                setUserModel(userModel);
             }
         });
-        if(userModel!=null){
-            homeActivityMvvm.updatefirebase(this,userModel);
+        if (getUserModel() != null) {
+            homeActivityMvvm.updateFirebase(this, getUserModel());
         }
     }
 
@@ -136,22 +123,13 @@ public class HomeActivity extends BaseActivity implements Listeners.Verification
 
     @Override
     public void onVerificationSuccess() {
-        int currentFragmentId = navController.getCurrentDestination().getId();
-        if (currentFragmentId == R.id.loginFragment) {
-            Fragment fragment = getSupportFragmentManager().getPrimaryNavigationFragment();
-            Fragment childFragment = fragment.getChildFragmentManager().getFragments().get(0);
-            if (childFragment instanceof LoginFragment) {
-                LoginFragment loginFragment = (LoginFragment) childFragment;
 
-            }
-        }
     }
 
 
-    public void updatefirebase() {
-        userModel=preferences.getUserData(this);
-        if(userModel!=null){
-            homeActivityMvvm.updatefirebase(this,userModel);
+    public void updateFirebase() {
+        if (getUserModel() != null) {
+            homeActivityMvvm.updateFirebase(this, getUserModel());
         }
     }
 

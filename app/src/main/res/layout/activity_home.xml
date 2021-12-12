@@ -10,10 +10,11 @@
             type="String" />
     </data>
 
-    <androidx.coordinatorlayout.widget.CoordinatorLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fitsSystemWindows="true">
+        android:orientation="vertical"
+        >
 
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/appbar"
@@ -73,11 +74,10 @@
             android:id="@+id/navHostFragment"
             android:name="androidx.navigation.fragment.NavHostFragment"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
             app:defaultNavHost="true"
-            app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
             app:navGraph="@navigation/nav_graph"
-
 
             />
 
@@ -89,14 +89,12 @@
             android:background="@color/white"
             app:elevation="5dp"
             app:labelVisibilityMode="labeled"
-            app:layout_behavior="com.google.android.material.behavior.HideBottomViewOnScrollBehavior"
             app:menu="@menu/menu"
             app:itemIconTint="@drawable/bottom_nav_item_bg"
             app:itemTextColor="@drawable/bottom_nav_item_bg"
             />
 
 
-    </androidx.coordinatorlayout.widget.CoordinatorLayout>
-
+</LinearLayout>
 </layout>
 

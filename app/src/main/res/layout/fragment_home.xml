@@ -111,7 +111,9 @@
                                     android:id="@+id/recViewHall"
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
-                                    android:layout_marginTop="3dp" />
+                                    android:layout_marginTop="3dp"
+
+                                    />
 
 
                             </FrameLayout>
@@ -157,7 +159,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_marginTop="12dp"
-                        android:text="@string/no_data_to_show"
+                        android:text="@string/no_services_to_show"
                         android:textColor="@color/black"
                         android:textSize="16sp" />
                 </LinearLayout>

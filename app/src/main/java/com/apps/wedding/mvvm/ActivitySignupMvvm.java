@@ -37,14 +37,13 @@ import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import retrofit2.Response;
 
-public class FragmentSignupMvvm extends AndroidViewModel {
+public class ActivitySignupMvvm extends AndroidViewModel {
     private Context context;
-
     public MutableLiveData<UserModel> userModelMutableLiveData = new MutableLiveData<>();
 
     private CompositeDisposable disposable = new CompositeDisposable();
 
-    public FragmentSignupMvvm(@NonNull Application application) {
+    public ActivitySignupMvvm(@NonNull Application application) {
         super(application);
         context = application.getApplicationContext();
 
@@ -65,7 +64,6 @@ public class FragmentSignupMvvm extends AndroidViewModel {
             public void onSuccess(@NonNull Response<UserModel> userModelResponse) {
                 dialog.dismiss();
                 if (userModelResponse.isSuccessful()) {
-                    //  Log.e("dkldkdk", userModelResponse.body().getStatus() + "");
                     if (userModelResponse.body().getStatus() == 200) {
 
                         userModelMutableLiveData.postValue(userModelResponse.body());
@@ -110,7 +108,6 @@ public class FragmentSignupMvvm extends AndroidViewModel {
             public void onNext(@NonNull Response<UserModel> userModelResponse) {
                 dialog.dismiss();
                 if (userModelResponse.isSuccessful()) {
-                     // Log.e("dkldkdk", userModelResponse.body().getStatus() + "");
                     if (userModelResponse.body().getStatus() == 200) {
 
                         userModelMutableLiveData.postValue(userModelResponse.body());

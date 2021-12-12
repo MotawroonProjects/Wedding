@@ -19,7 +19,6 @@ import com.apps.wedding.R;
 import com.apps.wedding.adapter.AdditionalItemAdapter;
 import com.apps.wedding.adapter.BaiscItemAdapter;
 import com.apps.wedding.adapter.WeddingHallAdapter;
-import com.apps.wedding.databinding.FragmentLoginBinding;
 import com.apps.wedding.databinding.FragmentReservationConfirmationBinding;
 import com.apps.wedding.model.LoginModel;
 import com.apps.wedding.model.RequestServiceModel;
@@ -74,6 +73,7 @@ public class FragmentReservisionConfirmation extends BaseFragment {
         serviceExtraItemList = new ArrayList<>();
         serviceMainItemList = new ArrayList<>();
         singleWeddingHallDataModel = (SingleWeddingHallDataModel) getArguments().getSerializable("data");
+        binding.setModel(singleWeddingHallDataModel.getData());
         preferences = Preferences.getInstance();
         userModel = preferences.getUserData(activity);
         binding.recViewBaiscItem.setLayoutManager(new LinearLayoutManager(activity));
@@ -92,15 +92,12 @@ public class FragmentReservisionConfirmation extends BaseFragment {
             additionalItemAdapter.updateList(serviceExtraItemList);
 
         }
-        binding.btnBook.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                requestServiceModel.setIds(ids);
-                requestServiceModel.setWeddingHallModel(singleWeddingHallDataModel.getData());
-                Bundle bundle = new Bundle();
-                bundle.putSerializable("data", requestServiceModel);
-                Navigation.findNavController(binding.getRoot()).navigate(R.id.chooseDayFragment, bundle);
-            }
+        binding.btnBook.setOnClickListener(view -> {
+            requestServiceModel.setIds(ids);
+            requestServiceModel.setWeddingHallModel(singleWeddingHallDataModel.getData());
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("data", requestServiceModel);
+            Navigation.findNavController(binding.getRoot()).navigate(R.id.chooseDayFragment, bundle);
         });
 
     }

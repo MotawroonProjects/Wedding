@@ -29,10 +29,8 @@ import androidx.navigation.Navigation;
 import com.apps.wedding.R;
 import com.apps.wedding.databinding.FragmentEditProfileBinding;
 import com.apps.wedding.model.EditProfileModel;
-import com.apps.wedding.model.SignUpModel;
 import com.apps.wedding.model.UserModel;
 import com.apps.wedding.mvvm.FragmentEditProfileMvvm;
-import com.apps.wedding.mvvm.FragmentSignupMvvm;
 import com.apps.wedding.preferences.Preferences;
 import com.apps.wedding.share.Common;
 import com.apps.wedding.tags.Tags;
@@ -123,12 +121,9 @@ public class FragmentEditProfile extends BaseFragment {
         });
 
         fragmentEditProfileMvvm.userModelMutableLiveData.observe(activity, userModel -> {
-            // Log.e("Dldldll", "lddldlld");
             preferences.createUpdateUserData(activity, userModel);
             if (userModel != null) {
                 Navigation.findNavController(binding.getRoot()).getPreviousBackStackEntry().getSavedStateHandle().set("data", true);
-                //Log.e("Dldldll", "lddldlld");
-
                 Navigation.findNavController(binding.getRoot()).popBackStack();
             }
         });

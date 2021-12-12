@@ -32,6 +32,11 @@ public class BaseFragment extends Fragment {
 
     }
 
+    protected void clearUserModel(Context context){
+        Preferences preferences = Preferences.getInstance();
+        preferences.clearUserData(context);
+
+    }
     protected void setUserModel(UserModel userModel) {
         Preferences preferences = Preferences.getInstance();
         preferences.createUpdateUserData(context, userModel);

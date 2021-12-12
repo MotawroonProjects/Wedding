@@ -44,7 +44,6 @@ public class FragmentProfileMvvm extends AndroidViewModel {
     }
 
     public void logout(Context context,  UserModel userModel) {
-        Log.e("llll",userModel.getData().getFirebase_token());
         ProgressDialog dialog = Common.createProgressDialog(context, context.getResources().getString(R.string.wait));
         dialog.setCancelable(false);
         dialog.show();
@@ -57,7 +56,6 @@ public class FragmentProfileMvvm extends AndroidViewModel {
             @Override
             public void onSuccess(@NonNull Response<StatusResponse> statusResponseResponse) {
                 dialog.dismiss();
-                Log.e("hasss",statusResponseResponse.code()+"");
                 if (statusResponseResponse.isSuccessful()) {
                     if (statusResponseResponse.body().getStatus() == 200) {
                         logout.postValue(true);

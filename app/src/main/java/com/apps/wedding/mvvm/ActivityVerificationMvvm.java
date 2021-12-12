@@ -16,6 +16,7 @@ import com.apps.wedding.remote.Api;
 import com.apps.wedding.share.Common;
 import com.apps.wedding.tags.Tags;
 import com.apps.wedding.uis.activity_home.HomeActivity;
+import com.apps.wedding.uis.activity_verification_code.VerificationCodeActivity;
 import com.google.firebase.FirebaseException;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.PhoneAuthCredential;
@@ -33,8 +34,8 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import retrofit2.Response;
 
-public class FragmentVerificationMvvm extends AndroidViewModel {
-    private static final String TAG = "FragmentVerficationMvvm";
+public class ActivityVerificationMvvm extends AndroidViewModel {
+    private static final String TAG = "ActivityVerificationMvvm";
     private Context context;
     private FirebaseAuth mAuth;
     private String verificationId;
@@ -42,7 +43,6 @@ public class FragmentVerificationMvvm extends AndroidViewModel {
     private boolean canSend = false;
     private String time;
     private String phone, phone_code;
-    private String apikey;
     public MutableLiveData<String> smscode = new MutableLiveData<>();
     public MutableLiveData<Boolean> canresnd = new MutableLiveData<>();
     public MutableLiveData<String> timereturn = new MutableLiveData<>();
@@ -51,7 +51,7 @@ public class FragmentVerificationMvvm extends AndroidViewModel {
 
     private CompositeDisposable disposable = new CompositeDisposable();
 
-    public FragmentVerificationMvvm(@NonNull Application application) {
+    public ActivityVerificationMvvm(@NonNull Application application) {
         super(application);
         context = application.getApplicationContext();
         mAuth = FirebaseAuth.getInstance();
@@ -59,7 +59,7 @@ public class FragmentVerificationMvvm extends AndroidViewModel {
 
     }
 
-    public void sendSmsCode(String lang, String phone_code, String phone, HomeActivity activity) {
+    public void sendSmsCode(String lang, String phone_code, String phone, VerificationCodeActivity activity) {
 
         startTimer();
         this.phone_code = phone_code;
@@ -85,9 +85,7 @@ public class FragmentVerificationMvvm extends AndroidViewModel {
             public void onVerificationFailed(@NonNull FirebaseException e) {
                 Log.e("dkdkdk", e.toString());
                 if (e.getMessage() != null) {
-                    //   Common.CreateDialogAlert(VerificationCodeActivity.this, e.getMessage());
                 } else {
-                    // Common.CreateDialogAlert(VerificationCodeActivity.this, getString(R.string.failed));
 
                 }
             }
@@ -146,9 +144,9 @@ public class FragmentVerificationMvvm extends AndroidViewModel {
     }
 
 
-    public void checkValidCode(String code, HomeActivity activity) {
+    public void checkValidCode(String code, VerificationCodeActivity activity) {
         login(activity);
-        if (verificationId != null) {
+       /* if (verificationId != null) {
             PhoneAuthCredential credential = PhoneAuthProvider.getCredential(verificationId, code);
             mAuth.signInWithCredential(credential)
                     .addOnSuccessListener(authResult -> {
@@ -161,7 +159,7 @@ public class FragmentVerificationMvvm extends AndroidViewModel {
             });
         } else {
             // Toast.makeText(context, "wait sms", Toast.LENGTH_SHORT).show();
-        }
+        }*/
 
     }
 
@@ -178,10 +176,9 @@ public class FragmentVerificationMvvm extends AndroidViewModel {
             @Override
             public void onSuccess(@NonNull Response<UserModel> userModelResponse) {
                 dialog.dismiss();
-                Log.e("dkldkdk", userModelResponse.code() + "");
 
                 if (userModelResponse.isSuccessful()) {
-                    Log.e("dkldkdk", userModelResponse.body().getStatus() + "");
+                    Log.e("status", userModelResponse.body().getStatus() + "");
                     if (userModelResponse.body().getStatus() == 200) {
 
                         userModelMutableLiveData.postValue(userModelResponse.body());

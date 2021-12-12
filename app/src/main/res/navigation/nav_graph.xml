@@ -52,27 +52,14 @@
         android:name="com.apps.wedding.uis.activity_home.fragments.ServiceDetailsFragment"
         android:label=""
         tools:layout="@layout/fragment_service_details" />
-    <fragment
-        android:id="@+id/loginFragment"
-        android:name="com.apps.wedding.uis.activity_home.fragments.LoginFragment"
-        android:label=""
-        tools:layout="@layout/fragment_login" />
-    <fragment
-        android:id="@+id/verificationcodeFragment"
-        android:name="com.apps.wedding.uis.activity_home.fragments.FragmentVerficationCode"
-        android:label=""
-        tools:layout="@layout/fragment_verification_code" />
+
 
     <fragment
         android:id="@+id/reservationConfirmFragment"
         android:name="com.apps.wedding.uis.activity_home.fragments.FragmentReservisionConfirmation"
         android:label=""
         tools:layout="@layout/fragment_reservation_confirmation" />
-    <fragment
-        android:id="@+id/signupFragment"
-        android:name="com.apps.wedding.uis.activity_home.fragments.FragmentSignup"
-        android:label=""
-        tools:layout="@layout/fragment_signup" />
+
     <fragment
         android:id="@+id/editProfileFragment"
         android:name="com.apps.wedding.uis.activity_home.fragments.FragmentEditProfile"

@@ -1,5 +1,6 @@
 package com.apps.wedding.uis.activity_home.fragments_home_navigaion;
 
+import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -8,29 +9,26 @@ import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.SavedStateHandle;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.NavBackStackEntry;
 import androidx.navigation.Navigation;
-import androidx.navigation.ui.NavigationUI;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.apps.wedding.R;
-import com.apps.wedding.model.UserModel;
-import com.apps.wedding.mvvm.FragmentEditProfileMvvm;
 import com.apps.wedding.mvvm.FragmentProfileMvvm;
-import com.apps.wedding.preferences.Preferences;
 import com.apps.wedding.uis.activity_base.BaseFragment;
 import com.apps.wedding.databinding.FragmentProfileBinding;
 import com.apps.wedding.uis.activity_home.HomeActivity;
+import com.apps.wedding.uis.activity_login.LoginActivity;
 
 import java.util.List;
 
@@ -38,15 +36,20 @@ import java.util.List;
 public class FragmentProfile extends BaseFragment {
     private HomeActivity activity;
     private FragmentProfileBinding binding;
-    private Preferences preferences;
-    private UserModel userModel;
     private boolean login;
     private FragmentProfileMvvm fragmentProfileMvvm;
+    private ActivityResultLauncher<Intent> launcher;
+    private int req = 1;
 
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         activity = (HomeActivity) context;
+        launcher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+            if (req == 1 && result.getResultCode() == Activity.RESULT_OK) {
+                binding.setModel(getUserModel());
+            }
+        });
     }
 
     @Override
@@ -65,19 +68,14 @@ public class FragmentProfile extends BaseFragment {
 
     private void initView() {
         fragmentProfileMvvm = ViewModelProviders.of(this).get(FragmentProfileMvvm.class);
-
-        preferences = Preferences.getInstance();
-        userModel = preferences.getUserData(activity);
-        if (userModel != null) {
-            binding.setModel(userModel);
+        if (getUserModel() != null) {
+            binding.setModel(getUserModel());
         }
         binding.setLang(getLang());
-        fragmentProfileMvvm.logout.observe(activity, new Observer<Boolean>() {
-            @Override
-            public void onChanged(Boolean aBoolean) {
-                if (aBoolean) {
-                    logout();
-                }
+
+        fragmentProfileMvvm.logout.observe(activity, aBoolean -> {
+            if (aBoolean) {
+                logout();
             }
         });
         binding.llContactUs.setOnClickListener(v -> {
@@ -96,42 +94,39 @@ public class FragmentProfile extends BaseFragment {
         });
 
         binding.llRate.setOnClickListener(v -> rateApp());
-        binding.llProfile.setOnClickListener(view -> {
-                    if (userModel == null) {
-                        Navigation.findNavController(binding.getRoot()).navigate(R.id.loginFragment);
-                    } else {
-                        Navigation.findNavController(binding.getRoot()).navigate(R.id.editProfileFragment);
 
-                        // Log.e("dlld",userModel.getData().getName());
-                    }
-                }
-        );
-        binding.llEditProfile.setOnClickListener(view -> {
-                    if (userModel == null) {
-                        Navigation.findNavController(binding.getRoot()).navigate(R.id.loginFragment);
-                    } else {
-                        Navigation.findNavController(binding.getRoot()).navigate(R.id.editProfileFragment);
-
-                        // Log.e("dlld",userModel.getData().getName());
-                    }
-                }
-        );
-        binding.lllogout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (userModel == null) {
-                    logout();
-                } else {
-                    fragmentProfileMvvm.logout(activity, userModel);
-                }
-
+        binding.tvName.setOnClickListener(v -> {
+            if (getUserModel() == null) {
+                navigateToLoginActivity();
             }
+        });
+        binding.llEditProfile.setOnClickListener(view -> {
+                    if (getUserModel() != null) {
+                        Navigation.findNavController(binding.getRoot()).navigate(R.id.editProfileFragment);
+                    }
+                }
+        );
+        binding.cardViewLogout.setOnClickListener(view -> {
+            if (getUserModel() == null) {
+                logout();
+            } else {
+                fragmentProfileMvvm.logout(activity, getUserModel());
+            }
+
         });
     }
 
+    private void navigateToLoginActivity() {
+        req = 1;
+        Intent intent = new Intent(activity, LoginActivity.class);
+        launcher.launch(intent);
+
+    }
+
     private void logout() {
-        preferences.createUpdateUserData(activity, null);
-        Navigation.findNavController(binding.getRoot()).navigate(R.id.loginFragment);
+        clearUserModel(activity);
+        binding.setModel(null);
+        binding.image.setImageResource(R.drawable.circle_avatar);
     }
 
     private void rateApp() {
@@ -186,9 +181,8 @@ public class FragmentProfile extends BaseFragment {
             if (savedStateHandle.contains("data")) {
                 login = savedStateHandle.get("data");
                 if (login) {
-                    userModel = preferences.getUserData(activity);
-                    binding.setModel(userModel);
-                    activity.updatefirebase();
+                    binding.setModel(getUserModel());
+                    activity.updateFirebase();
                 }
             }
         }

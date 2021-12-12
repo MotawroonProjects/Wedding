@@ -38,6 +38,14 @@ public class Preferences {
         editor.apply();
 
     }
+
+    public void clearUserData(Context context) {
+        SharedPreferences preferences = context.getSharedPreferences("user", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.clear();
+        editor.apply();
+
+    }
     public void create_update_user_settings(Context context, UserSettingsModel model) {
         SharedPreferences sharedPreferences = context.getSharedPreferences("settings_pref", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();

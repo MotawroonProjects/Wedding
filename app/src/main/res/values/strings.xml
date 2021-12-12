@@ -67,5 +67,6 @@
     <string name="user_found">User Found</string>
     <string name="suc">Sucess</string>
     <string name="all">All</string>
+    <string name="no_services_to_show">No services to show</string>
 
 </resources>

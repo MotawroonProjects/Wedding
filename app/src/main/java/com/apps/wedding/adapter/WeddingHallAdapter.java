@@ -76,7 +76,16 @@ public class WeddingHallAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     }
 
     public void updateList(List<WeddingHallModel> list){
-        this.list=list;
+        if (list==null){
+            if (this.list!=null){
+                this.list.clear();
+
+            }
+
+        }else {
+            this.list=list;
+
+        }
         notifyDataSetChanged();
     }
 

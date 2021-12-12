@@ -55,58 +55,60 @@
                 android:layout_height="0dp"
                 android:layout_weight="1"
                 app:cardCornerRadius="10dp"
-                app:cardElevation="3dp">
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    >
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="8dp"
-        android:orientation="horizontal">
+                android:layout_margin="3dp"
+                app:cardElevation="31dp">
 
-        <ImageView
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_gravity="center_vertical"
-            android:rotation='@{lang.equals("en")?180:0}'
-            android:src="@drawable/ic_menu" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/tvDate"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-            android:textColor="@color/black"
-            android:textSize="14sp" />
-    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="8dp"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:layout_gravity="center_vertical"
+                            android:rotation='@{lang.equals("en")?180:0}'
+                            android:src="@drawable/ic_menu" />
+
+                        <TextView
+                            android:id="@+id/tvDate"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginStart="16dp"
+                            android:layout_marginEnd="16dp"
+                            android:textColor="@color/black"
+                            android:textSize="14sp" />
+                    </LinearLayout>
 
 
-    <com.applandeo.materialcalendarview.CalendarView
-        android:id="@+id/calendarView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:abbreviationsBarColor="@color/white"
-        app:abbreviationsLabelsColor="@color/black"
-        app:anotherMonthsDaysLabelsColor="@color/gray8"
-        app:daysLabelsColor="@color/black"
-        app:disabledDaysLabelsColor="@color/gray8"
-        app:eventsEnabled="true"
-        app:headerColor="@color/white"
-        app:headerLabelColor="@color/white"
-        app:pagesColor="@color/white"
-        app:selectionColor="@color/color3"
-        app:selectionLabelColor="@color/white"
-        app:swipeEnabled="true"
-        app:todayLabelColor="@color/gray4"
-        app:type="one_day_picker"
+                    <com.applandeo.materialcalendarview.CalendarView
+                        android:id="@+id/calendarView"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        app:abbreviationsBarColor="@color/white"
+                        app:abbreviationsLabelsColor="@color/black"
+                        app:anotherMonthsDaysLabelsColor="@color/gray8"
+                        app:daysLabelsColor="@color/black"
+                        app:disabledDaysLabelsColor="@color/gray8"
+                        app:eventsEnabled="true"
+                        app:headerColor="@color/white"
+                        app:headerLabelColor="@color/white"
+                        app:pagesColor="@color/white"
+                        app:selectionColor="@color/colorPrimary"
+                        app:selectionLabelColor="@color/white"
+                        app:swipeEnabled="true"
+                        app:todayLabelColor="@color/gray4"
+                        app:type="one_day_picker"
 
-        />
-</LinearLayout>
+                        />
+                </LinearLayout>
 
             </androidx.cardview.widget.CardView>
 
@@ -115,7 +117,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_margin="16dp"
+                android:layout_marginBottom="100dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginTop="16dp"
                 android:background="@drawable/rounded_primary"
                 android:minWidth="120dp"
                 android:text="@string/choose_day"

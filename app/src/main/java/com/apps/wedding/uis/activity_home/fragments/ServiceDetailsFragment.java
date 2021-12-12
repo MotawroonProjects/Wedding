@@ -84,7 +84,6 @@ public class ServiceDetailsFragment extends BaseFragment {
     private TimerTask timerTask;
     private SliderAdapter sliderAdapter;
     private SingleWeddingHallDataModel singleWeddingHallDataModel;
-    private String video;
     private String service_id = "";
 
     @Override
@@ -145,7 +144,6 @@ public class ServiceDetailsFragment extends BaseFragment {
     private void initView() {
         fragmentServiceDetialsMvvm = ViewModelProviders.of(this).get(FragmentServiceDetialsMvvm.class);
         fragmentServiceDetialsMvvm.getIsLoading().observe(activity, isLoading -> {
-            //binding..setRefreshing(isLoading);
             if(isLoading){
                 binding.progBar.setVisibility(View.VISIBLE);
                 binding.nested.setVisibility(View.GONE);
@@ -173,7 +171,8 @@ public class ServiceDetailsFragment extends BaseFragment {
                 }
             }
             if (singleWeddingHallDataModel.getData().getVideo() != null) {
-                getVideoImage(singleWeddingHallDataModel.getData().getVideo());
+                getVideoImage();
+                setupPlayer();
             }
             if (singleWeddingHallDataModel.getData().getOffer() == null) {
                 binding.cardOffer.setVisibility(View.GONE);
@@ -205,22 +204,18 @@ public class ServiceDetailsFragment extends BaseFragment {
 
             }
         });
-        binding.btnBook.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                confirmReservision();
-            }
-        });
+        binding.btnBook.setOnClickListener(view -> confirmReservision());
 
     }
 
-    private void getVideoImage(String video) {
+    private void getVideoImage() {
+
         int microSecond = 6000000;// 6th second as an example
-        Uri uri = Uri.parse(video);
-        RequestOptions options = new RequestOptions().frame(microSecond);
-        this.video = video;
+        Uri uri = Uri.parse(singleWeddingHallDataModel.getData().getVideo());
+        RequestOptions options = new RequestOptions().frame(microSecond).override(binding.imageVideo.getWidth(), binding.imageVideo.getHeight());
         Glide.with(activity).asBitmap()
                 .load(uri)
+                .centerCrop()
                 .apply(options)
                 .into(binding.imageVideo);
     }
@@ -228,11 +223,11 @@ public class ServiceDetailsFragment extends BaseFragment {
     @SuppressLint("ClickableViewAccessibility")
     private void setupPlayer() {
 
-        if (video != null) {
+        if (singleWeddingHallDataModel.getData().getVideo() != null) {
             trackSelector = new DefaultTrackSelector(activity);
             dataSourceFactory = new DefaultDataSource.Factory(activity);
             MediaSourceFactory mediaSourceFactory = new DefaultMediaSourceFactory(dataSourceFactory);
-            MediaItem mediaItem = MediaItem.fromUri(Uri.parse(video));
+            MediaItem mediaItem = MediaItem.fromUri(Uri.parse(singleWeddingHallDataModel.getData().getVideo()));
 
             player = new ExoPlayer.Builder(activity)
                     .setTrackSelector(trackSelector)
@@ -241,6 +236,7 @@ public class ServiceDetailsFragment extends BaseFragment {
 
             player.setMediaItem(mediaItem);
             player.setPlayWhenReady(false);
+            player.setRepeatMode(ExoPlayer.REPEAT_MODE_ONE);
             binding.exoPlayer.setPlayer(player);
             player.prepare();
 
@@ -277,7 +273,7 @@ public class ServiceDetailsFragment extends BaseFragment {
 
     @Override
     public void onResume() {
-        if (Util.SDK_INT <= 23 || player == null) {
+        if ((Util.SDK_INT <= 23 || player == null)&&singleWeddingHallDataModel!=null) {
             setupPlayer();
         }
         super.onResume();
@@ -288,7 +284,7 @@ public class ServiceDetailsFragment extends BaseFragment {
     @Override
     public void onStart() {
         if (Util.SDK_INT > 23) {
-            if (player == null) {
+            if (player == null&&singleWeddingHallDataModel!=null) {
                 setupPlayer();
                 binding.exoPlayer.onResume();
             }

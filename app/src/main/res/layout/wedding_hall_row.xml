@@ -18,13 +18,27 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
+
             >
-            <ImageView
+            <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="250dp"
+                android:layout_height="wrap_content"
                 android:background="@color/gray12"
-                image="@{model.main_image}"
-                />
+                >
+                <com.makeramen.roundedimageview.RoundedImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="250dp"
+                    image="@{model.main_image}"
+                    android:adjustViewBounds="true"
+                    app:riv_corner_radius="20dp"
+                    app:riv_mutate_background="true"
+                    android:layout_marginTop="12sp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginBottom="8dp"
+                    />
+            </FrameLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

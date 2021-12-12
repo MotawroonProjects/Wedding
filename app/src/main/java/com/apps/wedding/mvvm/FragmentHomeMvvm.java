@@ -40,7 +40,7 @@ public class FragmentHomeMvvm extends AndroidViewModel {
     private float startRange = 0.0f;
     private float endRange = 100000.0f;
     private float steps = 500.0f;
-    private String defaultRate ="1";
+    private String defaultRate =null;
     private Context context;
     private MutableLiveData<List<WeddingHallModel>> weddingHallModelMutableLiveData;
     private MutableLiveData<List<DepartmentModel>> departmentLivData;
@@ -126,16 +126,19 @@ public class FragmentHomeMvvm extends AndroidViewModel {
             }
             Observable.fromArray(list)
                     .filter(list1 -> {
-                        int pos = 0;
+                        int pos = -1;
                         for (int index = 0; index < list1.size(); index++) {
                             if (list1.get(index).getTitle().equals(getFilter().getValue().getRate())) {
                                 pos = index;
                                 break;
                             }
                         }
-                        FilterRateModel model = list1.get(pos);
-                        model.setSelected(true);
-                        list1.set(pos, model);
+                        if (pos!=-1){
+                            FilterRateModel model = list1.get(pos);
+                            model.setSelected(true);
+                            list1.set(pos, model);
+                        }
+
                         return true;
                     })
                     .subscribeOn(Schedulers.computation())

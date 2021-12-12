@@ -101,6 +101,7 @@ public class FragmentHome extends BaseFragment {
             if (isLoading) {
                 binding.cardNoData.setVisibility(View.GONE);
 
+
             }
             binding.swipeRefresh.setRefreshing(isLoading);
         });
@@ -109,7 +110,10 @@ public class FragmentHome extends BaseFragment {
             if (weddingHallModels.size() > 0) {
                 weddingHallAdapter.updateList(fragmentHomeMvvm.getWeddingHall().getValue());
                 binding.cardNoData.setVisibility(View.GONE);
+
             } else {
+                weddingHallAdapter.updateList(null);
+
                 binding.cardNoData.setVisibility(View.VISIBLE);
 
             }

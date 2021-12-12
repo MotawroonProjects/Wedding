@@ -45,18 +45,18 @@
                     app:cardElevation="2dp"
                     app:contentPadding="2dp">
 
-                    <ImageView
+                    <de.hdodenhof.circleimageview.CircleImageView
                         android:id="@+id/image"
-                        image="@{model.Data.logo}"
+                        user_image="@{model.Data.logo}"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:adjustViewBounds="true"
                         android:src="@drawable/circle_avatar" />
 
 
                 </androidx.cardview.widget.CardView>
 
                 <TextView
+                    android:id="@+id/tvName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
@@ -266,7 +266,9 @@
                     android:layout_marginTop="16dp"
                     android:background="@color/white"
                     android:orientation="vertical"
-                    android:padding="16dp">
+                    android:padding="16dp"
+                    android:layout_marginBottom="8dp"
+                    >
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -321,6 +323,7 @@
 
 
                 <androidx.cardview.widget.CardView
+                    android:id="@+id/cardViewLogout"
                     android:layout_width="wrap_content"
                     android:layout_height="40dp"
                     android:layout_gravity="center_horizontal"
@@ -330,14 +333,13 @@
                     android:layout_marginBottom="40dp"
                     app:cardCornerRadius="20dp"
                     app:cardElevation="5dp"
+                    android:visibility='@{model==null?View.GONE:View.VISIBLE,default=gone}'
 
                     >
 
                     <LinearLayout
-                        android:id="@+id/lllogout"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:visibility='@{model==null?View.GONE:View.VISIBLE,default=gone}'
                         android:layout_gravity="center_vertical"
                         android:paddingStart="12dp"
                         android:paddingEnd="12dp">

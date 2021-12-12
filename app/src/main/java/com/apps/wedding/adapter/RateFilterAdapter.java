@@ -113,18 +113,22 @@ public class RateFilterAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     public void updateData(List<FilterRateModel> list, String rate) {
         this.list = list;
         if (list!=null){
-            currentPos = pos(rate);
-            oldPos = currentPos;
-            FilterRateModel model = this.list.get(currentPos);
-            model.setSelected(true);
-            this.list.set(currentPos,model);
+            int pos = pos(rate);
+            if (pos!=-1){
+                currentPos = pos(rate);
+                oldPos = currentPos;
+                FilterRateModel model = this.list.get(currentPos);
+                model.setSelected(true);
+                this.list.set(currentPos,model);
+            }
+
         }
 
         notifyDataSetChanged();
     }
 
     private int pos(String rate){
-        int pos = 0;
+        int pos = -1;
         if (list!=null){
             for (int index=0;index<list.size();index++){
                 if (list.get(index).getTitle().equals(rate)){

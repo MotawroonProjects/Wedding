@@ -28,12 +28,15 @@
         <entry key="..\:/Users/Arb Develpor/Desktop/emad/Projects/Wedding/app/src/main/res/layout/activity_language.xml" value="0.20416666666666666" />
         <entry key="..\:/Users/Arb Develpor/Desktop/emad/Projects/Wedding/app/src/main/res/layout/activity_login.xml" value="0.20416666666666666" />
         <entry key="..\:/Users/Arb Develpor/Desktop/emad/Projects/Wedding/app/src/main/res/layout/activity_notification.xml" value="0.20416666666666666" />
+        <entry key="..\:/Users/Arb Develpor/Desktop/emad/Projects/Wedding/app/src/main/res/layout/activity_sign_up.xml" value="0.19010416666666666" />
         <entry key="..\:/Users/Arb Develpor/Desktop/emad/Projects/Wedding/app/src/main/res/layout/activity_splash.xml" value="0.20416666666666666" />
+        <entry key="..\:/Users/Arb Develpor/Desktop/emad/Projects/Wedding/app/src/main/res/layout/activity_verification_code.xml" value="0.20416666666666666" />
         <entry key="..\:/Users/Arb Develpor/Desktop/emad/Projects/Wedding/app/src/main/res/layout/bottom_sheet_dialog.xml" value="0.45180722891566266" />
         <entry key="..\:/Users/Arb Develpor/Desktop/emad/Projects/Wedding/app/src/main/res/layout/category_row.xml" value="0.20416666666666666" />
         <entry key="..\:/Users/Arb Develpor/Desktop/emad/Projects/Wedding/app/src/main/res/layout/exo_player_layout.xml" value="0.20416666666666666" />
         <entry key="..\:/Users/Arb Develpor/Desktop/emad/Projects/Wedding/app/src/main/res/layout/filter_rate_row.xml" value="0.67" />
         <entry key="..\:/Users/Arb Develpor/Desktop/emad/Projects/Wedding/app/src/main/res/layout/fragment_app.xml" value="0.20416666666666666" />
+        <entry key="..\:/Users/Arb Develpor/Desktop/emad/Projects/Wedding/app/src/main/res/layout/fragment_choose_day.xml" value="0.20416666666666666" />
         <entry key="..\:/Users/Arb Develpor/Desktop/emad/Projects/Wedding/app/src/main/res/layout/fragment_current_reservation.xml" value="0.19010416666666666" />
         <entry key="..\:/Users/Arb Develpor/Desktop/emad/Projects/Wedding/app/src/main/res/layout/fragment_home.xml" value="0.20416666666666666" />
         <entry key="..\:/Users/Arb Develpor/Desktop/emad/Projects/Wedding/app/src/main/res/layout/fragment_login.xml" value="0.20416666666666666" />
@@ -43,6 +46,8 @@
         <entry key="..\:/Users/Arb Develpor/Desktop/emad/Projects/Wedding/app/src/main/res/layout/fragment_profile.xml" value="0.20416666666666666" />
         <entry key="..\:/Users/Arb Develpor/Desktop/emad/Projects/Wedding/app/src/main/res/layout/fragment_reservation_confirmation.xml" value="0.20416666666666666" />
         <entry key="..\:/Users/Arb Develpor/Desktop/emad/Projects/Wedding/app/src/main/res/layout/fragment_service_details.xml" value="0.22" />
+        <entry key="..\:/Users/Arb Develpor/Desktop/emad/Projects/Wedding/app/src/main/res/layout/fragment_signup.xml" value="0.20416666666666666" />
+        <entry key="..\:/Users/Arb Develpor/Desktop/emad/Projects/Wedding/app/src/main/res/layout/fragment_verification_code.xml" value="0.20416666666666666" />
         <entry key="..\:/Users/Arb Develpor/Desktop/emad/Projects/Wedding/app/src/main/res/layout/map_wedding_hall_row.xml" value="0.20416666666666666" />
         <entry key="..\:/Users/Arb Develpor/Desktop/emad/Projects/Wedding/app/src/main/res/layout/toolbar.xml" value="0.20416666666666666" />
         <entry key="..\:/Users/Arb Develpor/Desktop/emad/Projects/Wedding/app/src/main/res/layout/wedding_hall_row.xml" value="0.22" />
@@ -102,23 +107,13 @@
         <entry key="..\:/android/Projects/Wedding/app/src/main/res/layout/slider_row.xml" value="0.20416666666666666" />
         <entry key="..\:/android/Projects/Wedding/app/src/main/res/layout/toolbar.xml" value="0.20416666666666666" />
         <entry key="..\:/android/Projects/Wedding/app/src/main/res/menu/menu.xml" value="0.20102564102564102" />
-        <entry key="..\:/wedding/app/src/main/res/drawable/ic_all_icon.xml" value="0.14791666666666667" />
         <entry key="..\:/wedding/app/src/main/res/drawable/pin_view_item.xml" value="0.15885416666666666" />
-        <entry key="..\:/wedding/app/src/main/res/drawable/shape_stroke_gray_color1.xml" value="0.14791666666666667" />
-        <entry key="..\:/wedding/app/src/main/res/drawable/stroke_gray.xml" value="0.14791666666666667" />
-        <entry key="..\:/wedding/app/src/main/res/layout/activity_home.xml" value="0.13177083333333334" />
         <entry key="..\:/wedding/app/src/main/res/layout/additional_items_row.xml" value="0.27291666666666664" />
         <entry key="..\:/wedding/app/src/main/res/layout/basic_item_row.xml" value="0.27291666666666664" />
-        <entry key="..\:/wedding/app/src/main/res/layout/category_row.xml" value="0.13177083333333334" />
-        <entry key="..\:/wedding/app/src/main/res/layout/fragment_choose_day.xml" value="0.13177083333333334" />
-        <entry key="..\:/wedding/app/src/main/res/layout/fragment_home.xml" value="0.13177083333333334" />
         <entry key="..\:/wedding/app/src/main/res/layout/fragment_login.xml" value="0.14270833333333333" />
-        <entry key="..\:/wedding/app/src/main/res/layout/fragment_nearby.xml" value="0.13177083333333334" />
         <entry key="..\:/wedding/app/src/main/res/layout/fragment_reservation_confirmation.xml" value="0.27291666666666664" />
         <entry key="..\:/wedding/app/src/main/res/layout/fragment_service_details.xml" value="0.27291666666666664" />
         <entry key="..\:/wedding/app/src/main/res/layout/fragment_verification_code.xml" value="0.21" />
-        <entry key="..\:/wedding/app/src/main/res/layout/map_wedding_hall_row.xml" value="0.25" />
-        <entry key="..\:/wedding/app/src/main/res/layout/wedding_hall_row.xml" value="0.13177083333333334" />
       </map>
     </option>
   </component>

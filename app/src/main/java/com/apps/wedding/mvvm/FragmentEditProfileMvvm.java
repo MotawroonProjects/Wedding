@@ -47,7 +47,7 @@ public class FragmentEditProfileMvvm extends AndroidViewModel {
         ProgressDialog dialog = Common.createProgressDialog(context, context.getResources().getString(R.string.wait));
         dialog.setCancelable(false);
         dialog.show();
-        Api.getService(Tags.base_url).editProfile("Bearer "+userModel.getData().getToken(),Tags.api_key, model.getFirst_name()+model.getSeconed_name(), userModel.getData().getId()+"").subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).unsubscribeOn(Schedulers.io()).subscribe(new SingleObserver<Response<UserModel>>() {
+        Api.getService(Tags.base_url).editProfile("Bearer " + userModel.getData().getToken(), Tags.api_key, model.getFirst_name() + " " + model.getSeconed_name(), userModel.getData().getId() + "").subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).unsubscribeOn(Schedulers.io()).subscribe(new SingleObserver<Response<UserModel>>() {
             @Override
             public void onSubscribe(@NonNull Disposable d) {
                 disposable.add(d);
@@ -56,10 +56,8 @@ public class FragmentEditProfileMvvm extends AndroidViewModel {
             @Override
             public void onSuccess(@NonNull Response<UserModel> userModelResponse) {
                 dialog.dismiss();
-                Log.e("dkldkdk", userModelResponse.code() + ""+"Bearer  "+userModel.getData().getToken());
 
                 if (userModelResponse.isSuccessful()) {
-                      Log.e("dkldkdk", userModelResponse.body().getStatus() + "");
                     if (userModelResponse.body().getStatus() == 200) {
 
                         userModelMutableLiveData.postValue(userModelResponse.body());
@@ -85,14 +83,14 @@ public class FragmentEditProfileMvvm extends AndroidViewModel {
         dialog.setCancelable(false);
         dialog.show();
         RequestBody api_part = Common.getRequestBodyText(Tags.api_key);
-        RequestBody name_part = Common.getRequestBodyText(model.getFirst_name()+model.getSeconed_name());
-        RequestBody user_part = Common.getRequestBodyText(userModel.getData().getId()+"");
+        RequestBody name_part = Common.getRequestBodyText(model.getFirst_name() + " " + model.getSeconed_name());
+        RequestBody user_part = Common.getRequestBodyText(userModel.getData().getId() + "");
 
 
         MultipartBody.Part image = Common.getMultiPart(context, uri, "logo");
 
 
-        Api.getService(Tags.base_url).editProfilewithImage("Bearer "+userModel.getData().getToken(),api_part, name_part, user_part, image).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).unsubscribeOn(Schedulers.io()).subscribe(new Observer<Response<UserModel>>() {
+        Api.getService(Tags.base_url).editProfilewithImage("Bearer " + userModel.getData().getToken(), api_part, name_part, user_part, image).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).unsubscribeOn(Schedulers.io()).subscribe(new Observer<Response<UserModel>>() {
             @Override
             public void onSubscribe(@NonNull Disposable d) {
                 disposable.add(d);
@@ -102,7 +100,6 @@ public class FragmentEditProfileMvvm extends AndroidViewModel {
             public void onNext(@NonNull Response<UserModel> userModelResponse) {
                 dialog.dismiss();
                 if (userModelResponse.isSuccessful()) {
-                     // Log.e("dkldkdk", userModelResponse.body().getStatus() + "");
                     if (userModelResponse.body().getStatus() == 200) {
 
                         userModelMutableLiveData.postValue(userModelResponse.body());

@@ -71,5 +71,7 @@
     <string name="cahnge">Cahnge</string>
     <string name="show">Show</string>
     <string name="rate_service">Rate Service</string>
+    <string name="no_search_result">No search result</string>
+    <string name="offers">Offers</string>
 
 </resources>

@@ -10,64 +10,44 @@ import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.Navigation;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.PagerSnapHelper;
+import androidx.recyclerview.widget.SnapHelper;
 
-import android.system.Os;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.apps.wedding.R;
+import com.apps.wedding.adapter.OfferAdapter;
 import com.apps.wedding.adapter.SliderAdapter;
 import com.apps.wedding.databinding.FragmentServiceDetailsBinding;
 import com.apps.wedding.model.SingleWeddingHallDataModel;
+import com.apps.wedding.model.WeddingHallModel;
 import com.apps.wedding.mvvm.FragmentServiceDetialsMvvm;
 import com.apps.wedding.uis.activity_base.BaseFragment;
 import com.apps.wedding.uis.activity_home.HomeActivity;
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.bitmap_recycle.BitmapPool;
-import com.bumptech.glide.load.resource.bitmap.VideoBitmapDecoder;
 import com.bumptech.glide.request.RequestOptions;
 import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.MediaItem;
-import com.google.android.exoplayer2.PlaybackException;
-import com.google.android.exoplayer2.Player;
-import com.google.android.exoplayer2.SimpleExoPlayer;
-import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
 import com.google.android.exoplayer2.source.DefaultMediaSourceFactory;
-import com.google.android.exoplayer2.source.MediaSource;
 import com.google.android.exoplayer2.source.MediaSourceFactory;
-import com.google.android.exoplayer2.source.dash.DashMediaSource;
-import com.google.android.exoplayer2.source.dash.DefaultDashChunkSource;
-import com.google.android.exoplayer2.source.hls.HlsMediaSource;
-import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
-import com.google.android.exoplayer2.trackselection.TrackSelector;
-import com.google.android.exoplayer2.upstream.BandwidthMeter;
 import com.google.android.exoplayer2.upstream.DataSource;
-import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
 import com.google.android.exoplayer2.upstream.DefaultDataSource;
-import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
-import com.google.android.exoplayer2.upstream.DefaultHttpDataSource;
-import com.google.android.exoplayer2.upstream.HttpDataSource;
+import com.google.android.exoplayer2.util.Log;
 import com.google.android.exoplayer2.util.Util;
 
-import java.net.CookiePolicy;
-import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
-import io.reactivex.ObservableEmitter;
-import io.reactivex.ObservableOnSubscribe;
-import io.reactivex.ObservableSource;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 
 public class ServiceDetailsFragment extends BaseFragment {
@@ -85,6 +65,7 @@ public class ServiceDetailsFragment extends BaseFragment {
     private SliderAdapter sliderAdapter;
     private SingleWeddingHallDataModel singleWeddingHallDataModel;
     private String service_id = "";
+    private OfferAdapter offerAdapter;
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -96,7 +77,7 @@ public class ServiceDetailsFragment extends BaseFragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Bundle bundle = getArguments();
-        if (bundle!=null){
+        if (bundle != null) {
             service_id = bundle.getString("data");
         }
     }
@@ -144,48 +125,59 @@ public class ServiceDetailsFragment extends BaseFragment {
     private void initView() {
         fragmentServiceDetialsMvvm = ViewModelProviders.of(this).get(FragmentServiceDetialsMvvm.class);
         fragmentServiceDetialsMvvm.getIsLoading().observe(activity, isLoading -> {
-            if(isLoading){
+            if (isLoading) {
                 binding.progBar.setVisibility(View.VISIBLE);
                 binding.nested.setVisibility(View.GONE);
 
-            }
-            else {
+            } else {
                 binding.progBar.setVisibility(View.GONE);
                 binding.nested.setVisibility(View.VISIBLE);
             }
 
         });
 
+        offerAdapter = new OfferAdapter(activity, this);
+        binding.recView.setLayoutManager(new LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false));
+        SnapHelper snapHelper = new PagerSnapHelper();
+        snapHelper.attachToRecyclerView(binding.recView);
+        binding.recView.setAdapter(offerAdapter);
+
         fragmentServiceDetialsMvvm.getSingleWedding().observe(activity, s -> {
             singleWeddingHallDataModel = s;
             binding.setModel(singleWeddingHallDataModel.getData());
-            if(singleWeddingHallDataModel!=null&&singleWeddingHallDataModel.getData()!=null){
-            if (singleWeddingHallDataModel.getData().getService_images() != null && singleWeddingHallDataModel.getData().getService_images().size() > 0) {
-                sliderAdapter = new SliderAdapter(singleWeddingHallDataModel.getData().getService_images(), activity);
-                binding.pager.setAdapter(sliderAdapter);
-                binding.tab.setupWithViewPager(binding.pager);
-                if (singleWeddingHallDataModel.getData().getService_images().size() > 1) {
-                    timer = new Timer();
-                    timerTask = new MyTask();
-                    timer.scheduleAtFixedRate(timerTask, 6000, 6000);
+            if (singleWeddingHallDataModel != null && singleWeddingHallDataModel.getData() != null) {
+                if (singleWeddingHallDataModel.getData().getService_images() != null && singleWeddingHallDataModel.getData().getService_images().size() > 0) {
+                    sliderAdapter = new SliderAdapter(singleWeddingHallDataModel.getData().getService_images(), activity);
+                    binding.pager.setAdapter(sliderAdapter);
+                    binding.tab.setupWithViewPager(binding.pager);
+                    if (singleWeddingHallDataModel.getData().getService_images().size() > 1) {
+                        timer = new Timer();
+                        timerTask = new MyTask();
+                        timer.scheduleAtFixedRate(timerTask, 6000, 6000);
+                    }
                 }
-            }
-            if (singleWeddingHallDataModel.getData().getVideo() != null) {
-                getVideoImage();
-                setupPlayer();
-            }
-            if (singleWeddingHallDataModel.getData().getOffer() == null) {
-                binding.cardOffer.setVisibility(View.GONE);
-            } else {
-                binding.cardOffer.setVisibility(View.VISIBLE);
+                if (singleWeddingHallDataModel.getData().getVideo() != null) {
+                    getVideoImage();
+                    setupPlayer();
+                }
 
-            }}
+                if (singleWeddingHallDataModel.getData().getOffer() != null && singleWeddingHallDataModel.getData().getOffer().size() > 0) {
+
+                    offerAdapter.updateList(singleWeddingHallDataModel.getData().getOffer());
+                    Log.e("sdsa","sdfs");
+                } else {
+                    Log.e("tt","tt");
+
+                }
+
+            }
         });
         fragmentServiceDetialsMvvm.getSingleWeddingHallData(service_id);
 
 
         binding.flVideo.setOnClickListener(v -> {
             isInFullScreen = true;
+
             binding.motionLayout.transitionToEnd();
             if (player != null) {
                 player.setPlayWhenReady(true);
@@ -193,18 +185,7 @@ public class ServiceDetailsFragment extends BaseFragment {
 
 
         });
-        binding.llMore.setOnClickListener(v -> {
-            if (binding.expandedLayout.isExpanded()) {
-                binding.expandedLayout.collapse(true);
-                binding.imageArrow.clearAnimation();
-                binding.imageArrow.animate().setDuration(300).rotation(0).start();
-            } else {
-                binding.expandedLayout.expand(true);
-                binding.imageArrow.animate().setDuration(300).rotation(180).start();
-
-            }
-        });
-        binding.btnBook.setOnClickListener(view -> confirmReservision());
+        binding.btnBook.setOnClickListener(view -> confirmReservation());
 
     }
 
@@ -269,11 +250,12 @@ public class ServiceDetailsFragment extends BaseFragment {
             player.setPlayWhenReady(false);
         }
 
+
     }
 
     @Override
     public void onResume() {
-        if ((Util.SDK_INT <= 23 || player == null)&&singleWeddingHallDataModel!=null) {
+        if ((Util.SDK_INT <= 23 || player == null) && singleWeddingHallDataModel != null) {
             setupPlayer();
         }
         super.onResume();
@@ -284,7 +266,7 @@ public class ServiceDetailsFragment extends BaseFragment {
     @Override
     public void onStart() {
         if (Util.SDK_INT > 23) {
-            if (player == null&&singleWeddingHallDataModel!=null) {
+            if (player == null && singleWeddingHallDataModel != null) {
                 setupPlayer();
                 binding.exoPlayer.onResume();
             }
@@ -309,10 +291,18 @@ public class ServiceDetailsFragment extends BaseFragment {
     }
 
 
-    public void confirmReservision() {
-        Bundle bundle=new Bundle();
-        bundle.putSerializable("data",singleWeddingHallDataModel);
-        Navigation.findNavController(binding.getRoot()).navigate(R.id.reservationConfirmFragment,bundle);
+    public void confirmReservation() {
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("data", singleWeddingHallDataModel);
+        bundle.putSerializable("data2", null);
+        Navigation.findNavController(binding.getRoot()).navigate(R.id.reservationConfirmFragment, bundle);
+    }
+
+    public void book(WeddingHallModel.OfferModel offerModel) {
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("data", singleWeddingHallDataModel);
+        bundle.putSerializable("data2", offerModel);
+        Navigation.findNavController(binding.getRoot()).navigate(R.id.reservationConfirmFragment, bundle);
     }
 
     public class MyTask extends TimerTask {

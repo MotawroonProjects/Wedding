@@ -77,8 +77,15 @@ public class MapWeddingHallAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     }
 
     public void updateList(List<WeddingHallModel> list) {
-        this.list = list;
+        if (list!=null){
+            this.list = list;
+        }else {
+            if (this.list!=null){
+                this.list.clear();
+            }
+        }
         notifyDataSetChanged();
+
     }
 
 }

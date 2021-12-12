@@ -34,6 +34,7 @@
                             android:padding="12dp">
 
                             <LinearLayout
+                                android:id="@+id/llSearch"
                                 android:layout_width="0dp"
                                 android:layout_height="50dp"
                                 android:layout_weight="1"

@@ -55,20 +55,19 @@ public class ContactUsActivity extends BaseActivity {
         binding.setContactModel(contactUsModel);
         binding.btnSend.setOnClickListener(view -> {
             if (contactUsModel.isDataValid(this)) {
-                contactusActivityMvvm.contactus(this,contactUsModel);
+                contactusActivityMvvm.contactus(this, contactUsModel);
             }
         });
         contactusActivityMvvm.send.observe(this, new Observer<Boolean>() {
             @Override
             public void onChanged(Boolean aBoolean) {
-                if(aBoolean){
-                    Toast.makeText(ContactUsActivity.this,getResources().getString(R.string.suc),Toast.LENGTH_LONG).show();
+                if (aBoolean) {
+                    Toast.makeText(ContactUsActivity.this, getResources().getString(R.string.suc), Toast.LENGTH_LONG).show();
                     finish();
                 }
             }
         });
     }
-
 
 
 }

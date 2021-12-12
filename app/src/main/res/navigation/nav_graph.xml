@@ -70,4 +70,9 @@
         android:name="com.apps.wedding.uis.activity_home.fragments.FragmentChooseDay"
         android:label=""
         tools:layout="@layout/fragment_choose_day" />
+    <fragment
+        android:id="@+id/fragmentSearch"
+        android:name="com.apps.wedding.uis.activity_home.fragments.FragmentSearch"
+        android:label=""
+        tools:layout="@layout/fragment_search" />
 </navigation>

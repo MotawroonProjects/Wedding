@@ -52,8 +52,8 @@
     <string name="more">المزيد</string>
     <string name="details">التفاصيل</string>
     <string name="book_now">إحجز الان</string>
-    <string name="basic_items">بنود اساسيه</string>
-    <string name="extra_items">بنود اضافيه</string>
+    <string name="basic_items">بنود اساسية</string>
+    <string name="extra_items">بنود اضافية</string>
     <string name="number_of_people">عدد الافراد </string>
     <string name="choose_day">اختر اليوم </string>
     <string name="please_enter_the_verification_code_sent_to">من فضلك ادخل رمز التحقق المرسل الي</string>
@@ -68,6 +68,8 @@
     <string name="suc">تم بنجاح</string>
     <string name="all">الكل</string>
     <string name="no_services_to_show">لاتوجد خدمات لعرضها</string>
+    <string name="no_search_result">لا توجد نتائج البحث</string>
+    <string name="offers">العروض</string>
     <string name="cahnge">تغيير</string>
     <string name="show">عرض</string>
     <string name="rate_service">قيم الخدمه</string>

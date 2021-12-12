@@ -45,13 +45,10 @@ public class HomeActivityMvvm extends AndroidViewModel {
     }
 
     public void updateFirebase(Context context, UserModel userModel) {
-        FirebaseInstanceId.getInstance().getInstanceId().addOnCompleteListener((Activity) context, (OnCompleteListener<InstanceIdResult>) task -> {
+        FirebaseInstanceId.getInstance().getInstanceId().addOnCompleteListener((Activity) context, task -> {
             if (task.isSuccessful()) {
                 String token = task.getResult().getToken();
 
-                ProgressDialog dialog = Common.createProgressDialog(context, context.getResources().getString(R.string.wait));
-                dialog.setCancelable(false);
-                dialog.show();
                 Api.getService(Tags.base_url).updateFirebasetoken("Bearer " + userModel.getData().getToken(), Tags.api_key, token, userModel.getData().getId() + "", "android").subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).unsubscribeOn(Schedulers.io()).subscribe(new SingleObserver<Response<StatusResponse>>() {
                     @Override
                     public void onSubscribe(@NonNull Disposable d) {
@@ -60,7 +57,6 @@ public class HomeActivityMvvm extends AndroidViewModel {
 
                     @Override
                     public void onSuccess(@NonNull Response<StatusResponse> statusResponseResponse) {
-                        dialog.dismiss();
                         if (statusResponseResponse.isSuccessful()) {
                             if (statusResponseResponse.body().getStatus() == 200) {
                                 firebase.postValue(token);
@@ -71,7 +67,7 @@ public class HomeActivityMvvm extends AndroidViewModel {
 
                     @Override
                     public void onError(@NonNull Throwable throwable) {
-                        dialog.dismiss();
+
                     }
                 });
             }

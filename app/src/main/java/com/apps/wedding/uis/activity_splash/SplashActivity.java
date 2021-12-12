@@ -50,7 +50,7 @@ public class SplashActivity extends BaseActivity {
 
                     @Override
                     public void onNext(@NonNull Long aLong) {
-                       navigateToHomeActivity();
+                        navigateToHomeActivity();
                     }
 
                     @Override
@@ -63,7 +63,6 @@ public class SplashActivity extends BaseActivity {
 
                     }
                 });
-
 
 
     }

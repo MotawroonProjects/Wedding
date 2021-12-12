@@ -1,139 +1,152 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+
     <data>
+
         <variable
             name="model"
             type="com.apps.wedding.model.WeddingHallModel" />
+
+        <import type="android.view.View" />
+
     </data>
+
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="5dp"
         app:cardBackgroundColor="@color/white"
         app:cardCornerRadius="3dp"
-        app:cardElevation="0dp"
-        android:layout_margin="5dp"
-        >
+        app:cardElevation="0dp">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
 
             >
+
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/gray12"
-                >
+                android:background="@color/gray12">
+
                 <com.makeramen.roundedimageview.RoundedImageView
+                    image="@{model.main_image}"
                     android:layout_width="match_parent"
                     android:layout_height="250dp"
-                    image="@{model.main_image}"
-                    android:adjustViewBounds="true"
-                    app:riv_corner_radius="20dp"
-                    app:riv_mutate_background="true"
-                    android:layout_marginTop="12sp"
                     android:layout_marginStart="8dp"
+                    android:layout_marginTop="12dp"
                     android:layout_marginEnd="8dp"
                     android:layout_marginBottom="8dp"
-                    />
+                    android:adjustViewBounds="true"
+                    app:riv_corner_radius="20dp"
+                    app:riv_mutate_background="true" />
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginEnd="24dp"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginBottom="8dp"
+                    android:src="@drawable/ic_offer"
+                    android:scaleType="centerCrop"
+                    android:visibility="@{model.offer==null?View.GONE:View.VISIBLE,default=gone}" />
+
             </FrameLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
                 android:layout_marginStart="8dp"
-                android:layout_marginEnd="8dp"
                 android:layout_marginTop="12dp"
-                >
+                android:layout_marginEnd="8dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
                 <TextView
                     android:layout_width="0dp"
-                    android:layout_weight="1"
                     android:layout_height="wrap_content"
-                    android:maxLines="3"
+                    android:layout_weight="1"
                     android:ellipsize="end"
                     android:gravity="start"
-                    android:textAlignment="viewStart"
-                    android:textColor="@color/black"
-                    android:textSize="16sp"
+                    android:maxLines="3"
                     android:paddingStart="5dp"
                     android:paddingEnd="5dp"
                     android:text="@{model.name}"
-                    android:textStyle="bold"
-                    />
-
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:ellipsize="end"
-                    android:textColor="@color/gray2"
-                    android:textSize="12sp"
-                    android:text='@{"("+model.rates_count+")"}'
-                    />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:ellipsize="end"
+                    android:textAlignment="viewStart"
                     android:textColor="@color/black"
-                    android:textSize="14sp"
-                    android:textStyle="bold"
-                    android:text="@{model.rates_val}"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:text='@{"("+model.rates_count+")"}'
+                    android:textColor="@color/gray2"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_marginStart="3dp"
                     android:layout_marginEnd="3dp"
-                    />
+                    android:ellipsize="end"
+                    android:text="@{model.rates_val}"
+                    android:textColor="@color/black"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+
                 <ImageView
                     android:layout_width="24dp"
                     android:layout_height="24dp"
-                    android:src="@drawable/ic_star"
                     android:padding="3dp"
-                    />
+                    android:src="@drawable/ic_star" />
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
                 android:layout_marginStart="8dp"
-                android:layout_marginEnd="8dp"
                 android:layout_marginTop="12dp"
+                android:layout_marginEnd="8dp"
                 android:layout_marginBottom="12dp"
-                >
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
                 <ImageView
                     android:layout_width="24dp"
                     android:layout_height="24dp"
-                    android:src="@drawable/ic_pin"
                     android:padding="3dp"
-                    />
+                    android:src="@drawable/ic_pin" />
+
                 <TextView
                     android:layout_width="0dp"
-                    android:layout_weight="1"
                     android:layout_height="wrap_content"
-                    android:maxLines="2"
+                    android:layout_weight="1"
                     android:ellipsize="end"
                     android:gravity="start"
-                    android:textAlignment="viewStart"
-                    android:textColor="@color/gray2"
-                    android:textSize="14sp"
+                    android:maxLines="2"
                     android:paddingStart="5dp"
                     android:paddingEnd="5dp"
                     android:text="@{model.address}"
-                    />
+                    android:textAlignment="viewStart"
+                    android:textColor="@color/gray2"
+                    android:textSize="14sp" />
 
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:ellipsize="end"
+                    android:text="@{model.price}"
                     android:textColor="@color/colorPrimary"
                     android:textSize="14sp"
-                    android:textStyle="bold"
-                    android:text="@{model.price}"
-                    />
-
+                    android:textStyle="bold" />
 
 
             </LinearLayout>

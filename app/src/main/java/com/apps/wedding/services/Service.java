@@ -44,6 +44,11 @@ public interface Service {
                                                           @Query(value = "price_to") String price_to
     );
 
+    @GET("api/services")
+    Single<Response<WeddingHallDataModel>> getSearchWeddingHall(@Query(value = "api_key") String api_key,
+                                                                @Query(value = "name") String name
+    );
+
 
     @FormUrlEncoded
     @POST("api/login")
@@ -141,7 +146,9 @@ public interface Service {
                                              @Field("user_id") String user_id,
                                              @Field("date") String date,
                                              @Field("day") String day,
-                                             @Field("service_item_ids[]") List<String> service_item_ids);
+                                             @Field("service_item_ids[]") List<String> service_item_ids,
+                                             @Field("offer_id") String offer_id
+    );
 
     @GET("api/new-reservations")
     Single<Response<ReservionDataModel>> getCurrentReservion(@Header("AUTHORIZATION") String token,

@@ -5,7 +5,6 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CompoundButton;
 
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
@@ -13,7 +12,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.apps.wedding.R;
 import com.apps.wedding.databinding.AdditionalItemsRowBinding;
-import com.apps.wedding.databinding.BasicItemRowBinding;
 import com.apps.wedding.model.WeddingHallModel;
 import com.apps.wedding.uis.activity_home.fragments.FragmentReservisionConfirmation;
 
@@ -49,16 +47,13 @@ public class AdditionalItemAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
         MyHolder myHolder = (MyHolder) holder;
         myHolder.binding.setModel(list.get(position));
-        if (position == list.size()) {
+        if (position == list.size() - 1) {
             myHolder.binding.view.setVisibility(View.GONE);
         }
-        myHolder.binding.checkbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if (fragment instanceof FragmentReservisionConfirmation) {
-                    FragmentReservisionConfirmation fragmentReservisionConfirmation = (FragmentReservisionConfirmation) fragment;
-                    fragmentReservisionConfirmation.seletItem(list.get(holder.getLayoutPosition()).getId());
-                }
+        myHolder.binding.checkbox.setOnCheckedChangeListener((compoundButton, b) -> {
+            if (fragment instanceof FragmentReservisionConfirmation) {
+                FragmentReservisionConfirmation fragmentReservisionConfirmation = (FragmentReservisionConfirmation) fragment;
+                fragmentReservisionConfirmation.selectItem(list.get(holder.getLayoutPosition()).getId());
             }
         });
     }

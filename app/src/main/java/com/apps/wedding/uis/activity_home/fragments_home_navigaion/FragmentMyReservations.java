@@ -32,6 +32,7 @@ public class FragmentMyReservations extends BaseFragment {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_my_reservations, container, false);
         return binding.getRoot();
     }
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);

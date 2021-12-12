@@ -10,22 +10,24 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.apps.wedding.R;
+import com.apps.wedding.databinding.OfferRowBinding;
 import com.apps.wedding.databinding.WeddingHallRowBinding;
 import com.apps.wedding.model.WeddingHallModel;
 import com.apps.wedding.uis.activity_home.fragments.FragmentSearch;
+import com.apps.wedding.uis.activity_home.fragments.ServiceDetailsFragment;
 import com.apps.wedding.uis.activity_home.fragments_home_navigaion.FragmentHome;
 
 import java.util.List;
 
-public class WeddingHallAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class OfferAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private List<WeddingHallModel> list;
+    private List<WeddingHallModel.OfferModel> list;
     private Context context;
     private LayoutInflater inflater;
     private Fragment fragment;
 
 
-    public WeddingHallAdapter(Context context,Fragment fragment) {
+    public OfferAdapter(Context context, Fragment fragment) {
         this.context = context;
         inflater = LayoutInflater.from(context);
         this.fragment = fragment;
@@ -36,7 +38,7 @@ public class WeddingHallAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     public RecyclerView.ViewHolder onCreateViewHolder(@androidx.annotation.NonNull ViewGroup parent, int viewType) {
 
 
-        WeddingHallRowBinding binding = DataBindingUtil.inflate(inflater, R.layout.wedding_hall_row, parent, false);
+        OfferRowBinding binding = DataBindingUtil.inflate(inflater, R.layout.offer_row, parent, false);
         return new MyHolder(binding);
 
 
@@ -48,13 +50,13 @@ public class WeddingHallAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         MyHolder myHolder = (MyHolder) holder;
         myHolder.binding.setModel(list.get(position));
         myHolder.itemView.setOnClickListener(v -> {
-            WeddingHallModel weddingHallModel = list.get(holder.getAdapterPosition());
-            if (fragment instanceof FragmentHome){
-                FragmentHome fragmentHome = (FragmentHome) fragment;
-                fragmentHome.setItemWeddingDetails(weddingHallModel.getId());
-            }else if (fragment instanceof FragmentSearch){
-                FragmentSearch fragmentSearch = (FragmentSearch) fragment;
-                fragmentSearch.setItemWeddingDetails(weddingHallModel.getId());
+
+        });
+
+        myHolder.binding.btnBook.setOnClickListener(v -> {
+            if (fragment instanceof ServiceDetailsFragment){
+                ServiceDetailsFragment serviceDetailsFragment = (ServiceDetailsFragment) fragment;
+                serviceDetailsFragment.book(list.get(myHolder.getAdapterPosition()));
             }
         });
 
@@ -62,32 +64,32 @@ public class WeddingHallAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     @Override
     public int getItemCount() {
-        if (list!=null){
-         return list.size();
-        }else {
+        if (list != null) {
+            return list.size();
+        } else {
             return 0;
         }
     }
 
     public static class MyHolder extends RecyclerView.ViewHolder {
-        public WeddingHallRowBinding binding;
+        public OfferRowBinding binding;
 
-        public MyHolder(WeddingHallRowBinding binding) {
+        public MyHolder(OfferRowBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
 
         }
     }
 
-    public void updateList(List<WeddingHallModel> list){
-        if (list==null){
-            if (this.list!=null){
+    public void updateList(List<WeddingHallModel.OfferModel> list) {
+        if (list == null) {
+            if (this.list != null) {
                 this.list.clear();
 
             }
 
-        }else {
-            this.list=list;
+        } else {
+            this.list = list;
 
         }
         notifyDataSetChanged();

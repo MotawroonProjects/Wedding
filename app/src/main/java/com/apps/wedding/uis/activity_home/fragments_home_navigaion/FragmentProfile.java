@@ -19,6 +19,7 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.NavBackStackEntry;
 import androidx.navigation.Navigation;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,6 +35,7 @@ import java.util.List;
 
 
 public class FragmentProfile extends BaseFragment {
+    private static final String TAG = FragmentProfile.class.getName();
     private HomeActivity activity;
     private FragmentProfileBinding binding;
     private boolean login;
@@ -63,6 +65,7 @@ public class FragmentProfile extends BaseFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         initView();
+        Log.e(TAG, "onViewCreated: ");
 
     }
 

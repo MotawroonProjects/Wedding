@@ -6,22 +6,24 @@
 
         <variable
             name="model"
-            type="com.apps.wedding.model.WeddingHallModel" />
-        <import type="android.view.View"/>
+            type="com.apps.wedding.model.WeddingHallModel.OfferModel" />
     </data>
 
     <androidx.cardview.widget.CardView
-        android:layout_width="320dp"
+        android:layout_width="260dp"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
         app:cardBackgroundColor="@color/white"
-        app:cardCornerRadius="3dp"
-        app:cardElevation="8dp">
+        app:cardCornerRadius="8dp"
+
+        app:cardElevation="2dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+
+            >
 
             <FrameLayout
                 android:layout_width="match_parent"
@@ -29,30 +31,20 @@
                 android:background="@color/gray12">
 
                 <com.makeramen.roundedimageview.RoundedImageView
-                    image="@{model.main_image}"
+                    image="@{model.image}"
                     android:layout_width="match_parent"
-                    android:layout_height="140dp"
+                    android:layout_height="120dp"
                     android:layout_marginStart="8dp"
                     android:layout_marginTop="12dp"
+
                     android:layout_marginEnd="8dp"
                     android:layout_marginBottom="8dp"
                     android:adjustViewBounds="true"
                     app:riv_corner_radius="20dp"
                     app:riv_mutate_background="true" />
 
-                <ImageView
-                    android:layout_width="24dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="24dp"
-                    android:layout_marginEnd="24dp"
-                    android:layout_marginTop="12dp"
-                    android:layout_marginBottom="8dp"
-                    android:src="@drawable/ic_offer"
-                    android:scaleType="centerCrop"
-                    android:visibility="@{model.offer==null?View.GONE:View.VISIBLE,default=gone}" />
 
             </FrameLayout>
-
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -78,48 +70,30 @@
                     android:textSize="14sp"
                     android:textStyle="bold" />
 
+                <androidx.legacy.widget.Space
+                    android:layout_width="8dp"
+                    android:layout_height="0dp" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:ellipsize="end"
-                    android:text='@{"("+model.rates_count+")"}'
-                    android:textColor="@color/gray2"
-                    android:textSize="12sp" />
+                    android:text='@{model.price}'
+                    android:textColor="@color/color1"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="3dp"
-                    android:layout_marginEnd="3dp"
-                    android:ellipsize="end"
-                    android:text="@{model.rates_val}"
-                    android:textColor="@color/black"
-                    android:textSize="14sp"
-                    android:textStyle="bold" />
-
-                <ImageView
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:padding="3dp"
-                    android:src="@drawable/ic_star" />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:layout_marginTop="12dp"
+                android:layout_marginTop="5dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginBottom="12dp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
-
-                <ImageView
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:padding="3dp"
-                    android:src="@drawable/ic_pin" />
 
                 <TextView
                     android:layout_width="0dp"
@@ -127,29 +101,33 @@
                     android:layout_weight="1"
                     android:ellipsize="end"
                     android:gravity="start"
-                    android:lines="1"
-                    android:maxLines="1"
+                    android:lines="2"
+                    android:maxLines="2"
                     android:paddingStart="5dp"
                     android:paddingEnd="5dp"
-                    android:text="@{model.address}"
+                    android:text="@{model.text}"
                     android:textAlignment="viewStart"
                     android:textColor="@color/gray2"
                     android:textSize="12sp" />
 
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:ellipsize="end"
-                    android:text="@{model.price}"
-                    android:textColor="@color/colorPrimary"
-                    android:textSize="14sp"
-                    android:textStyle="bold" />
-
-
             </LinearLayout>
+
+            <Button
+                android:id="@+id/btnBook"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="12dp"
+                android:minWidth="120dp"
+                android:text="@string/book_now"
+                android:textColor="@color/white"
+                android:textSize="14sp"
+                style="@style/button"
+                />
 
         </LinearLayout>
     </androidx.cardview.widget.CardView>
+
 
 </layout>

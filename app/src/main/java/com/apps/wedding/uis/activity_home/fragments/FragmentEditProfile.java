@@ -82,14 +82,14 @@ public class FragmentEditProfile extends BaseFragment {
         fragmentEditProfileMvvm = ViewModelProviders.of(this).get(FragmentEditProfileMvvm.class);
         model = new EditProfileModel();
 
-        userModel=preferences.getUserData(activity);
-        if(userModel!=null){
-           model.setFirst_name(userModel.getData().getName().split(" ")[0]);
+        userModel = preferences.getUserData(activity);
+        if (userModel != null) {
+            model.setFirst_name(userModel.getData().getName().split(" ")[0]);
             model.setSeconed_name(userModel.getData().getName().split(" ")[1]);
 
-            if(userModel.getData().getLogo()!=null){
-               Picasso.get().load(Tags.base_url+userModel.getData().getLogo()).into(binding.image);
-           }
+            if (userModel.getData().getLogo() != null) {
+                Picasso.get().load(Tags.base_url + userModel.getData().getLogo()).into(binding.image);
+            }
         }
         binding.setModel(model);
         launcher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {

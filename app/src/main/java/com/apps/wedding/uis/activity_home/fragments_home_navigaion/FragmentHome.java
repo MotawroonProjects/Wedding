@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,6 +43,7 @@ import io.reactivex.schedulers.Schedulers;
 
 
 public class FragmentHome extends BaseFragment {
+    private static final String TAG = FragmentHome.class.getName();
     private HomeActivity activity;
     private FragmentHomeBinding binding;
     private FragmentHomeMvvm fragmentHomeMvvm;
@@ -96,6 +98,7 @@ public class FragmentHome extends BaseFragment {
     }
 
     private void initView() {
+
         fragmentHomeMvvm = ViewModelProviders.of(this).get(FragmentHomeMvvm.class);
         fragmentHomeMvvm.getIsLoading().observe(activity, isLoading -> {
             if (isLoading) {
@@ -142,6 +145,10 @@ public class FragmentHome extends BaseFragment {
         });
         binding.swipeRefresh.setOnRefreshListener(() -> {
             fragmentHomeMvvm.getDepartment();
+        });
+
+        binding.llSearch.setOnClickListener(v -> {
+            Navigation.findNavController(v).navigate(R.id.fragmentSearch);
         });
 
         fragmentHomeMvvm.getDepartment();

@@ -19,6 +19,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.apps.wedding.R;
+import com.apps.wedding.model.DepartmentDataModel;
 import com.apps.wedding.model.DepartmentModel;
 import com.apps.wedding.model.FilterModel;
 import com.apps.wedding.model.FilterRangeModel;
@@ -57,27 +58,21 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import retrofit2.Response;
 
-public class FragmentNearMvvm extends AndroidViewModel implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
+public class FragmentNearMvvm extends AndroidViewModel  {
     private static final String TAG = "FragmentNearMvvm";
     private float startRange = 0.0f;
     private float endRange = 100000.0f;
     private float steps = 500.0f;
-    private String defaultRate ="1";
+    private String defaultRate = null;
     private Context context;
-    private HomeActivity activity;
-    private GoogleApiClient googleApiClient;
-    private LocationRequest locationRequest;
-    private LocationCallback locationCallback;
-    private MutableLiveData<LocationModel> locationModelMutableLiveData;
-    private MutableLiveData<GoogleMap> mMap;
+
+
     private MutableLiveData<List<WeddingHallModel>> weddingHallModelMutableLiveData;
     private MutableLiveData<List<FilterRateModel>> filterModelListLiveData;
     private MutableLiveData<FilterRateModel> filterRateModelMutableLiveData;
     private MutableLiveData<FilterRangeModel> filterRangeModelMutableLiveData;
-    private MutableLiveData<Boolean> isLoadingLivData;
-
     private MutableLiveData<FilterModel> filter;
-    private MutableLiveData<Boolean> isProgressUpdating;
+    private MutableLiveData<Boolean> isLoadingLivData;
 
     private CompositeDisposable disposable = new CompositeDisposable();
 
@@ -86,16 +81,10 @@ public class FragmentNearMvvm extends AndroidViewModel implements GoogleApiClien
         super(application);
         context = application.getApplicationContext();
     }
-    public MutableLiveData<Boolean> getIsLoading() {
-        if (isLoadingLivData == null) {
-            isLoadingLivData = new MutableLiveData<>();
-        }
-        return isLoadingLivData;
-    }
 
-    public void setContext(Context context){
-        activity = (HomeActivity) context;
-    }
+
+
+
     public LiveData<List<WeddingHallModel>> getWeddingHall() {
         if (weddingHallModelMutableLiveData == null) {
             weddingHallModelMutableLiveData = new MutableLiveData<>();
@@ -157,16 +146,19 @@ public class FragmentNearMvvm extends AndroidViewModel implements GoogleApiClien
             }
             Observable.fromArray(list)
                     .filter(list1 -> {
-                        int pos = 0;
+                        int pos = -1;
                         for (int index = 0; index < list1.size(); index++) {
                             if (list1.get(index).getTitle().equals(getFilter().getValue().getRate())) {
                                 pos = index;
                                 break;
                             }
                         }
-                        FilterRateModel model = list1.get(pos);
-                        model.setSelected(true);
-                        list1.set(pos, model);
+                        if (pos != -1) {
+                            FilterRateModel model = list1.get(pos);
+                            model.setSelected(true);
+                            list1.set(pos, model);
+                        }
+
                         return true;
                     })
                     .subscribeOn(Schedulers.computation())
@@ -182,145 +174,29 @@ public class FragmentNearMvvm extends AndroidViewModel implements GoogleApiClien
         return filterModelListLiveData;
     }
 
+
     public void clearFilterModel() {
         filterModelListLiveData = null;
     }
 
-    public LiveData<LocationModel> getLocationData() {
-        if (locationModelMutableLiveData == null) {
-            locationModelMutableLiveData = new MutableLiveData<>();
+
+    public MutableLiveData<Boolean> getIsLoading() {
+        if (isLoadingLivData == null) {
+            isLoadingLivData = new MutableLiveData<>();
         }
-
-        return locationModelMutableLiveData;
+        return isLoadingLivData;
     }
 
+    //_________________________hitting api_________________________________
 
-
-    public LiveData<GoogleMap> getGoogleMap() {
-        if (mMap == null) {
-            mMap = new MutableLiveData<>();
-        }
-
-        return mMap;
-    }
-
-
-
-
-    public void setmMap(GoogleMap googleMap) {
-        mMap.setValue(googleMap);
-    }
-
-
-    public LiveData<Boolean> getProgressStatus() {
-        if (isProgressUpdating == null) {
-            isProgressUpdating = new MutableLiveData<>();
-        }
-        return isProgressUpdating;
-    }
-
-    public void initGoogleApi() {
-        googleApiClient = new GoogleApiClient.Builder(context)
-                .addApi(LocationServices.API)
-                .addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this)
-                .build();
-        googleApiClient.connect();
-    }
-
-    @Override
-    public void onConnected(@Nullable Bundle bundle) {
-        initLocationRequest();
-    }
-
-    private void initLocationRequest() {
-        locationRequest = LocationRequest.create();
-        locationRequest.setFastestInterval(1000);
-        locationRequest.setInterval(60000);
-        LocationSettingsRequest.Builder request = new LocationSettingsRequest.Builder();
-        request.addLocationRequest(locationRequest);
-        request.setAlwaysShow(false);
-
-
-        PendingResult<LocationSettingsResult> result = LocationServices.SettingsApi.checkLocationSettings(googleApiClient, request.build());
-        result.setResultCallback(locationSettingsResult -> {
-            Status status = locationSettingsResult.getStatus();
-            switch (status.getStatusCode()) {
-                case LocationSettingsStatusCodes.SUCCESS:
-                    startLocationUpdate();
-                    break;
-
-                case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
-                    try {
-                        status.startResolutionForResult(activity, 100);
-                    } catch (IntentSender.SendIntentException e) {
-                        e.printStackTrace();
-                    }
-                    break;
-
-            }
-        });
-
-    }
-
-    @Override
-    public void onConnectionSuspended(int i) {
-        if (googleApiClient != null) {
-            googleApiClient.connect();
-        }
-    }
-
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-
-    }
-
-
-    @SuppressLint("MissingPermission")
-    public void startLocationUpdate() {
-        locationCallback = new LocationCallback() {
-            @Override
-            public void onLocationResult(LocationResult locationResult) {
-                onLocationChanged(locationResult.getLastLocation());
-            }
-        };
-        LocationServices.getFusedLocationProviderClient(activity)
-                .requestLocationUpdates(locationRequest, locationCallback, Looper.myLooper());
-    }
-
-    @Override
-    public void onLocationChanged(Location location) {
-        double lat = location.getLatitude();
-        double lng = location.getLongitude();
-        LocationModel locationModel = new LocationModel(lat, lng);
-        locationModelMutableLiveData.setValue(locationModel);
-
-        if (googleApiClient != null) {
-            LocationServices.getFusedLocationProviderClient(activity).removeLocationUpdates(locationCallback);
-            googleApiClient.disconnect();
-            googleApiClient = null;
-        }
-    }
-
-
-    @Override
-    protected void onCleared() {
-        super.onCleared();
-        disposable.clear();
-        if (googleApiClient != null) {
-            if (locationCallback != null) {
-                LocationServices.getFusedLocationProviderClient(activity).removeLocationUpdates(locationCallback);
-                googleApiClient.disconnect();
-                googleApiClient = null;
-            }
-        }
-    }
     public void getWeddingHallData() {
         isLoadingLivData.postValue(true);
 
         filter = getFilter();
+
+        Log.e("sada",filter.getValue().getRate()+"__"+filter.getValue().getFromRange()+"__"+filter.getValue().getToRange());
         Api.getService(Tags.base_url)
-                .getWeddingHall(Tags.api_key, filter.getValue().getCategory_id(), filter.getValue().getRate(), filter.getValue().getFromRange(), filter.getValue().getToRange())
+                .getWeddingHall(Tags.api_key, null, filter.getValue().getRate(), filter.getValue().getFromRange(), filter.getValue().getToRange())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
 
@@ -338,16 +214,25 @@ public class FragmentNearMvvm extends AndroidViewModel implements GoogleApiClien
                             if (response.body().getStatus() == 200) {
                                 List<WeddingHallModel> list = response.body().getData();
                                 weddingHallModelMutableLiveData.setValue(list);
+                                Log.e("size",list.size()+"");
                             }
                         }
                     }
 
                     @Override
                     public void onError(@NonNull Throwable e) {
-                        isLoadingLivData.postValue(false);
+                        isLoadingLivData.setValue(false);
                         Log.e(TAG, "onError: ", e);
                     }
                 });
+
+    }
+
+
+    @Override
+    protected void onCleared() {
+        super.onCleared();
+        disposable.clear();
 
     }
 

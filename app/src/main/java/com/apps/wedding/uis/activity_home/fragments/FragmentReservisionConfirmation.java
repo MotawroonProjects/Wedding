@@ -45,6 +45,18 @@ public class FragmentReservisionConfirmation extends BaseFragment {
     private List<WeddingHallModel.ServiceExtraItem> serviceExtraItemList;
     private List<String> ids;
     private RequestServiceModel requestServiceModel;
+    private WeddingHallModel.OfferModel offerModel = null;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Bundle bundle = getArguments();
+        if (bundle != null) {
+            singleWeddingHallDataModel = (SingleWeddingHallDataModel) bundle.getSerializable("data");
+            offerModel = (WeddingHallModel.OfferModel) bundle.getSerializable("data2");
+        }
+
+    }
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -72,15 +84,21 @@ public class FragmentReservisionConfirmation extends BaseFragment {
         requestServiceModel = new RequestServiceModel();
         serviceExtraItemList = new ArrayList<>();
         serviceMainItemList = new ArrayList<>();
-        singleWeddingHallDataModel = (SingleWeddingHallDataModel) getArguments().getSerializable("data");
         binding.setModel(singleWeddingHallDataModel.getData());
+        binding.setOfferModel(offerModel);
         preferences = Preferences.getInstance();
         userModel = preferences.getUserData(activity);
+
+
         binding.recViewBaiscItem.setLayoutManager(new LinearLayoutManager(activity));
         baiscItemAdapter = new BaiscItemAdapter(activity, this);
         binding.recViewBaiscItem.setAdapter(baiscItemAdapter);
         binding.recViewAdditionalItem.setLayoutManager(new LinearLayoutManager(activity));
+
+
+
         additionalItemAdapter = new AdditionalItemAdapter(activity, this);
+
         binding.recViewAdditionalItem.setAdapter(additionalItemAdapter);
         if (singleWeddingHallDataModel.getData().getService_main_items() != null) {
             serviceMainItemList.addAll(singleWeddingHallDataModel.getData().getService_main_items());
@@ -97,6 +115,14 @@ public class FragmentReservisionConfirmation extends BaseFragment {
             requestServiceModel.setWeddingHallModel(singleWeddingHallDataModel.getData());
             Bundle bundle = new Bundle();
             bundle.putSerializable("data", requestServiceModel);
+            if (offerModel!=null){
+                bundle.putSerializable("data2", offerModel.getId());
+
+            }else {
+                bundle.putSerializable("data2", null);
+
+            }
+
             Navigation.findNavController(binding.getRoot()).navigate(R.id.chooseDayFragment, bundle);
         });
 
@@ -120,7 +146,7 @@ public class FragmentReservisionConfirmation extends BaseFragment {
 
     }
 
-    public void seletItem(String id) {
+    public void selectItem(String id) {
         if (!ids.contains(id)) {
             ids.add(id);
 

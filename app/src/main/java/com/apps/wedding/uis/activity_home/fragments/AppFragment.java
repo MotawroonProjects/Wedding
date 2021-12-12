@@ -44,6 +44,6 @@ public class AppFragment extends BaseFragment {
     }
 
     private void initView() {
-        Log.e("type",type);
+        Log.e("type", type);
     }
 }

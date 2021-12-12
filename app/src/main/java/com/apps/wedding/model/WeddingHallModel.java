@@ -23,7 +23,7 @@ public class WeddingHallModel implements Serializable {
     private List<ServiceMainItem> service_main_items;
     private List<ServiceExtraItem> service_extra_items;
     private List<ServiceImage> service_images;
-    private OfferModel offer;
+    private List<OfferModel> offer;
     private List<ServiceRate> service_rates;
 
     public String getId() {
@@ -102,7 +102,7 @@ public class WeddingHallModel implements Serializable {
         return service_images;
     }
 
-    public OfferModel getOffer() {
+    public List<OfferModel> getOffer() {
         return offer;
     }
 

@@ -91,7 +91,6 @@ public class FragmentNearby extends BaseFragment implements OnMapReadyCallback {
     private HomeActivity activity;
     private FragmentNearbyBinding binding;
     private GoogleMap mMap;
-    private Marker marker;
     private float zoom = 15.0f;
     private ActivityResultLauncher<String> permissionLauncher;
     private FragmentNearMvvm fragmentNearMvvm;
@@ -104,13 +103,7 @@ public class FragmentNearby extends BaseFragment implements OnMapReadyCallback {
         super.onAttach(context);
         activity = (HomeActivity) context;
         permissionLauncher = registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
-            if (isGranted) {
-                fragmentNearMvvm.initGoogleApi();
 
-            } else {
-                Toast.makeText(activity, "Permission denied", Toast.LENGTH_SHORT).show();
-
-            }
         });
     }
 
@@ -155,27 +148,35 @@ public class FragmentNearby extends BaseFragment implements OnMapReadyCallback {
 
     private void initView() {
         fragmentNearMvvm = ViewModelProviders.of(this).get(FragmentNearMvvm.class);
-        fragmentNearMvvm.setContext(activity);
         fragmentNearMvvm.getWeddingHall().observe(activity, weddingHallModels -> adapter.updateList(fragmentNearMvvm.getWeddingHall().getValue()));
 
-        fragmentNearMvvm.getLocationData().observe(activity, locationModel -> {
-          //  addMarker(locationModel.getLat(), locationModel.getLng());
-        });
         fragmentNearMvvm.getIsLoading().observe(activity, isLoading -> {
             if (isLoading) {
-               // binding.cardNoData.setVisibility(View.GONE);
+                binding.flLoading.setClickable(true);
+                binding.flLoading.setFocusable(true);
+                binding.progBar.setVisibility(View.VISIBLE);
+                binding.flLoading.setVisibility(View.VISIBLE);
+                binding.cardNoData.setVisibility(View.GONE);
+                adapter.updateList(null);
 
             }
         });
-        fragmentNearMvvm.getWeddingHallData();
+
         fragmentNearMvvm.getWeddingHall().observe(activity, weddingHallModels -> {
             if (weddingHallModels.size() > 0) {
                 adapter.updateList(fragmentNearMvvm.getWeddingHall().getValue());
                 updateMapData(weddingHallModels);
-              //  binding.cardNoData.setVisibility(View.GONE);
-            } else {
-                //binding.cardNoData.setVisibility(View.VISIBLE);
+                binding.cardNoData.setVisibility(View.GONE);
+                binding.flLoading.setVisibility(View.GONE);
 
+            } else {
+                binding.flLoading.setVisibility(View.VISIBLE);
+                binding.progBar.setVisibility(View.GONE);
+                binding.cardNoData.setVisibility(View.VISIBLE);
+                adapter.updateList(null);
+                mMap.clear();
+                binding.flLoading.setClickable(false);
+                binding.flLoading.setFocusable(false);
             }
 
         });
@@ -189,17 +190,12 @@ public class FragmentNearby extends BaseFragment implements OnMapReadyCallback {
         binding.cardFilter.setOnClickListener(v -> {
             createSheetDialog();
         });
+
+        binding.cardViewSearch.setOnClickListener(v -> {
+            Navigation.findNavController(v).navigate(R.id.fragmentSearch);
+        });
+
         updateUI();
-        checkPermission();
-    }
-
-    private void checkPermission() {
-        if (ActivityCompat.checkSelfPermission(activity, BaseActivity.fineLocPerm) != PackageManager.PERMISSION_GRANTED) {
-            permissionLauncher.launch(BaseActivity.fineLocPerm);
-        } else {
-
-            fragmentNearMvvm.initGoogleApi();
-        }
     }
 
 
@@ -219,34 +215,16 @@ public class FragmentNearby extends BaseFragment implements OnMapReadyCallback {
             mMap.setTrafficEnabled(false);
             mMap.setBuildingsEnabled(false);
             mMap.setIndoorEnabled(true);
-            if (fragmentNearMvvm.getGoogleMap().getValue() == null) {
-                fragmentNearMvvm.setmMap(mMap);
-
-            }
+            fragmentNearMvvm.getWeddingHallData();
 
         }
     }
 
     private void addMarker(double lat, double lng) {
-        if (fragmentNearMvvm.getGoogleMap().getValue() != null) {
-            mMap = fragmentNearMvvm.getGoogleMap().getValue();
-        }
-       // mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(lat, lng), zoom));
-        Marker marker = mMap.addMarker(new MarkerOptions().position(new LatLng(lat, lng)).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
+        mMap.addMarker(new MarkerOptions().position(new LatLng(lat, lng)).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
 
     }
 
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == 100 && resultCode == Activity.RESULT_OK) {
-
-            fragmentNearMvvm.startLocationUpdate();
-
-        }
-    }
 
     public void setItemWeddingDetails(String id) {
         Bundle bundle = new Bundle();
@@ -254,11 +232,6 @@ public class FragmentNearby extends BaseFragment implements OnMapReadyCallback {
         Navigation.findNavController(binding.getRoot()).navigate(R.id.serviceDetailsFragment, bundle);
     }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        disposable.clear();
-    }
 
     private void createSheetDialog() {
 
@@ -331,15 +304,26 @@ public class FragmentNearby extends BaseFragment implements OnMapReadyCallback {
     private void updateMapData(List<WeddingHallModel> data) {
 
         LatLngBounds.Builder bounds = new LatLngBounds.Builder();
-        for (WeddingHallModel weddingHallModel:data)
-        {
-            bounds.include(new LatLng(Double.parseDouble(weddingHallModel.getLatitude()),Double.parseDouble(weddingHallModel.getLongitude())));
-            addMarker(Double.parseDouble(weddingHallModel.getLatitude()),Double.parseDouble(weddingHallModel.getLongitude()));
+        for (WeddingHallModel weddingHallModel : data) {
+            bounds.include(new LatLng(Double.parseDouble(weddingHallModel.getLatitude()), Double.parseDouble(weddingHallModel.getLongitude())));
+            addMarker(Double.parseDouble(weddingHallModel.getLatitude()), Double.parseDouble(weddingHallModel.getLongitude()));
         }
-        mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds.build(),20));
+
+        if (data.size() >= 2) {
+            mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds.build(), 100));
+
+        } else if (data.size() == 1) {
+            LatLng latLng = new LatLng(Double.parseDouble(data.get(0).getLatitude()), Double.parseDouble(data.get(0).getLongitude()));
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom));
+
+        }
 
 
     }
 
-
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        disposable.clear();
+    }
 }

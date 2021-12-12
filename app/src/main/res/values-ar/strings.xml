@@ -68,5 +68,8 @@
     <string name="suc">تم بنجاح</string>
     <string name="all">الكل</string>
     <string name="no_services_to_show">لاتوجد خدمات لعرضها</string>
+    <string name="cahnge">تغيير</string>
+    <string name="show">عرض</string>
+    <string name="rate_service">قيم الخدمه</string>
 
 </resources>

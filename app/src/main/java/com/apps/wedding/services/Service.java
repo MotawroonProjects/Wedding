@@ -3,6 +3,7 @@ package com.apps.wedding.services;
 
 import com.apps.wedding.model.DepartmentDataModel;
 import com.apps.wedding.model.PlaceGeocodeData;
+import com.apps.wedding.model.ReservionDataModel;
 import com.apps.wedding.model.SingleWeddingHallDataModel;
 import com.apps.wedding.model.StatusResponse;
 import com.apps.wedding.model.UserModel;
@@ -126,10 +127,12 @@ public interface Service {
 
 
     );
+
     @GET("api/one-service")
     Single<Response<SingleWeddingHallDataModel>> getSingleWeddingHall(@Query(value = "api_key") String api_key,
                                                                       @Query(value = "service_id") String service_id
     );
+
     @FormUrlEncoded
     @POST("api/book-service")
     Single<Response<StatusResponse>> reserve(@Header("AUTHORIZATION") String token,
@@ -139,5 +142,17 @@ public interface Service {
                                              @Field("date") String date,
                                              @Field("day") String day,
                                              @Field("service_item_ids[]") List<String> service_item_ids);
+
+    @GET("api/new-reservations")
+    Single<Response<ReservionDataModel>> getCurrentReservion(@Header("AUTHORIZATION") String token,
+                                                             @Query(value = "api_key") String api_key,
+                                                             @Query(value = "user_id") String user_id
+    );
+
+    @GET("api/confirmed-reservations")
+    Single<Response<ReservionDataModel>> getPreviousReservion(@Header("AUTHORIZATION") String token,
+                                                             @Query(value = "api_key") String api_key,
+                                                             @Query(value = "user_id") String user_id
+    );
 
 }

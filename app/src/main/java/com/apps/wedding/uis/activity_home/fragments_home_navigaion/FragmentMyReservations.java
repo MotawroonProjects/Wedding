@@ -46,7 +46,7 @@ public class FragmentMyReservations extends BaseFragment {
         titles.add(getString(R.string.current));
         titles.add(getString(R.string.prev));
         fragments.add(FragmentCurrentReservation.newInstance());
-        fragments.add(FragmentCurrentReservation.newInstance());
+        fragments.add(FragmentPreviousReservation.newInstance());
 
         adapter = new MyPagerAdapter(getChildFragmentManager(), FragmentStatePagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT, fragments, titles);
         binding.pager.setAdapter(adapter);

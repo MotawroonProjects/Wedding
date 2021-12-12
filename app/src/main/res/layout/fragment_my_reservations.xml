@@ -20,6 +20,7 @@
             app:tabBackground="@color/white"
             app:tabIndicatorColor="@color/color1"
             app:tabMode="fixed"
+            app:tabMaxWidth="0dp"
             app:tabIndicatorHeight="5dp"
             app:tabTextColor="@color/gray2"
             app:tabSelectedTextColor="@color/color1"

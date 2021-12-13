@@ -25,6 +25,7 @@
         android:usesCleartextTraffic="true"
         tools:ignore="AllowBackup"
         tools:targetApi="q">
+
         <activity
             android:name=".uis.activity_language.LanguageActivity"
             android:exported="false" />

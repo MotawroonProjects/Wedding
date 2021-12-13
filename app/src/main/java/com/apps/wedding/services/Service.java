@@ -2,6 +2,7 @@ package com.apps.wedding.services;
 
 
 import com.apps.wedding.model.DepartmentDataModel;
+import com.apps.wedding.model.NotificationDataModel;
 import com.apps.wedding.model.PlaceGeocodeData;
 import com.apps.wedding.model.ReservionDataModel;
 import com.apps.wedding.model.SingleWeddingHallDataModel;
@@ -176,6 +177,12 @@ public interface Service {
     Single<Response<ReservionDataModel>> getPreviousReservion(@Header("AUTHORIZATION") String token,
                                                               @Query(value = "api_key") String api_key,
                                                               @Query(value = "user_id") String user_id
+    );
+
+    @GET("api/confirmed-reservations")
+    Single<Response<NotificationDataModel>> getNotifications(@Header("AUTHORIZATION") String token,
+                                                             @Query(value = "api_key") String api_key,
+                                                             @Query(value = "user_id") String user_id
     );
 
 }

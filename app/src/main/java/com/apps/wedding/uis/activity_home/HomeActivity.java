@@ -25,6 +25,8 @@ import com.apps.wedding.R;
 import com.apps.wedding.databinding.ActivityHomeBinding;
 import com.apps.wedding.language.Language;
 import com.apps.wedding.uis.activity_home.fragments.ServiceDetailsFragment;
+import com.apps.wedding.uis.activity_login.LoginActivity;
+import com.apps.wedding.uis.activity_notification.NotificationActivity;
 
 import io.paperdb.Paper;
 
@@ -74,6 +76,16 @@ public class HomeActivity extends BaseActivity implements Listeners.Verification
                 UserModel userModel = getUserModel();
                 userModel.getData().setFirebase_token(token);
                 setUserModel(userModel);
+            }
+        });
+
+        binding.imgNotification.setOnClickListener(v -> {
+            if (getUserModel() != null) {
+                Intent intent = new Intent(this, NotificationActivity.class);
+                startActivity(intent);
+            } else {
+                Intent intent = new Intent(this, LoginActivity.class);
+                startActivity(intent);
             }
         });
         if (getUserModel() != null) {

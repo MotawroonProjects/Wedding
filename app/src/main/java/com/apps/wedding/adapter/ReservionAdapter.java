@@ -18,6 +18,7 @@ import com.apps.wedding.databinding.OrderRowBinding;
 import com.apps.wedding.model.ResevisionModel;
 import com.apps.wedding.model.WeddingHallModel;
 import com.apps.wedding.uis.activity_home.fragments.FragmentReservisionConfirmation;
+import com.apps.wedding.uis.activity_home.fragments_home_navigaion.FragmentCurrentReservation;
 
 import java.util.List;
 
@@ -52,6 +53,29 @@ public class ReservionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         MyHolder myHolder = (MyHolder) holder;
         myHolder.binding.setModel(list.get(position));
 
+        myHolder.binding.llShow.setOnClickListener(v -> {
+            if (fragment instanceof FragmentCurrentReservation) {
+                FragmentCurrentReservation fragmentCurrentReservation = (FragmentCurrentReservation) fragment;
+                fragmentCurrentReservation.createSheetDialog(list.get(myHolder.getAdapterPosition()));
+
+            }
+        });
+
+        myHolder.binding.llEdit.setOnClickListener(v -> {
+            if (fragment instanceof FragmentCurrentReservation) {
+                FragmentCurrentReservation fragmentCurrentReservation = (FragmentCurrentReservation) fragment;
+                fragmentCurrentReservation.createSheetDialog(list.get(myHolder.getAdapterPosition()));
+
+            }
+        });
+
+        myHolder.binding.llDelete.setOnClickListener(v -> {
+            if (fragment instanceof FragmentCurrentReservation) {
+                FragmentCurrentReservation fragmentCurrentReservation = (FragmentCurrentReservation) fragment;
+                fragmentCurrentReservation.delete(list.get(myHolder.getAdapterPosition()));
+
+            }
+        });
 
     }
 

@@ -29,6 +29,7 @@ import com.apps.wedding.mvvm.FragmentProfileMvvm;
 import com.apps.wedding.uis.activity_base.BaseFragment;
 import com.apps.wedding.databinding.FragmentProfileBinding;
 import com.apps.wedding.uis.activity_home.HomeActivity;
+import com.apps.wedding.uis.activity_language.LanguageActivity;
 import com.apps.wedding.uis.activity_login.LoginActivity;
 
 import java.util.List;
@@ -50,6 +51,9 @@ public class FragmentProfile extends BaseFragment {
         launcher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
             if (req == 1 && result.getResultCode() == Activity.RESULT_OK) {
                 binding.setModel(getUserModel());
+            } else if (req == 2 && result.getResultCode() == Activity.RESULT_OK&&result.getData()!=null) {
+                String lang = result.getData().getStringExtra("lang");
+                activity.refreshActivity(lang);
             }
         });
     }
@@ -96,6 +100,12 @@ public class FragmentProfile extends BaseFragment {
             navigateToFragmentApp(v, "terms");
         });
 
+        binding.llLanguage.setOnClickListener(v -> {
+            req = 2;
+            Intent intent = new Intent(activity, LanguageActivity.class);
+            launcher.launch(intent);
+        });
+
         binding.llRate.setOnClickListener(v -> rateApp());
 
         binding.tvName.setOnClickListener(v -> {
@@ -103,12 +113,13 @@ public class FragmentProfile extends BaseFragment {
                 navigateToLoginActivity();
             }
         });
+
         binding.llEditProfile.setOnClickListener(view -> {
-                    if (getUserModel() != null) {
-                        Navigation.findNavController(binding.getRoot()).navigate(R.id.editProfileFragment);
-                    }
-                }
-        );
+            if (getUserModel() != null) {
+                Navigation.findNavController(binding.getRoot()).navigate(R.id.editProfileFragment);
+            }
+        });
+
         binding.cardViewLogout.setOnClickListener(view -> {
             if (getUserModel() == null) {
                 logout();

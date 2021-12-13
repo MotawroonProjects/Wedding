@@ -2,8 +2,10 @@ package com.apps.wedding.mvvm;
 
 import android.annotation.SuppressLint;
 import android.app.Application;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
@@ -19,9 +21,11 @@ import com.apps.wedding.model.FilterRateModel;
 import com.apps.wedding.model.ReservionDataModel;
 import com.apps.wedding.model.ResevisionModel;
 import com.apps.wedding.model.ReservionDataModel;
+import com.apps.wedding.model.StatusResponse;
 import com.apps.wedding.model.UserModel;
 import com.apps.wedding.model.WeddingHallModel;
 import com.apps.wedding.remote.Api;
+import com.apps.wedding.share.Common;
 import com.apps.wedding.tags.Tags;
 
 import java.util.ArrayList;
@@ -36,11 +40,11 @@ import io.reactivex.schedulers.Schedulers;
 import retrofit2.Response;
 
 public class FragmentCurrentReservisonMvvm extends AndroidViewModel {
-    private static final String TAG = "FragmentCurrentReservisionMvvm";
- 
+    private static final String TAG = "FragmentCurrReservMvvm";
+
     private Context context;
     private MutableLiveData<List<ResevisionModel>> listMutableLiveData;
-   
+
 
     private MutableLiveData<Boolean> isLoadingLivData;
 
@@ -58,9 +62,6 @@ public class FragmentCurrentReservisonMvvm extends AndroidViewModel {
         return listMutableLiveData;
     }
 
-   
-
-   
 
     public MutableLiveData<Boolean> getIsLoading() {
         if (isLoadingLivData == null) {
@@ -69,15 +70,16 @@ public class FragmentCurrentReservisonMvvm extends AndroidViewModel {
         return isLoadingLivData;
     }
 
+
     //_________________________hitting api_________________________________
 
 
     public void getReservionData(UserModel userModel) {
-        isLoadingLivData.postValue(true);
+        isLoadingLivData.setValue(true);
 
-       
+
         Api.getService(Tags.base_url)
-                .getCurrentReservion("Bearer " + userModel.getData().getToken(),Tags.api_key,userModel.getData().getId()+"" )
+                .getCurrentReservion("Bearer " + userModel.getData().getToken(), Tags.api_key, userModel.getData().getId() + "")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
 
@@ -102,11 +104,53 @@ public class FragmentCurrentReservisonMvvm extends AndroidViewModel {
                     @SuppressLint("LongLogTag")
                     @Override
                     public void onError(@NonNull Throwable e) {
-                        isLoadingLivData.postValue(false);
+                        isLoadingLivData.setValue(false);
                         Log.e(TAG, "onError: ", e);
                     }
                 });
 
+    }
+
+    public void deleteReservation(Context context, ResevisionModel model, UserModel userModel) {
+        ProgressDialog dialog = Common.createProgressDialog(context, context.getResources().getString(R.string.wait));
+        dialog.setCancelable(false);
+        dialog.show();
+        Api.getService(Tags.base_url).deleteReservation("Bearer " + userModel.getData().getToken(), Tags.api_key, userModel.getData().getId() + "", model.getId() + "")
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(new SingleObserver<Response<StatusResponse>>() {
+                    @Override
+                    public void onSubscribe(@NonNull Disposable d) {
+                        disposable.add(d);
+                    }
+
+                    @Override
+                    public void onSuccess(@NonNull Response<StatusResponse> statusResponseResponse) {
+                        dialog.dismiss();
+
+                        if (statusResponseResponse.isSuccessful()) {
+                            if (statusResponseResponse.body() != null) {
+                                Log.e(TAG, statusResponseResponse.body().getStatus() + "");
+                                if (statusResponseResponse.body().getStatus() == 200) {
+                                    getReservionData(userModel);
+                                } else if (statusResponseResponse.body().getStatus() == 412) {
+                                    Toast.makeText(context, R.string.cnt_book, Toast.LENGTH_SHORT).show();
+                                }
+                            }
+
+                        } else {
+
+                        }
+
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+                        dialog.dismiss();
+
+                    }
+                });
     }
 
 

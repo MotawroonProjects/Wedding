@@ -26,11 +26,16 @@
         tools:ignore="AllowBackup"
         tools:targetApi="q">
         <activity
+            android:name=".uis.activity_language.LanguageActivity"
+            android:exported="false" />
+        <activity
             android:name=".uis.activity_sign_up.SignUpActivity"
             android:exported="false" />
+
         <activity
             android:name=".uis.activity_verification_code.VerificationCodeActivity"
             android:exported="false" />
+
         <activity
             android:name=".uis.activity_login.LoginActivity"
             android:exported="false" />

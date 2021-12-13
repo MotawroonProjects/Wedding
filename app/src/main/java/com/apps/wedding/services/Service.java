@@ -150,6 +150,22 @@ public interface Service {
                                              @Field("offer_id") String offer_id
     );
 
+    @FormUrlEncoded
+    @POST("api/change-date")
+    Single<Response<StatusResponse>> updateReservation(@Header("AUTHORIZATION") String token,
+                                                       @Field("api_key") String api_key,
+                                                       @Field("user_id") String user_id,
+                                                       @Field("service_id") String service_id,
+                                                       @Field("reservation_id") String reservation_id,
+                                                       @Field("date") String date);
+
+    @FormUrlEncoded
+    @POST("api/delete-reservation")
+    Single<Response<StatusResponse>> deleteReservation(@Header("AUTHORIZATION") String token,
+                                                       @Field("api_key") String api_key,
+                                                       @Field("user_id") String user_id,
+                                                       @Field("reservation_id") String reservation_id);
+
     @GET("api/new-reservations")
     Single<Response<ReservionDataModel>> getCurrentReservion(@Header("AUTHORIZATION") String token,
                                                              @Query(value = "api_key") String api_key,
@@ -158,8 +174,8 @@ public interface Service {
 
     @GET("api/confirmed-reservations")
     Single<Response<ReservionDataModel>> getPreviousReservion(@Header("AUTHORIZATION") String token,
-                                                             @Query(value = "api_key") String api_key,
-                                                             @Query(value = "user_id") String user_id
+                                                              @Query(value = "api_key") String api_key,
+                                                              @Query(value = "user_id") String user_id
     );
 
 }

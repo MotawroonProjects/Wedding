@@ -12,6 +12,7 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.apps.wedding.R;
 import com.apps.wedding.model.RequestServiceModel;
+import com.apps.wedding.model.ResevisionModel;
 import com.apps.wedding.model.StatusResponse;
 import com.apps.wedding.model.UserModel;
 import com.apps.wedding.remote.Api;
@@ -25,15 +26,15 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import retrofit2.Response;
 
-public class FragmentChooseDayMvvm extends AndroidViewModel {
-    private static final String TAG = "FragmentChooseDayMvvm";
+public class FragmentEditReservationMvvm extends AndroidViewModel {
+    private static final String TAG = "FragmentEditMvvm";
     private Context context;
 
     public MutableLiveData<Boolean> onSuccess = new MutableLiveData<>();
 
     private CompositeDisposable disposable = new CompositeDisposable();
 
-    public FragmentChooseDayMvvm(@NonNull Application application) {
+    public FragmentEditReservationMvvm(@NonNull Application application) {
         super(application);
         context = application.getApplicationContext();
 
@@ -41,14 +42,15 @@ public class FragmentChooseDayMvvm extends AndroidViewModel {
     }
 
 
-    public void reserve(Context context, RequestServiceModel requestServiceModel, UserModel userModel, String date, String day, String offer_id) {
+    public void updateReservation(Context context, ResevisionModel model, UserModel userModel, String date) {
         ProgressDialog dialog = Common.createProgressDialog(context, context.getResources().getString(R.string.wait));
         dialog.setCancelable(false);
         dialog.show();
-        Api.getService(Tags.base_url).reserve("Bearer " + userModel.getData().getToken(), Tags.api_key, requestServiceModel.getWeddingHallModel().getId(), userModel.getData().getId() + "", date, day, requestServiceModel.getIds(), offer_id)
+        Api.getService(Tags.base_url).updateReservation("Bearer " + userModel.getData().getToken(), Tags.api_key,userModel.getData().getId()+"", model.getService().getId(), model.getId()+"", date)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io()).subscribe(new SingleObserver<Response<StatusResponse>>() {
+                .subscribeOn(Schedulers.io())
+                .subscribe(new SingleObserver<Response<StatusResponse>>() {
             @Override
             public void onSubscribe(@NonNull Disposable d) {
                 disposable.add(d);

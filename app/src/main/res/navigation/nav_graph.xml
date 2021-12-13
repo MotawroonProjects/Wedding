@@ -75,4 +75,9 @@
         android:name="com.apps.wedding.uis.activity_home.fragments.FragmentSearch"
         android:label=""
         tools:layout="@layout/fragment_search" />
+    <fragment
+        android:id="@+id/fragmentEditReservation"
+        android:name="com.apps.wedding.uis.activity_home.fragments.FragmentEditReservation"
+        android:label=""
+        tools:layout="@layout/fragment_edit_reservation" />
 </navigation>

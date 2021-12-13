@@ -45,6 +45,7 @@ import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
 
@@ -73,7 +74,6 @@ public class FragmentSearch extends BaseFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         initView();
-        Log.e(TAG, "onViewCreated: ");
 
     }
 
@@ -102,6 +102,7 @@ public class FragmentSearch extends BaseFragment {
         binding.recView.setAdapter(adapter);
         fragmentSearchMvvm.getWeddingHallData(null);
 
+        binding.swipeRefresh.setOnRefreshListener(() -> fragmentSearchMvvm.getWeddingHallData(binding.edtSearch.getText().toString()));
 
         Observable.create(emitter -> {
             binding.edtSearch.addTextChangedListener(new TextWatcher() {
@@ -112,43 +113,21 @@ public class FragmentSearch extends BaseFragment {
 
                 @Override
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
-
+                    emitter.onNext(s.toString());
                 }
 
                 @Override
                 public void afterTextChanged(Editable s) {
-                    emitter.onNext(s.toString());
+
                 }
             });
-        }).subscribeOn(Schedulers.computation())
-                .debounce(3, TimeUnit.SECONDS)
+        })
+                .debounce(2, TimeUnit.SECONDS)
                 .distinctUntilChanged()
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<Object>() {
-                    @Override
-                    public void onSubscribe(@NonNull Disposable d) {
-                        disposable.add(d);
-                    }
+                .subscribe(query -> {
+                    fragmentSearchMvvm.getWeddingHallData(query.toString());
 
-                    @Override
-                    public void onNext(@NonNull Object o) {
-                        String query = o.toString();
-                        Log.e(TAG, "onNext: " + query);
-
-                    }
-
-                    @Override
-                    public void onError(@NonNull Throwable e) {
-                        Log.e(TAG, "onError: ", e);
-                    }
-
-                    @Override
-                    public void onComplete() {
-
-                    }
                 });
-
-
     }
 
 

@@ -60,8 +60,7 @@ public class GeneralMethod {
                                 .apply(options)
                                 .into(imageView);
                     }
-                }
-                else if (view instanceof RoundedImageView) {
+                } else if (view instanceof RoundedImageView) {
                     RoundedImageView imageView = (RoundedImageView) view;
 
                     if (imageUrl != null) {
@@ -75,8 +74,7 @@ public class GeneralMethod {
                                 .into(imageView);
 
                     }
-                }
-                else if (view instanceof ImageView) {
+                } else if (view instanceof ImageView) {
                     ImageView imageView = (ImageView) view;
 
                     if (imageUrl != null) {
@@ -93,7 +91,6 @@ public class GeneralMethod {
 
             }
         });
-
 
 
     }
@@ -140,6 +137,49 @@ public class GeneralMethod {
                         .into(imageView);
             }
         }
+
+    }
+
+    @BindingAdapter("qr_image")
+    public static void qr_image(View view, String imageUrl) {
+
+        if (view instanceof CircleImageView) {
+            CircleImageView imageView = (CircleImageView) view;
+            if (imageUrl != null) {
+                RequestOptions options = new RequestOptions();
+                Glide.with(view.getContext()).asBitmap()
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                        .load(imageUrl)
+                        .apply(options)
+                        .into(imageView);
+            }
+        } else if (view instanceof RoundedImageView) {
+            RoundedImageView imageView = (RoundedImageView) view;
+
+            if (imageUrl != null) {
+
+                RequestOptions options = new RequestOptions();
+                Glide.with(view.getContext()).asBitmap()
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                        .load(imageUrl)
+                        .apply(options)
+                        .into(imageView);
+
+            }
+        } else if (view instanceof ImageView) {
+            ImageView imageView = (ImageView) view;
+
+            if (imageUrl != null) {
+
+                RequestOptions options = new RequestOptions();
+                Glide.with(view.getContext()).asBitmap()
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                        .load(imageUrl)
+                        .apply(options)
+                        .into(imageView);
+            }
+        }
+
 
     }
 

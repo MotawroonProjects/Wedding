@@ -53,9 +53,9 @@
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
+                android:layout_margin="3dp"
                 android:layout_weight="1"
                 app:cardCornerRadius="10dp"
-                android:layout_margin="3dp"
                 app:cardElevation="31dp">
 
                 <LinearLayout
@@ -117,13 +117,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginBottom="100dp"
                 android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
                 android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="100dp"
                 android:background="@drawable/rounded_primary"
                 android:minWidth="120dp"
-                android:text="@string/confirm"
+                android:text="@string/update"
                 android:textColor="@color/white" />
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>

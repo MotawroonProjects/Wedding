@@ -73,5 +73,8 @@
     <string name="rate_service">Rate Service</string>
     <string name="no_search_result">No search result</string>
     <string name="offers">Offers</string>
+    <string name="change">Change</string>
+    <string name="cnt_book">You cannot book now</string>
+    <string name="choose_language">Change language</string>
 
 </resources>

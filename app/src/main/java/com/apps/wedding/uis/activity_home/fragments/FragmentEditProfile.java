@@ -88,7 +88,7 @@ public class FragmentEditProfile extends BaseFragment {
             model.setSeconed_name(userModel.getData().getName().split(" ")[1]);
 
             if (userModel.getData().getLogo() != null) {
-                Picasso.get().load(Tags.base_url + userModel.getData().getLogo()).into(binding.image);
+                Picasso.get().load(userModel.getData().getLogo()).into(binding.image);
             }
         }
         binding.setModel(model);

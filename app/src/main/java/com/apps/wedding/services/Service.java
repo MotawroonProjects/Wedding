@@ -128,7 +128,7 @@ public interface Service {
     Single<Response<StatusResponse>> contactUs(@Field("api_key") String api_key,
                                                @Field("name") String name,
                                                @Field("email") String email,
-                                               @Field("phone") String phone,
+                                               @Field("subject") String phone,
                                                @Field("message") String message
 
 

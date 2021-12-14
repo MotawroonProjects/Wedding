@@ -58,13 +58,10 @@ public class ContactUsActivity extends BaseActivity {
                 contactusActivityMvvm.contactus(this, contactUsModel);
             }
         });
-        contactusActivityMvvm.send.observe(this, new Observer<Boolean>() {
-            @Override
-            public void onChanged(Boolean aBoolean) {
-                if (aBoolean) {
-                    Toast.makeText(ContactUsActivity.this, getResources().getString(R.string.suc), Toast.LENGTH_LONG).show();
-                    finish();
-                }
+        contactusActivityMvvm.send.observe(this, aBoolean -> {
+            if (aBoolean) {
+                Toast.makeText(ContactUsActivity.this, getResources().getString(R.string.suc), Toast.LENGTH_LONG).show();
+                finish();
             }
         });
     }

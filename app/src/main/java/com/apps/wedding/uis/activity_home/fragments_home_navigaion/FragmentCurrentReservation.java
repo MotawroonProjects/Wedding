@@ -143,7 +143,6 @@ public class FragmentCurrentReservation extends BaseFragment {
         dialog.show();
     }
 
-
     public void delete(ResevisionModel model) {
         fragmentCurrentReservisonMvvm.deleteReservation(activity, model, getUserModel());
     }

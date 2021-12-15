@@ -47,8 +47,13 @@ public class PreviousReservionAdapter extends RecyclerView.Adapter<RecyclerView.
 
         MyHolder myHolder = (MyHolder) holder;
         myHolder.binding.setModel(list.get(position));
+        ResevisionModel model = list.get(position);
+        double total = model.getMain_item_price() + model.getExtra_item_price();
 
-
+        if (model.getOffer() != null) {
+            total = Double.parseDouble(model.getOffer().getPrice()) + model.getExtra_item_price();
+        }
+        myHolder.binding.setTotal(total+"");
     }
 
     @Override

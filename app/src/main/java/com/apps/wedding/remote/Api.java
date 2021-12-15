@@ -17,10 +17,9 @@ public class Api {
 
     private static Retrofit retrofit = null;
 
-    private static Retrofit getRetrofit(String baseUrl)
-    {
+    private static Retrofit getRetrofit(String baseUrl) {
 
-        Interceptor interceptor   = chain -> {
+        Interceptor interceptor = chain -> {
             Request request = chain.request();
 
             Request accept = request.newBuilder()
@@ -31,8 +30,8 @@ public class Api {
 
         OkHttpClient client = new OkHttpClient.Builder()
                 .connectTimeout(90, TimeUnit.SECONDS)
-                .writeTimeout(90,TimeUnit.SECONDS)
-                .readTimeout(90,TimeUnit.SECONDS)
+                .writeTimeout(90, TimeUnit.SECONDS)
+                .readTimeout(90, TimeUnit.SECONDS)
                 .retryOnConnectionFailure(true)
                 .addInterceptor(interceptor)
                 .build();
@@ -50,8 +49,7 @@ public class Api {
     }
 
 
-    public static Service getService(String baseUrl)
-    {
+    public static Service getService(String baseUrl) {
         return getRetrofit(baseUrl).create(Service.class);
     }
 }

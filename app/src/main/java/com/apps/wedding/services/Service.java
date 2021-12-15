@@ -179,7 +179,7 @@ public interface Service {
                                                               @Query(value = "user_id") String user_id
     );
 
-    @GET("api/confirmed-reservations")
+    @GET("api/notifications")
     Single<Response<NotificationDataModel>> getNotifications(@Header("AUTHORIZATION") String token,
                                                              @Query(value = "api_key") String api_key,
                                                              @Query(value = "user_id") String user_id

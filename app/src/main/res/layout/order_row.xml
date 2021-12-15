@@ -11,6 +11,10 @@
         <import type="android.graphics.Color" />
 
         <import type="android.view.View" />
+        <variable
+            name="total"
+            type="String" />
+
     </data>
 
 
@@ -93,7 +97,7 @@
                             android:layout_height="wrap_content"
 
                             android:layout_gravity="center"
-                            android:text='@{(model.main_item_price+model.extra_item_price)+""}'
+                            android:text='@{total}'
                             android:textColor="@color/colorAccent"
                             android:textSize="14sp" />
 

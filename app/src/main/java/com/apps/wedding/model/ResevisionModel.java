@@ -20,6 +20,7 @@ public class ResevisionModel  implements Serializable {
     private String status;
     private WeddingHallModel service;
     private List<ResevisionExtraItems> reservation_extra_items;
+    private WeddingHallModel.OfferModel offer;
 
     public int getId() {
         return id;
@@ -83,6 +84,10 @@ public class ResevisionModel  implements Serializable {
 
     public List<ResevisionExtraItems> getReservation_extra_items() {
         return reservation_extra_items;
+    }
+
+    public WeddingHallModel.OfferModel getOffer() {
+        return offer;
     }
 
     public class ResevisionExtraItems implements Serializable{

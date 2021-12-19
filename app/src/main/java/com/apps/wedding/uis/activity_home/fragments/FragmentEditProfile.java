@@ -95,7 +95,6 @@ public class FragmentEditProfile extends BaseFragment {
         launcher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
             if (result.getResultCode() == RESULT_OK && result.getData() != null) {
                 if (selectedReq == READ_REQ) {
-                    binding.icon.setVisibility(View.GONE);
 
                     uri = result.getData().getData();
                     File file = new File(Common.getImagePath(activity, uri));
@@ -103,7 +102,6 @@ public class FragmentEditProfile extends BaseFragment {
 
                 } else if (selectedReq == CAMERA_REQ) {
                     Bitmap bitmap = (Bitmap) result.getData().getExtras().get("data");
-                    binding.icon.setVisibility(View.GONE);
                     uri = getUriFromBitmap(bitmap);
                     if (uri != null) {
                         String path = Common.getImagePath(activity, uri);

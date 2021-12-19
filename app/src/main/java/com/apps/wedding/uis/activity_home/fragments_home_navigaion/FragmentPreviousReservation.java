@@ -32,11 +32,13 @@ public class FragmentPreviousReservation extends BaseFragment {
         FragmentPreviousReservation fragment = new FragmentPreviousReservation();
         return fragment;
     }
+
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         activity = (HomeActivity) context;
     }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {

@@ -65,17 +65,9 @@
                             android:longClickable="false"
                             app:civ_border_color="@color/white"
                             app:civ_border_width="1dp"
+                            android:src="@drawable/circle_avatar"
                             app:civ_circle_background_color="@color/white" />
 
-                        <ImageView
-                            android:id="@+id/icon"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:background="@drawable/circle_white"
-                            android:clickable="false"
-                            android:longClickable="false"
-                            android:padding="8dp"
-                            android:src="@drawable/circle_avatar" />
 
 
                     </FrameLayout>

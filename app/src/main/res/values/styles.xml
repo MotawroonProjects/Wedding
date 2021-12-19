@@ -57,6 +57,10 @@
         <item name="shapeAppearance">@style/buttonShape</item>
         <item name="materialThemeOverlay">@style/ButtonBgColor</item>
     </style>
+    <style name="button2" parent="Widget.MaterialComponents.Button">
+        <item name="shapeAppearance">@style/buttonShape</item>
+        <item name="materialThemeOverlay">@style/ButtonBgColor2</item>
+    </style>
 
     <style name="buttonShape">
         <item name="cornerFamily">rounded</item>
@@ -67,6 +71,8 @@
     <style name="ButtonBgColor">
         <item name="colorPrimary">@color/color2</item>
     </style>
-
+    <style name="ButtonBgColor2">
+        <item name="colorPrimary">@color/color1</item>
+    </style>
 
 </resources>

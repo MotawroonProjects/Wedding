@@ -109,7 +109,7 @@ public class FragmentCurrentReservation extends BaseFragment {
         BottomSheetServiceDetailsBinding binding = DataBindingUtil.inflate(LayoutInflater.from(activity), R.layout.bottom_sheet_service_details, null, false);
         dialog.setContentView(binding.getRoot());
         binding.setModel(model);
-        double total = model.getMain_item_price() + model.getExtra_item_price();
+        double total = model.getPrice() + model.getExtra_item_price();
         binding.setTotal(String.valueOf(total));
         StringBuilder details = new StringBuilder();
         if (model.getReservation_extra_items() != null && model.getReservation_extra_items().size() > 0) {

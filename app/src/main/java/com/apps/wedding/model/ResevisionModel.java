@@ -18,6 +18,7 @@ public class ResevisionModel  implements Serializable {
     private String day;
     private String hour;
     private String status;
+    private double price;
     private WeddingHallModel service;
     private List<ResevisionExtraItems> reservation_extra_items;
     private WeddingHallModel.OfferModel offer;
@@ -80,6 +81,10 @@ public class ResevisionModel  implements Serializable {
 
     public WeddingHallModel getService() {
         return service;
+    }
+
+    public double getPrice() {
+        return price;
     }
 
     public List<ResevisionExtraItems> getReservation_extra_items() {

@@ -2,6 +2,7 @@ package com.apps.wedding.services;
 
 
 import com.apps.wedding.model.DepartmentDataModel;
+import com.apps.wedding.model.NotificationCount;
 import com.apps.wedding.model.NotificationDataModel;
 import com.apps.wedding.model.PlaceGeocodeData;
 import com.apps.wedding.model.ReservionDataModel;
@@ -181,6 +182,12 @@ public interface Service {
 
     @GET("api/notifications")
     Single<Response<NotificationDataModel>> getNotifications(@Header("AUTHORIZATION") String token,
+                                                             @Query(value = "api_key") String api_key,
+                                                             @Query(value = "user_id") String user_id
+    );
+
+    @GET("api/is-read-count")
+    Single<Response<NotificationCount>> getNotificationCount(@Header("AUTHORIZATION") String token,
                                                              @Query(value = "api_key") String api_key,
                                                              @Query(value = "user_id") String user_id
     );

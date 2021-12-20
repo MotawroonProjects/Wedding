@@ -8,10 +8,12 @@ import android.os.Handler;
 import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.NavController;
 import androidx.navigation.NavOptions;
 import androidx.navigation.Navigation;
+import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 
@@ -41,17 +43,36 @@ public class HomeActivity extends BaseActivity implements Listeners.Verification
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_home);
         initView();
+        getDataFromIntent();
 
 
+    }
+
+    private void getDataFromIntent() {
+        Intent intent = getIntent();
+        if (intent != null && intent.hasExtra("from_firebase")) {
+            if (getUserModel() != null) {
+                binding.setCount("0");
+                Intent intent1 = new Intent(this, NotificationActivity.class);
+                startActivity(intent1);
+            } else {
+                Intent intent1 = new Intent(this, LoginActivity.class);
+                startActivity(intent1);
+            }
+        }
     }
 
 
     private void initView() {
 
         homeActivityMvvm = ViewModelProviders.of(this).get(HomeActivityMvvm.class);
+        homeActivityMvvm.getCount().observe(this, countNumber -> {
+            binding.setCount(countNumber);
+        });
         setSupportActionBar(binding.toolBar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         navController = Navigation.findNavController(this, R.id.navHostFragment);
+
         NavigationUI.setupWithNavController(binding.bottomNav, navController);
         NavigationUI.setupWithNavController(binding.toolBar, navController);
         NavigationUI.setupActionBarWithNavController(this, navController);
@@ -81,6 +102,7 @@ public class HomeActivity extends BaseActivity implements Listeners.Verification
 
         binding.imgNotification.setOnClickListener(v -> {
             if (getUserModel() != null) {
+                binding.setCount("0");
                 Intent intent = new Intent(this, NotificationActivity.class);
                 startActivity(intent);
             } else {
@@ -91,6 +113,8 @@ public class HomeActivity extends BaseActivity implements Listeners.Verification
         if (getUserModel() != null) {
             homeActivityMvvm.updateFirebase(this, getUserModel());
         }
+
+        homeActivityMvvm.getNotificationCount(getUserModel());
     }
 
 

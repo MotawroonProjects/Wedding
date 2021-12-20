@@ -6,6 +6,9 @@
     <data>
 
         <variable
+            name="count"
+            type="String" />
+        <variable
             name="lang"
             type="String" />
     </data>
@@ -54,16 +57,34 @@
 
                     />
 
-                <ImageView
-                    android:id="@+id/imgNotification"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
+                <FrameLayout
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
                     android:layout_gravity="end"
                     android:layout_marginStart="12dp"
                     android:layout_marginEnd="12dp"
-                    android:src="@drawable/ic_notification"
 
-                    />
+                    >
+                    <ImageView
+                        android:id="@+id/imgNotification"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+
+                        android:src="@drawable/ic_notification"
+                        android:layout_gravity="center"
+                        />
+                    <TextView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:background="@drawable/circle_color1"
+                        android:textColor="@color/white"
+                        android:textSize="9sp"
+                        android:text='@{count??"0",default="0"}'
+                        android:gravity="center"
+                        tools:ignore="SmallSp" />
+
+                </FrameLayout>
+
 
 
             </androidx.appcompat.widget.Toolbar>

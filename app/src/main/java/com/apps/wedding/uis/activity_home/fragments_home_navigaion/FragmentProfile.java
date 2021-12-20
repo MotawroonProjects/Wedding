@@ -6,6 +6,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.ResolveInfo;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -19,6 +21,7 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.NavBackStackEntry;
 import androidx.navigation.Navigation;
 
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -51,7 +54,7 @@ public class FragmentProfile extends BaseFragment {
         launcher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
             if (req == 1 && result.getResultCode() == Activity.RESULT_OK) {
                 binding.setModel(getUserModel());
-            } else if (req == 2 && result.getResultCode() == Activity.RESULT_OK&&result.getData()!=null) {
+            } else if (req == 2 && result.getResultCode() == Activity.RESULT_OK && result.getData() != null) {
                 String lang = result.getData().getStringExtra("lang");
                 activity.refreshActivity(lang);
             }
@@ -129,6 +132,8 @@ public class FragmentProfile extends BaseFragment {
 
         });
     }
+
+
 
     private void navigateToLoginActivity() {
         req = 1;

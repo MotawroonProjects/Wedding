@@ -18,6 +18,7 @@ import com.apps.wedding.R;
 import com.apps.wedding.adapter.OfferExtraItemsAdapter;
 import com.apps.wedding.adapter.PreviousReservionAdapter;
 import com.apps.wedding.adapter.ReservionAdapter;
+import com.apps.wedding.databinding.BottomSheetRateBinding;
 import com.apps.wedding.databinding.BottomSheetServiceDetailsBinding;
 import com.apps.wedding.model.ResevisionModel;
 import com.apps.wedding.mvvm.FragmentCurrentReservisonMvvm;
@@ -26,6 +27,7 @@ import com.apps.wedding.uis.activity_base.BaseFragment;
 import com.apps.wedding.databinding.FragmentCurrentReservationBinding;
 import com.apps.wedding.uis.activity_home.HomeActivity;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.iarcuschin.simpleratingbar.SimpleRatingBar;
 
 
 public class FragmentPreviousReservation extends BaseFragment {
@@ -127,6 +129,28 @@ public class FragmentPreviousReservation extends BaseFragment {
         });
 
 
+        dialog.show();
+
+    }
+
+    public void createRateSheetDialog(ResevisionModel model) {
+        BottomSheetDialog dialog = new BottomSheetDialog(activity);
+        BottomSheetRateBinding binding = DataBindingUtil.inflate(LayoutInflater.from(activity), R.layout.bottom_sheet_rate, null, false);
+        dialog.setContentView(binding.getRoot());
+        binding.rateBar.setOnRatingBarChangeListener((simpleRatingBar, rating, fromUser) -> {
+            int rate = (int) rating;
+            binding.tvRate.setText(rate + "");
+        });
+        binding.imageClose.setOnClickListener(v -> {
+            dialog.dismiss();
+        });
+
+        binding.btnRate.setOnClickListener(view -> {
+            int rate = (int) binding.rateBar.getRating();
+            fragmentCurrentReservisonMvvm.addRate(getUserModel(), model.getService().getId(), rate);
+            dialog.dismiss();
+
+        });
         dialog.show();
 
     }

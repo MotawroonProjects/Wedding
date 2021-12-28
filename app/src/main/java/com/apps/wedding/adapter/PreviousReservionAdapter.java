@@ -60,6 +60,14 @@ public class PreviousReservionAdapter extends RecyclerView.Adapter<RecyclerView.
             }
         });
 
+        myHolder.binding.llRate.setOnClickListener(v -> {
+            if (fragment instanceof FragmentPreviousReservation) {
+                FragmentPreviousReservation fragmentCurrentReservation = (FragmentPreviousReservation) fragment;
+                fragmentCurrentReservation.createRateSheetDialog(list.get(myHolder.getAdapterPosition()));
+
+            }
+        });
+
     }
 
     @Override

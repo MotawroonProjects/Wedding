@@ -76,5 +76,6 @@
     <string name="change">تغيير</string>
     <string name="cnt_book">عفوا لايمكن الحجز الان</string>
     <string name="choose_language">تغيير اللغة</string>
+    <string name="add_rate">تقييم الخدمة</string>
 
 </resources>

@@ -76,5 +76,6 @@
     <string name="change">Change</string>
     <string name="cnt_book">You cannot book now</string>
     <string name="choose_language">Change language</string>
+    <string name="add_rate">Add rate</string>
 
 </resources>

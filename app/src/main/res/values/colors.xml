@@ -38,6 +38,7 @@
     <color name="black_trans">#55000000</color>
     <color name="trans_black">#55000000</color>
     <color name="transparent">#00000000</color>
+    <color name="rate_color">#FFD800</color>
 
 
 </resources>

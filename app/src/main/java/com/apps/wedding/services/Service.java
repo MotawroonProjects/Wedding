@@ -192,4 +192,14 @@ public interface Service {
                                                              @Query(value = "user_id") String user_id
     );
 
+    @FormUrlEncoded
+    @POST("api/add-rate")
+    Single<Response<StatusResponse>> addRate(@Header("AUTHORIZATION") String token,
+                                             @Field("api_key") String api_key,
+                                             @Field("user_id") String user_id,
+                                             @Field("service_id") String service_id,
+                                             @Field("rate_value") int rate_value
+                                             );
+
+
 }

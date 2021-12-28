@@ -15,7 +15,7 @@
         <variable
             name="details"
             type="String" />
-
+        <import type="android.view.View" />
     </data>
 
     <androidx.core.widget.NestedScrollView
@@ -189,7 +189,59 @@
                     android:textColor="@color/gray17"
                     android:textSize="13sp" />
 
+                <LinearLayout
+                    android:id="@+id/llOffer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:visibility="@{model.offer!=null?View.VISIBLE:View.GONE,default=gone}">
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="180dp"
+                        image='@{model.offer!=null?model.offer.image:""}' />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="5dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="5dp"
+                        android:layout_marginBottom="8dp"
+                        android:gravity="start"
+                        android:maxLines="2"
+                        android:ellipsize="end"
+                        android:text='@{model.offer.name??""}'
+                        android:textAlignment="viewStart"
+                        android:textColor="@color/black"
+                        android:textSize="13sp" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="5dp"
+                        android:layout_marginEnd="5dp"
+                        android:layout_marginBottom="8dp"
+                        android:background="@drawable/stroke_gray"
+                        android:gravity="start"
+                        android:maxLines="3"
+                        android:padding="8dp"
+                        android:ellipsize="end"
+                        android:text='@{model.offer.text??""}'
+                        android:textAlignment="viewStart"
+                        android:textColor="@color/gray6"
+                        android:textSize="12sp" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+
                 <ImageView
+                    android:id="@+id/imageQrCode"
                     qr_image="@{model.bar_code_image}"
                     android:layout_width="180dp"
                     android:layout_height="180dp"

@@ -14,6 +14,8 @@ import com.apps.wedding.R;
 import com.apps.wedding.databinding.OrderRowBinding;
 import com.apps.wedding.databinding.PreviousOrderRowBinding;
 import com.apps.wedding.model.ResevisionModel;
+import com.apps.wedding.uis.activity_home.fragments_home_navigaion.FragmentCurrentReservation;
+import com.apps.wedding.uis.activity_home.fragments_home_navigaion.FragmentPreviousReservation;
 
 import java.util.List;
 
@@ -49,7 +51,15 @@ public class PreviousReservionAdapter extends RecyclerView.Adapter<RecyclerView.
         myHolder.binding.setModel(list.get(position));
         ResevisionModel model = list.get(position);
         double total = model.getPrice() + model.getExtra_item_price();
-        myHolder.binding.setTotal(total+"");
+        myHolder.binding.setTotal(total + "");
+        myHolder.binding.llShow.setOnClickListener(v -> {
+            if (fragment instanceof FragmentPreviousReservation) {
+                FragmentPreviousReservation fragmentCurrentReservation = (FragmentPreviousReservation) fragment;
+                fragmentCurrentReservation.createSheetDialog(list.get(myHolder.getAdapterPosition()));
+
+            }
+        });
+
     }
 
     @Override

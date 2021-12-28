@@ -9,6 +9,7 @@ import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.Navigation;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.util.Log;
@@ -17,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.apps.wedding.R;
+import com.apps.wedding.adapter.OfferExtraItemsAdapter;
 import com.apps.wedding.adapter.RateFilterAdapter;
 import com.apps.wedding.adapter.ReservionAdapter;
 import com.apps.wedding.adapter.WeddingHallDepartmentAdapter;
@@ -110,24 +112,17 @@ public class FragmentCurrentReservation extends BaseFragment {
         binding.setModel(model);
         double total = model.getPrice() + model.getExtra_item_price();
         binding.setTotal(String.valueOf(total));
-        StringBuilder details = new StringBuilder();
-        if (model.getReservation_extra_items() != null && model.getReservation_extra_items().size() > 0) {
-            int index = 0;
-            for (ResevisionModel.ResevisionExtraItems items : model.getReservation_extra_items()) {
-                if (index == model.getReservation_extra_items().size() - 1) {
-                    details.append(items.getItem_name());
-                } else {
-                    details.append(items.getItem_name()).append("-");
-                }
-
-            }
-
-        } else {
-            details = new StringBuilder(model.getService().getText());
-        }
-
+        StringBuilder details;
+        details = new StringBuilder(model.getService().getText());
 
         binding.setDetails(details.toString());
+        if (model.getReservation_extra_items() != null) {
+            binding.recView.setLayoutManager(new GridLayoutManager(activity, 2, LinearLayoutManager.HORIZONTAL, false));
+            OfferExtraItemsAdapter adapter = new OfferExtraItemsAdapter(activity);
+            binding.recView.setAdapter(adapter);
+            adapter.updateList(model.getReservation_extra_items());
+        }
+
 
         binding.imageClose.setOnClickListener(v -> {
             dialog.dismiss();

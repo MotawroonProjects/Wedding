@@ -139,18 +139,6 @@ public class HomeActivity extends BaseActivity implements Listeners.Verification
         if (currentFragmentId == R.id.home) {
             finish();
 
-        } else if (currentFragmentId == R.id.serviceDetailsFragment) {
-            Fragment fragment = getSupportFragmentManager().getPrimaryNavigationFragment();
-            Fragment childFragment = fragment.getChildFragmentManager().getFragments().get(0);
-            if (childFragment instanceof ServiceDetailsFragment) {
-                ServiceDetailsFragment serviceDetailsFragment = (ServiceDetailsFragment) childFragment;
-                if (serviceDetailsFragment.isFullScreen()) {
-                    serviceDetailsFragment.setToNormalScreen();
-                } else {
-                    navController.popBackStack();
-                }
-            }
-
         } else {
             navController.popBackStack();
         }

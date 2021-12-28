@@ -134,7 +134,6 @@ public class FragmentProfile extends BaseFragment {
     }
 
 
-
     private void navigateToLoginActivity() {
         req = 1;
         Intent intent = new Intent(activity, LoginActivity.class);

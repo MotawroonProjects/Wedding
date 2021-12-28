@@ -79,7 +79,6 @@ public class FragmentCurrentReservation extends BaseFragment {
         });
 
 
-
         fragmentCurrentReservisonMvvm.getReservionList().observe(activity, weddingHallModels -> {
             if (weddingHallModels.size() > 0) {
                 reservionAdapter.updateList(fragmentCurrentReservisonMvvm.getReservionList().getValue());

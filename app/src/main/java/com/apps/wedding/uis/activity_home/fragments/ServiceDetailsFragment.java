@@ -2,6 +2,7 @@ package com.apps.wedding.uis.activity_home.fragments;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -17,6 +18,10 @@ import androidx.recyclerview.widget.SnapHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebResourceRequest;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 
 import com.apps.wedding.R;
 import com.apps.wedding.adapter.OfferAdapter;
@@ -136,6 +141,38 @@ public class ServiceDetailsFragment extends BaseFragment {
 
         });
 
+        binding.webView.getSettings().setPluginState(WebSettings.PluginState.ON);
+        binding.webView.getSettings().setJavaScriptEnabled(true);
+        binding.webView.setWebViewClient(new WebViewClient() {
+            @Override
+            public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
+                return super.shouldOverrideUrlLoading(view, request);
+            }
+
+            @Override
+            public void onPageStarted(WebView view, String url, Bitmap favicon) {
+                super.onPageStarted(view, url, favicon);
+                binding.webView.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onPageFinished(WebView view, String url) {
+                super.onPageFinished(view, url);
+
+
+            }
+
+            @Override
+            public void onPageCommitVisible(WebView view, String url) {
+                super.onPageCommitVisible(view, url);
+                binding.progBarVideo.setVisibility(View.GONE);
+
+            }
+
+
+        });
+
+
         offerAdapter = new OfferAdapter(activity, this);
         binding.recView.setLayoutManager(new LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false));
         SnapHelper snapHelper = new PagerSnapHelper();
@@ -156,17 +193,16 @@ public class ServiceDetailsFragment extends BaseFragment {
                         timer.scheduleAtFixedRate(timerTask, 6000, 6000);
                     }
                 }
-                if (singleWeddingHallDataModel.getData().getVideo() != null) {
-                    getVideoImage();
-                    setupPlayer();
+                if (singleWeddingHallDataModel.getData().getVideo_link() != null) {
+                    binding.webView.loadUrl(singleWeddingHallDataModel.getData().getVideo_link());
                 }
 
                 if (singleWeddingHallDataModel.getData().getOffer() != null && singleWeddingHallDataModel.getData().getOffer().size() > 0) {
 
                     offerAdapter.updateList(singleWeddingHallDataModel.getData().getOffer());
-                    Log.e("sdsa","sdfs");
+                    Log.e("sdsa", "sdfs");
                 } else {
-                    Log.e("tt","tt");
+                    Log.e("tt", "tt");
 
                 }
 
@@ -175,117 +211,15 @@ public class ServiceDetailsFragment extends BaseFragment {
         fragmentServiceDetialsMvvm.getSingleWeddingHallData(service_id);
 
 
-        binding.flVideo.setOnClickListener(v -> {
-            isInFullScreen = true;
-
-            binding.motionLayout.transitionToEnd();
-            if (player != null) {
-                player.setPlayWhenReady(true);
-            }
-
-
-        });
         binding.btnBook.setOnClickListener(view -> confirmReservation());
 
     }
 
-    private void getVideoImage() {
-
-        int microSecond = 6000000;// 6th second as an example
-        Uri uri = Uri.parse(singleWeddingHallDataModel.getData().getVideo());
-        RequestOptions options = new RequestOptions().frame(microSecond).override(binding.imageVideo.getWidth(), binding.imageVideo.getHeight());
-        Glide.with(activity).asBitmap()
-                .load(uri)
-                .centerCrop()
-                .apply(options)
-                .into(binding.imageVideo);
-    }
-
-    @SuppressLint("ClickableViewAccessibility")
-    private void setupPlayer() {
-
-        if (singleWeddingHallDataModel.getData().getVideo() != null) {
-            trackSelector = new DefaultTrackSelector(activity);
-            dataSourceFactory = new DefaultDataSource.Factory(activity);
-            MediaSourceFactory mediaSourceFactory = new DefaultMediaSourceFactory(dataSourceFactory);
-            MediaItem mediaItem = MediaItem.fromUri(Uri.parse(singleWeddingHallDataModel.getData().getVideo()));
-
-            player = new ExoPlayer.Builder(activity)
-                    .setTrackSelector(trackSelector)
-                    .setMediaSourceFactory(mediaSourceFactory)
-                    .build();
-
-            player.setMediaItem(mediaItem);
-            player.setPlayWhenReady(false);
-            player.setRepeatMode(ExoPlayer.REPEAT_MODE_ONE);
-            binding.exoPlayer.setPlayer(player);
-            player.prepare();
-
-            binding.exoPlayer.setOnTouchListener((v, event) -> {
-                if (player != null && player.isPlaying()) {
-                    player.setPlayWhenReady(false);
-                } else if (player != null && !player.isPlaying()) {
-
-                    player.setPlayWhenReady(true);
-
-                }
-                return false;
-            });
-
-
-        }
-
-
-    }
-
-    public boolean isFullScreen() {
-        return isInFullScreen;
-    }
-
-    public void setToNormalScreen() {
-
-        isInFullScreen = false;
-        binding.motionLayout.transitionToStart();
-        if (player != null) {
-            player.setPlayWhenReady(false);
-        }
-
-
-    }
-
-    @Override
-    public void onResume() {
-        if ((Util.SDK_INT <= 23 || player == null) && singleWeddingHallDataModel != null) {
-            setupPlayer();
-        }
-        super.onResume();
-
-
-    }
-
-    @Override
-    public void onStart() {
-        if (Util.SDK_INT > 23) {
-            if (player == null && singleWeddingHallDataModel != null) {
-                setupPlayer();
-                binding.exoPlayer.onResume();
-            }
-
-
-        }
-        super.onStart();
-
-
-    }
 
     @Override
     public void onPause() {
-        if (Util.SDK_INT <= 23) {
-            if (player != null) {
-                player.setPlayWhenReady(false);
-            }
-        }
         super.onPause();
+        binding.webView.onPause();
 
 
     }
@@ -331,13 +265,6 @@ public class ServiceDetailsFragment extends BaseFragment {
         }
         if (timerTask != null) {
             timerTask.cancel();
-        }
-        if (Util.SDK_INT > 23) {
-            if (player != null) {
-                player.release();
-                player = null;
-            }
-
         }
 
 

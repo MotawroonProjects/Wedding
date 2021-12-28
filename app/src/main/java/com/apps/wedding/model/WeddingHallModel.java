@@ -13,6 +13,7 @@ public class WeddingHallModel implements Serializable {
     private String longitude;
     private String address;
     private String main_image;
+    private String video_link;
     private String video;
     private String text;
     private String rates_val;
@@ -108,6 +109,10 @@ public class WeddingHallModel implements Serializable {
 
     public List<ServiceRate> getService_rates() {
         return service_rates;
+    }
+
+    public String getVideo_link() {
+        return video_link;
     }
 
     public static class ServiceMainItem implements Serializable {

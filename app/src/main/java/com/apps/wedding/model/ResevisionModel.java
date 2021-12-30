@@ -8,6 +8,9 @@ public class ResevisionModel  implements Serializable {
     private String service_name;
     private String user_name;
     private String user_phone;
+    private String provider_name;
+    private String provider_phone;
+
     private int service_id;
     private int user_id;
     private String date;
@@ -93,6 +96,14 @@ public class ResevisionModel  implements Serializable {
 
     public WeddingHallModel.OfferModel getOffer() {
         return offer;
+    }
+
+    public String getProvider_name() {
+        return provider_name;
+    }
+
+    public String getProvider_phone() {
+        return provider_phone;
     }
 
     public class ResevisionExtraItems implements Serializable{

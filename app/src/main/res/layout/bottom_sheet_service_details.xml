@@ -15,6 +15,7 @@
         <variable
             name="details"
             type="String" />
+
         <import type="android.view.View" />
     </data>
 
@@ -106,7 +107,7 @@
                         android:layout_marginEnd="5dp"
                         android:layout_weight="1"
                         android:gravity="start"
-                        android:text="@{model.user_name}"
+                        android:text="@{model.provider_name}"
                         android:textAlignment="viewStart"
                         android:textColor="@color/gray17"
                         android:textSize="13sp" />
@@ -154,7 +155,7 @@
                         android:layout_marginStart="5dp"
                         android:layout_marginEnd="5dp"
                         android:gravity="start"
-                        android:text="@{model.user_phone}"
+                        android:text="@{model.provider_phone}"
                         android:textAlignment="viewStart"
                         android:textColor="@color/gray17"
                         android:textSize="13sp" />
@@ -193,15 +194,15 @@
                     android:id="@+id/llOffer"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
                     android:layout_marginTop="8dp"
                     android:layout_marginBottom="8dp"
+                    android:orientation="vertical"
                     android:visibility="@{model.offer!=null?View.VISIBLE:View.GONE,default=gone}">
 
                     <ImageView
+                        image='@{model.offer!=null?model.offer.image:""}'
                         android:layout_width="match_parent"
-                        android:layout_height="180dp"
-                        image='@{model.offer!=null?model.offer.image:""}' />
+                        android:layout_height="180dp" />
 
                     <TextView
                         android:layout_width="match_parent"
@@ -210,9 +211,9 @@
                         android:layout_marginTop="8dp"
                         android:layout_marginEnd="5dp"
                         android:layout_marginBottom="8dp"
+                        android:ellipsize="end"
                         android:gravity="start"
                         android:maxLines="2"
-                        android:ellipsize="end"
                         android:text='@{model.offer.name??""}'
                         android:textAlignment="viewStart"
                         android:textColor="@color/black"
@@ -225,10 +226,10 @@
                         android:layout_marginEnd="5dp"
                         android:layout_marginBottom="8dp"
                         android:background="@drawable/stroke_gray"
+                        android:ellipsize="end"
                         android:gravity="start"
                         android:maxLines="3"
                         android:padding="8dp"
-                        android:ellipsize="end"
                         android:text='@{model.offer.text??""}'
                         android:textAlignment="viewStart"
                         android:textColor="@color/gray6"

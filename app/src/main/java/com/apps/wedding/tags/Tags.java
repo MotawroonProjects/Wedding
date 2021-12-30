@@ -7,4 +7,5 @@ public class Tags {
     public static final String not_tag = "wedding_not";
     public static final String api_key = "ase1iXcLAxanvXLZcgh6tk";
 
+    //weddingapp617@gmail.com
 }

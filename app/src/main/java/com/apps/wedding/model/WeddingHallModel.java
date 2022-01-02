@@ -26,6 +26,8 @@ public class WeddingHallModel implements Serializable {
     private List<ServiceImage> service_images;
     private List<OfferModel> offer;
     private List<ServiceRate> service_rates;
+    private ServiceRate service_rate;
+
 
     public String getId() {
         return id;
@@ -113,6 +115,10 @@ public class WeddingHallModel implements Serializable {
 
     public String getVideo_link() {
         return video_link;
+    }
+
+    public ServiceRate getService_rate() {
+        return service_rate;
     }
 
     public static class ServiceMainItem implements Serializable {
@@ -304,6 +310,7 @@ public class WeddingHallModel implements Serializable {
             return updated_at;
         }
     }
+
 
 
 }

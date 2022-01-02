@@ -26,12 +26,17 @@ import com.apps.wedding.databinding.BottomSheetDialogBinding;
 import com.apps.wedding.databinding.BottomSheetServiceDetailsBinding;
 import com.apps.wedding.model.FilterModel;
 import com.apps.wedding.model.FilterRangeModel;
+import com.apps.wedding.model.NotModel;
 import com.apps.wedding.model.ResevisionModel;
 import com.apps.wedding.mvvm.FragmentCurrentReservisonMvvm;
 import com.apps.wedding.uis.activity_base.BaseFragment;
 import com.apps.wedding.databinding.FragmentCurrentReservationBinding;
 import com.apps.wedding.uis.activity_home.HomeActivity;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.text.NumberFormat;
 import java.util.Currency;
@@ -78,7 +83,10 @@ public class FragmentCurrentReservation extends BaseFragment {
 
             }
             binding.swipeRefresh.setRefreshing(isLoading);
+
         });
+
+
 
 
         fragmentCurrentReservisonMvvm.getReservionList().observe(activity, weddingHallModels -> {
@@ -103,6 +111,8 @@ public class FragmentCurrentReservation extends BaseFragment {
         reservionAdapter = new ReservionAdapter(activity, this);
         binding.recView.setAdapter(reservionAdapter);
         fragmentCurrentReservisonMvvm.getReservionData(getUserModel());
+
+        EventBus.getDefault().register(activity);
     }
 
     public void createSheetDialog(ResevisionModel model) {
@@ -139,5 +149,18 @@ public class FragmentCurrentReservation extends BaseFragment {
 
     public void delete(ResevisionModel model) {
         fragmentCurrentReservisonMvvm.deleteReservation(activity, model, getUserModel());
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onNewNotificationListener(NotModel model){
+        fragmentCurrentReservisonMvvm.getReservionData(getUserModel());
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        if (EventBus.getDefault().isRegistered(this)){
+            EventBus.getDefault().unregister(this);
+        }
     }
 }

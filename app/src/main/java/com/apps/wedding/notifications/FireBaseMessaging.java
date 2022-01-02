@@ -8,6 +8,7 @@ import android.app.TaskStackBuilder;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.media.AudioAttributes;
 import android.media.AudioManager;
 import android.media.RingtoneManager;
@@ -16,18 +17,26 @@ import android.os.Build;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
 
 import com.apps.wedding.R;
 import com.apps.wedding.broadcast_notification.NotificationBroadCastReceiver;
+import com.apps.wedding.model.NotModel;
 import com.apps.wedding.model.UserModel;
 import com.apps.wedding.preferences.Preferences;
 import com.apps.wedding.tags.Tags;
 import com.apps.wedding.uis.activity_home.HomeActivity;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.CustomTarget;
+import com.bumptech.glide.request.transition.Transition;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
+import com.google.gson.Gson;
 
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.Map;
 
@@ -74,8 +83,9 @@ public class FireBaseMessaging extends FirebaseMessagingService {
     private void createNewNotificationVersion(Map<String, String> map) {
         String title = map.get("title");
         String body = map.get("message");
+        UserModel.Data userModel = new Gson().fromJson(map.get("from_user_data"), UserModel.Data.class);
+
         Intent intent;
-        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher_round);
 
         Intent cancelIntent = new Intent(this, NotificationBroadCastReceiver.class);
         PendingIntent cancelPendingIntent = PendingIntent.getBroadcast(this.getApplicationContext(), 0, cancelIntent, 0);
@@ -103,9 +113,8 @@ public class FireBaseMessaging extends FirebaseMessagingService {
         );
 
 
-
         intent = new Intent(this, HomeActivity.class);
-        intent.putExtra("from_firebase",true);
+        intent.putExtra("from_firebase", true);
         builder.setContentTitle(title);
         builder.setStyle(new NotificationCompat.BigTextStyle().bigText(body));
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -123,14 +132,27 @@ public class FireBaseMessaging extends FirebaseMessagingService {
         builder.setGroup(GROUP_KEY);
         builder.setDeleteIntent(cancelPendingIntent);
 
+        Glide.with(this)
+                .asBitmap()
+                .load(userModel.getLogo())
+                .into(new CustomTarget<Bitmap>() {
+                    @Override
+                    public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+                        builder.setLargeIcon(resource);
+                        if (manager != null) {
 
-        builder.setLargeIcon(bitmap);
-        if (manager != null) {
+                            manager.createNotificationChannel(channel);
+                            manager.notify(Tags.not_tag, Tags.not_id, builder.build());
+                            EventBus.getDefault().post(new NotModel(true));
+                        }
+                    }
 
-            manager.createNotificationChannel(channel);
-            manager.notify(Tags.not_tag, Tags.not_id, builder.build());
+                    @Override
+                    public void onLoadCleared(@Nullable Drawable placeholder) {
 
-        }
+                    }
+                });
+
 
     }
 
@@ -150,10 +172,12 @@ public class FireBaseMessaging extends FirebaseMessagingService {
 
         String title = map.get("title");
         String body = map.get("message");
+        UserModel.Data userModel = new Gson().fromJson(map.get("from_user_data"), UserModel.Data.class);
+
         Intent intent;
 
         intent = new Intent(this, HomeActivity.class);
-        intent.putExtra("from_firebase",true);
+        intent.putExtra("from_firebase", true);
         Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher_round);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         TaskStackBuilder taskStackBuilder = TaskStackBuilder.create(this);
@@ -171,17 +195,30 @@ public class FireBaseMessaging extends FirebaseMessagingService {
         builder.setGroupSummary(true);
         builder.setGroup(GROUP_KEY);
         NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-        if (manager != null) {
 
-            manager.notify(Tags.not_tag, Tags.not_id, builder.build());
 
-        }
+        Glide.with(this)
+                .asBitmap()
+                .load(userModel.getLogo())
+                .into(new CustomTarget<Bitmap>() {
+                    @Override
+                    public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+                        builder.setLargeIcon(resource);
+                        if (manager != null) {
+
+                            manager.notify(Tags.not_tag, Tags.not_id, builder.build());
+                            EventBus.getDefault().post(new NotModel(true));
+                        }
+                    }
+
+                    @Override
+                    public void onLoadCleared(@Nullable Drawable placeholder) {
+
+                    }
+                });
 
 
     }
-
-
-
 
 
 }

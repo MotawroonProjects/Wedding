@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
     <data>
 
     </data>
@@ -10,15 +11,15 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/white"
-        tools:context=".uis.activity_home.fragments_home_navigaion.FragmentNearby">
 
+        tools:context=".uis.activity_home.fragments_home_navigaion.FragmentNearby">
 
 
         <FrameLayout
             android:id="@+id/map"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            />
+            android:layout_height="match_parent" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -30,12 +31,12 @@
                 android:id="@+id/cardViewSearch"
                 android:layout_width="0dp"
                 android:layout_height="50dp"
+                android:layout_margin="3dp"
                 android:layout_weight="1"
                 android:background="@color/white"
-                app:cardElevation="5dp"
-                android:layout_margin="3dp"
                 app:cardCornerRadius="25dp"
-                >
+                app:cardElevation="5dp">
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
@@ -49,7 +50,10 @@
                         android:layout_height="24dp"
                         android:padding="2dp"
                         android:src="@drawable/ic_search"
-                        app:tint="@color/gray5" />
+                        app:tint="@color/gray5"
+
+
+                        />
 
                     <androidx.legacy.widget.Space
                         android:layout_width="12dp"
@@ -60,7 +64,9 @@
                         android:layout_height="wrap_content"
                         android:text="@string/search"
                         android:textColor="@color/gray5"
-                        android:textSize="15sp" />
+                        android:textSize="15sp"
+
+                        />
                 </LinearLayout>
 
             </androidx.cardview.widget.CardView>
@@ -75,11 +81,11 @@
 
                 android:layout_width="44dp"
                 android:layout_height="50dp"
-                android:background="@color/white"
-                app:cardElevation="5dp"
                 android:layout_margin="3dp"
+                android:background="@color/white"
                 app:cardCornerRadius="5dp"
-                >
+                app:cardElevation="5dp">
+
                 <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -96,8 +102,7 @@
             android:id="@+id/recView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            />
+            android:layout_gravity="bottom" />
 
         <FrameLayout
             android:id="@+id/flLoading"
@@ -105,14 +110,13 @@
             android:layout_height="match_parent"
             android:background="@color/trans_black"
             android:clickable="true"
-            android:focusable="true"
-            >
+            android:focusable="true">
+
             <ProgressBar
                 android:id="@+id/progBar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                />
+                android:layout_gravity="center" />
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/cardNoData"

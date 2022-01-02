@@ -25,6 +25,7 @@ public class ResevisionModel  implements Serializable {
     private WeddingHallModel service;
     private List<ResevisionExtraItems> reservation_extra_items;
     private WeddingHallModel.OfferModel offer;
+    private WeddingHallModel.ServiceRate service_rate;
 
     public int getId() {
         return id;
@@ -104,6 +105,10 @@ public class ResevisionModel  implements Serializable {
 
     public String getProvider_phone() {
         return provider_phone;
+    }
+
+    public WeddingHallModel.ServiceRate getService_rate() {
+        return service_rate;
     }
 
     public class ResevisionExtraItems implements Serializable{

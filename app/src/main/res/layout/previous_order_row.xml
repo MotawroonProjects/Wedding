@@ -202,6 +202,8 @@
                 </LinearLayout>
 
                 <View
+                    android:id="@+id/v"
+
                     android:layout_width="1px"
                     android:layout_height="match_parent"
                     android:background="@color/gray17" />
@@ -213,14 +215,16 @@
                     android:layout_gravity="center"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+
+                    >
 
                     <ImageView
                         android:layout_width="20dp"
                         android:layout_height="20dp"
                         android:layout_marginStart="10dp"
                         android:layout_marginEnd="10dp"
-
+                        
                         android:src="@drawable/ic_calender"
 
                         app:tint="@color/gray17" />
@@ -232,7 +236,9 @@
                         android:layout_gravity="center"
                         android:text="@string/rate_service"
                         android:textColor="@color/gray17"
-                        android:textSize="14sp" />
+                        android:textSize="14sp"
+
+                        />
                 </LinearLayout>
 
 

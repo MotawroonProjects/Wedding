@@ -4,6 +4,7 @@ package com.apps.wedding.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.databinding.DataBindingUtil;
@@ -52,6 +53,13 @@ public class PreviousReservionAdapter extends RecyclerView.Adapter<RecyclerView.
         ResevisionModel model = list.get(position);
         double total = model.getPrice() + model.getExtra_item_price();
         myHolder.binding.setTotal(total + "");
+        if (list.get(position).getService_rate() != null) {
+            myHolder.binding.llRate.setVisibility(View.GONE);
+            myHolder.binding.v.setVisibility(View.GONE);
+        } else {
+            myHolder.binding.llRate.setVisibility(View.VISIBLE);
+            myHolder.binding.v.setVisibility(View.VISIBLE);
+        }
         myHolder.binding.llShow.setOnClickListener(v -> {
             if (fragment instanceof FragmentPreviousReservation) {
                 FragmentPreviousReservation fragmentCurrentReservation = (FragmentPreviousReservation) fragment;

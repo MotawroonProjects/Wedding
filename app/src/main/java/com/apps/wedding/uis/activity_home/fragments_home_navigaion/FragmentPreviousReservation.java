@@ -20,6 +20,7 @@ import com.apps.wedding.adapter.PreviousReservionAdapter;
 import com.apps.wedding.adapter.ReservionAdapter;
 import com.apps.wedding.databinding.BottomSheetRateBinding;
 import com.apps.wedding.databinding.BottomSheetServiceDetailsBinding;
+import com.apps.wedding.model.NotModel;
 import com.apps.wedding.model.ResevisionModel;
 import com.apps.wedding.mvvm.FragmentCurrentReservisonMvvm;
 import com.apps.wedding.mvvm.FragmentPreviousReservisonMvvm;
@@ -28,6 +29,10 @@ import com.apps.wedding.databinding.FragmentCurrentReservationBinding;
 import com.apps.wedding.uis.activity_home.HomeActivity;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.iarcuschin.simpleratingbar.SimpleRatingBar;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 
 public class FragmentPreviousReservation extends BaseFragment {
@@ -96,6 +101,9 @@ public class FragmentPreviousReservation extends BaseFragment {
         previousReservionAdapter = new PreviousReservionAdapter(activity, this);
         binding.recView.setAdapter(previousReservionAdapter);
         fragmentCurrentReservisonMvvm.getReservionData(getUserModel());
+
+        EventBus.getDefault().register(activity);
+
     }
 
 
@@ -153,5 +161,18 @@ public class FragmentPreviousReservation extends BaseFragment {
         });
         dialog.show();
 
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onNewNotificationListener(NotModel model){
+        fragmentCurrentReservisonMvvm.getReservionData(getUserModel());
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        if (EventBus.getDefault().isRegistered(this)){
+            EventBus.getDefault().unregister(this);
+        }
     }
 }

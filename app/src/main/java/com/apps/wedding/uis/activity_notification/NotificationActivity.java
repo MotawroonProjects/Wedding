@@ -19,10 +19,15 @@ import com.apps.wedding.R;
 import com.apps.wedding.adapter.NotificationAdapter;
 import com.apps.wedding.databinding.ActivityHomeBinding;
 import com.apps.wedding.databinding.ActivityNotificationBinding;
+import com.apps.wedding.model.NotModel;
 import com.apps.wedding.model.NotificationModel;
 import com.apps.wedding.mvvm.ActivityNotificationMvvm;
 import com.apps.wedding.uis.activity_base.BaseActivity;
 import com.apps.wedding.uis.activity_home.HomeActivity;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.List;
 
@@ -64,6 +69,20 @@ public class NotificationActivity extends BaseActivity {
         binding.recView.setAdapter(adapter);
         activityNotificationMvvm.getNotifications(getUserModel());
 
+        EventBus.getDefault().register(this);
+
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onNewNotificationListener(NotModel model){
+        activityNotificationMvvm.getNotifications(getUserModel());
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (EventBus.getDefault().isRegistered(this)){
+            EventBus.getDefault().unregister(this);
+        }
+    }
 }

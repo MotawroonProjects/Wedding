@@ -102,7 +102,6 @@ public class FragmentPreviousReservation extends BaseFragment {
         binding.recView.setAdapter(previousReservionAdapter);
         fragmentCurrentReservisonMvvm.getReservionData(getUserModel());
 
-        EventBus.getDefault().register(activity);
 
     }
 
@@ -155,7 +154,7 @@ public class FragmentPreviousReservation extends BaseFragment {
 
         binding.btnRate.setOnClickListener(view -> {
             int rate = (int) binding.rateBar.getRating();
-            fragmentCurrentReservisonMvvm.addRate(getUserModel(), model.getService().getId(), rate);
+            fragmentCurrentReservisonMvvm.addRate(getUserModel(), model.getService().getId(), rate, activity);
             dialog.dismiss();
 
         });
@@ -163,16 +162,8 @@ public class FragmentPreviousReservation extends BaseFragment {
 
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onNewNotificationListener(NotModel model){
+    public void updateData() {
         fragmentCurrentReservisonMvvm.getReservionData(getUserModel());
-    }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        if (EventBus.getDefault().isRegistered(this)){
-            EventBus.getDefault().unregister(this);
-        }
     }
 }

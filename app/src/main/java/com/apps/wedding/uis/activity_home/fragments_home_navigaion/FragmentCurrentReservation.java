@@ -112,7 +112,6 @@ public class FragmentCurrentReservation extends BaseFragment {
         binding.recView.setAdapter(reservionAdapter);
         fragmentCurrentReservisonMvvm.getReservionData(getUserModel());
 
-        EventBus.getDefault().register(activity);
     }
 
     public void createSheetDialog(ResevisionModel model) {
@@ -151,16 +150,8 @@ public class FragmentCurrentReservation extends BaseFragment {
         fragmentCurrentReservisonMvvm.deleteReservation(activity, model, getUserModel());
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onNewNotificationListener(NotModel model){
-        fragmentCurrentReservisonMvvm.getReservionData(getUserModel());
-    }
+  public void updateData(){
+      fragmentCurrentReservisonMvvm.getReservionData(getUserModel());
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        if (EventBus.getDefault().isRegistered(this)){
-            EventBus.getDefault().unregister(this);
-        }
-    }
+  }
 }

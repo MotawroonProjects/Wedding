@@ -14,12 +14,15 @@ import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentStatePagerAdapter;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.apps.wedding.R;
+import com.apps.wedding.mvvm.ActivityHomeShareModelMvvm;
 import com.apps.wedding.uis.activity_base.BaseFragment;
 import com.apps.wedding.adapter.MyPagerAdapter;
 import com.apps.wedding.databinding.FragmentMyReservationsBinding;
@@ -37,6 +40,7 @@ public class FragmentMyReservations extends BaseFragment {
     private ActivityResultLauncher<Intent> launcher;
     private int req = 1;
     private HomeActivity activity;
+    private ActivityHomeShareModelMvvm activityHomeShareModelMvvm;
 
 
     @Override
@@ -76,6 +80,15 @@ public class FragmentMyReservations extends BaseFragment {
     }
 
     private void initView() {
+        activityHomeShareModelMvvm = ViewModelProviders.of(activity).get(ActivityHomeShareModelMvvm.class);
+        activityHomeShareModelMvvm.getIsDataRefreshed().observe(activity, new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean aBoolean) {
+                if (aBoolean) {
+                    updateData();
+                }
+            }
+        });
         titles = new ArrayList<>();
         fragments = new ArrayList<>();
 
@@ -93,6 +106,20 @@ public class FragmentMyReservations extends BaseFragment {
             Intent intent = new Intent(activity, LoginActivity.class);
             launcher.launch(intent);
 
+        }
+
+
+    }
+
+    public void updateData() {
+        if (fragments.get(0) != null) {
+            FragmentCurrentReservation fragmentCurrentReservation = (FragmentCurrentReservation) fragments.get(0);
+            fragmentCurrentReservation.updateData();
+        }
+
+        if (fragments.get(1) != null) {
+            FragmentPreviousReservation fragmentPreviousReservation = (FragmentPreviousReservation) fragments.get(1);
+            fragmentPreviousReservation.updateData();
         }
 
 

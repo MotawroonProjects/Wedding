@@ -102,7 +102,7 @@ public class FragmentPreviousReservisonMvvm extends AndroidViewModel {
 
     }
 
-    public void addRate(UserModel userModel, String service_id, int rate) {
+    public void addRate(UserModel userModel, String service_id, int rate,Context context) {
         ProgressDialog dialog = Common.createProgressDialog(context, context.getResources().getString(R.string.wait));
         dialog.setCancelable(false);
         dialog.show();

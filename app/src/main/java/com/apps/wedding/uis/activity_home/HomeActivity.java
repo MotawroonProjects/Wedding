@@ -18,7 +18,9 @@ import androidx.navigation.ui.NavigationUI;
 
 
 import com.apps.wedding.interfaces.Listeners;
+import com.apps.wedding.model.NotModel;
 import com.apps.wedding.model.UserModel;
+import com.apps.wedding.mvvm.ActivityHomeShareModelMvvm;
 import com.apps.wedding.mvvm.HomeActivityMvvm;
 import com.apps.wedding.uis.activity_base.BaseActivity;
 
@@ -30,12 +32,17 @@ import com.apps.wedding.uis.activity_home.fragments.ServiceDetailsFragment;
 import com.apps.wedding.uis.activity_login.LoginActivity;
 import com.apps.wedding.uis.activity_notification.NotificationActivity;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import io.paperdb.Paper;
 
 public class HomeActivity extends BaseActivity implements Listeners.VerificationListener {
     private ActivityHomeBinding binding;
     private NavController navController;
     private HomeActivityMvvm homeActivityMvvm;
+    private ActivityHomeShareModelMvvm activityHomeShareModelMvvm;
 
 
     @Override
@@ -66,6 +73,7 @@ public class HomeActivity extends BaseActivity implements Listeners.Verification
     private void initView() {
 
         homeActivityMvvm = ViewModelProviders.of(this).get(HomeActivityMvvm.class);
+        activityHomeShareModelMvvm = ViewModelProviders.of(this).get(ActivityHomeShareModelMvvm.class);
         homeActivityMvvm.getCount().observe(this, countNumber -> {
             binding.setCount(countNumber);
         });
@@ -112,7 +120,10 @@ public class HomeActivity extends BaseActivity implements Listeners.Verification
         });
         if (getUserModel() != null) {
             homeActivityMvvm.updateFirebase(this, getUserModel());
+            EventBus.getDefault().register(this);
+
         }
+
 
         homeActivityMvvm.getNotificationCount(getUserModel());
     }
@@ -128,6 +139,14 @@ public class HomeActivity extends BaseActivity implements Listeners.Verification
                     finish();
                     startActivity(intent);
                 }, 500);
+
+
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onNewNotificationListener(NotModel model) {
+        homeActivityMvvm.getNotificationCount(getUserModel());
+        activityHomeShareModelMvvm.setRefresh(true);
 
 
     }
@@ -154,8 +173,15 @@ public class HomeActivity extends BaseActivity implements Listeners.Verification
     public void updateFirebase() {
         if (getUserModel() != null) {
             homeActivityMvvm.updateFirebase(this, getUserModel());
+
         }
     }
 
-
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (EventBus.getDefault().isRegistered(this)) {
+            EventBus.getDefault().unregister(this);
+        }
+    }
 }

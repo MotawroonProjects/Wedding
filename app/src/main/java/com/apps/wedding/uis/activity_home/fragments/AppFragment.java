@@ -1,5 +1,6 @@
 package com.apps.wedding.uis.activity_home.fragments;
 
+import android.graphics.Bitmap;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -11,9 +12,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebResourceRequest;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 
 import com.apps.wedding.R;
 import com.apps.wedding.databinding.FragmentAppBinding;
+import com.apps.wedding.tags.Tags;
 import com.apps.wedding.uis.activity_base.BaseFragment;
 
 public class AppFragment extends BaseFragment {
@@ -44,6 +50,57 @@ public class AppFragment extends BaseFragment {
     }
 
     private void initView() {
-        Log.e("type", type);
+        String url = "";
+        if (type.equals("about")) {
+            url = Tags.base_url + "about_app";
+        } else if (type.equals("policy")) {
+            url = Tags.base_url + "privacy_policy";
+
+        } else if (type.equals("terms")) {
+            url = Tags.base_url + "terms";
+
+        }
+
+
+        binding.webView.getSettings().setAllowFileAccessFromFileURLs(true);
+        binding.webView.getSettings().setAllowUniversalAccessFromFileURLs(true);
+        binding.webView.getSettings().setAllowContentAccess(true);
+        binding.webView.getSettings().setAllowFileAccess(true);
+        binding.webView.getSettings().setBuiltInZoomControls(false);
+        binding.webView.getSettings().setPluginState(WebSettings.PluginState.ON);
+        binding.webView.getSettings().setJavaScriptEnabled(true);
+        binding.webView.getSettings().setLoadWithOverviewMode(true);
+        binding.webView.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
+
+        binding.webView.loadUrl(url);
+
+        binding.webView.setWebViewClient(new WebViewClient() {
+            @Override
+            public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
+                return super.shouldOverrideUrlLoading(view, request);
+            }
+
+            @Override
+            public void onPageStarted(WebView view, String url, Bitmap favicon) {
+                super.onPageStarted(view, url, favicon);
+            }
+
+            @Override
+            public void onPageFinished(WebView view, String url) {
+                super.onPageFinished(view, url);
+
+
+            }
+
+            @Override
+            public void onPageCommitVisible(WebView view, String url) {
+                super.onPageCommitVisible(view, url);
+                binding.progBar.setVisibility(View.GONE);
+
+            }
+
+
+        });
+
     }
 }

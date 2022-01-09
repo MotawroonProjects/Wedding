@@ -6,10 +6,10 @@
 
         <variable
             name="model"
-            type="com.apps.wedding.model.WeddingHallModel" />
+            type="com.e_co.wedding.model.WeddingHallModel" />
         <variable
             name="offerModel"
-            type="com.apps.wedding.model.WeddingHallModel.OfferModel" />
+            type="com.e_co.wedding.model.WeddingHallModel.OfferModel" />
         <import type="android.view.View"/>
     </data>
 

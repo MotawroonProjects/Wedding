@@ -12,7 +12,7 @@
 
         <variable
             name="model"
-            type="com.apps.wedding.model.EditProfileModel" />
+            type="com.e_co.wedding.model.EditProfileModel" />
     </data>
 
     <FrameLayout

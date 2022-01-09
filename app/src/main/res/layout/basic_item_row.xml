@@ -6,7 +6,7 @@
 
         <variable
             name="model"
-            type="com.apps.wedding.model.WeddingHallModel.ServiceMainItem" />
+            type="com.e_co.wedding.model.WeddingHallModel.ServiceMainItem" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

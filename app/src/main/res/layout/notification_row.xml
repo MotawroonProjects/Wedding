@@ -4,7 +4,7 @@
     <data>
         <variable
             name="model"
-            type="com.apps.wedding.model.NotificationModel" />
+            type="com.e_co.wedding.model.NotificationModel" />
     </data>
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"

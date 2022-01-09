@@ -8,76 +8,76 @@
 
     <fragment
         android:id="@+id/home"
-        android:name="com.apps.wedding.uis.activity_home.fragments_home_navigaion.FragmentHome"
+        android:name="com.e_co.wedding.uis.activity_home.fragments_home_navigaion.FragmentHome"
         android:label=""
         tools:layout="@layout/fragment_home" />
     <fragment
         android:id="@+id/nearby"
-        android:name="com.apps.wedding.uis.activity_home.fragments_home_navigaion.FragmentNearby"
+        android:name="com.e_co.wedding.uis.activity_home.fragments_home_navigaion.FragmentNearby"
         android:label=""
         tools:layout="@layout/fragment_nearby" />
     <fragment
         android:id="@+id/reservation"
-        android:name="com.apps.wedding.uis.activity_home.fragments_home_navigaion.FragmentMyReservations"
+        android:name="com.e_co.wedding.uis.activity_home.fragments_home_navigaion.FragmentMyReservations"
         android:label=""
         tools:layout="@layout/fragment_my_reservations" />
     <fragment
         android:id="@+id/profile"
-        android:name="com.apps.wedding.uis.activity_home.fragments_home_navigaion.FragmentProfile"
+        android:name="com.e_co.wedding.uis.activity_home.fragments_home_navigaion.FragmentProfile"
         android:label=""
         tools:layout="@layout/fragment_profile" />
 
     <fragment
         android:id="@+id/appFragment"
-        android:name="com.apps.wedding.uis.activity_home.fragments.AppFragment"
+        android:name="com.e_co.wedding.uis.activity_home.fragments.AppFragment"
         android:label=""
         tools:layout="@layout/fragment_app" />
 
     <activity
         android:id="@+id/activity_notification"
-        android:name="com.apps.wedding.uis.activity_notification.NotificationActivity"
+        android:name="com.e_co.wedding.uis.activity_notification.NotificationActivity"
         android:label=""
         tools:layout="@layout/activity_notification"
 
         />
     <activity
         android:id="@+id/activity_contact_us"
-        android:name="com.apps.wedding.uis.activity_contact_us.ContactUsActivity"
+        android:name="com.e_co.wedding.uis.activity_contact_us.ContactUsActivity"
         android:label=""
         tools:layout="@layout/activity_contact_us"
 
         />
     <fragment
         android:id="@+id/serviceDetailsFragment"
-        android:name="com.apps.wedding.uis.activity_home.fragments.ServiceDetailsFragment"
+        android:name="com.e_co.wedding.uis.activity_home.fragments.ServiceDetailsFragment"
         android:label=""
         tools:layout="@layout/fragment_service_details" />
 
 
     <fragment
         android:id="@+id/reservationConfirmFragment"
-        android:name="com.apps.wedding.uis.activity_home.fragments.FragmentReservisionConfirmation"
+        android:name="com.e_co.wedding.uis.activity_home.fragments.FragmentReservisionConfirmation"
         android:label=""
         tools:layout="@layout/fragment_reservation_confirmation" />
 
     <fragment
         android:id="@+id/editProfileFragment"
-        android:name="com.apps.wedding.uis.activity_home.fragments.FragmentEditProfile"
+        android:name="com.e_co.wedding.uis.activity_home.fragments.FragmentEditProfile"
         android:label=""
         tools:layout="@layout/fragment_edit_profile" />
     <fragment
         android:id="@+id/chooseDayFragment"
-        android:name="com.apps.wedding.uis.activity_home.fragments.FragmentChooseDay"
+        android:name="com.e_co.wedding.uis.activity_home.fragments.FragmentChooseDay"
         android:label=""
         tools:layout="@layout/fragment_choose_day" />
     <fragment
         android:id="@+id/fragmentSearch"
-        android:name="com.apps.wedding.uis.activity_home.fragments.FragmentSearch"
+        android:name="com.e_co.wedding.uis.activity_home.fragments.FragmentSearch"
         android:label=""
         tools:layout="@layout/fragment_search" />
     <fragment
         android:id="@+id/fragmentEditReservation"
-        android:name="com.apps.wedding.uis.activity_home.fragments.FragmentEditReservation"
+        android:name="com.e_co.wedding.uis.activity_home.fragments.FragmentEditReservation"
         android:label=""
         tools:layout="@layout/fragment_edit_reservation" />
 </navigation>

@@ -4,7 +4,7 @@
 <data>
     <variable
         name="model"
-        type="com.apps.wedding.model.WeddingHallModel.ServiceExtraItem" />
+        type="com.e_co.wedding.model.WeddingHallModel.ServiceExtraItem" />
 </data>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"

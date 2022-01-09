@@ -8,11 +8,11 @@ android {
     compileSdk 31
 
     defaultConfig {
-        applicationId "com.apps.wedding"
+        applicationId "com.e_co.wedding"
         minSdk 19
         targetSdk 31
-        versionCode 2
-        versionName "1.1"
+        versionCode 1
+        versionName "1.0"
         multiDexEnabled true
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"

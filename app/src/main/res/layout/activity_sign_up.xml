@@ -12,7 +12,7 @@
 
         <variable
             name="model"
-            type="com.apps.wedding.model.SignUpModel" />
+            type="com.e_co.wedding.model.SignUpModel" />
     </data>
 
     <FrameLayout

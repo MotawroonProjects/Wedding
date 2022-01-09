@@ -6,7 +6,7 @@
 
         <variable
             name="model"
-            type="com.apps.wedding.model.WeddingHallModel" />
+            type="com.e_co.wedding.model.WeddingHallModel" />
 
         <import type="android.view.View" />
 

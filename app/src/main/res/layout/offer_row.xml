@@ -6,7 +6,7 @@
 
         <variable
             name="model"
-            type="com.apps.wedding.model.WeddingHallModel.OfferModel" />
+            type="com.e_co.wedding.model.WeddingHallModel.OfferModel" />
     </data>
 
     <androidx.cardview.widget.CardView

@@ -76,11 +76,17 @@ public class FragmentCurrentReservation extends BaseFragment {
 
         fragmentCurrentReservisonMvvm.getReservionList().observe(activity, weddingHallModels -> {
             if (weddingHallModels.size() > 0) {
-                reservionAdapter.updateList(fragmentCurrentReservisonMvvm.getReservionList().getValue());
+                if (reservionAdapter!=null){
+                    reservionAdapter.updateList(fragmentCurrentReservisonMvvm.getReservionList().getValue());
+
+                }
                 binding.cardNoData.setVisibility(View.GONE);
 
             } else {
-                reservionAdapter.updateList(null);
+                if (reservionAdapter!=null){
+                    reservionAdapter.updateList(null);
+
+                }
 
                 binding.cardNoData.setVisibility(View.VISIBLE);
 

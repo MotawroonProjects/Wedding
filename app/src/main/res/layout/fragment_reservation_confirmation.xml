@@ -7,10 +7,12 @@
         <variable
             name="model"
             type="com.e_co.wedding.model.WeddingHallModel" />
+
         <variable
             name="offerModel"
             type="com.e_co.wedding.model.WeddingHallModel.OfferModel" />
-        <import type="android.view.View"/>
+
+        <import type="android.view.View" />
     </data>
 
     <androidx.core.widget.NestedScrollView
@@ -39,8 +41,8 @@
 
                 <FrameLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    >
+                    android:layout_height="wrap_content">
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -48,8 +50,7 @@
                         android:layout_marginTop="3dp"
                         android:layout_marginEnd="8dp"
                         android:orientation="vertical"
-                        android:visibility="@{offerModel==null?View.VISIBLE:View.GONE,default=gone}"
-                        >
+                        android:visibility="@{offerModel==null?View.VISIBLE:View.GONE,default=gone}">
 
                         <com.makeramen.roundedimageview.RoundedImageView
                             image="@{model.main_image}"
@@ -82,18 +83,18 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
                                 android:text="@{model.price}"
                                 android:textColor="@color/colorAccent"
                                 android:textSize="15sp"
-                                android:layout_gravity="center_vertical"
 
                                 />
 
                             <ImageView
                                 android:layout_width="20dp"
                                 android:layout_height="20dp"
-                                android:src="@drawable/ic_money"
                                 android:layout_gravity="center_vertical"
+                                android:src="@drawable/ic_money"
 
                                 />
                         </LinearLayout>
@@ -107,26 +108,23 @@
                         android:layout_marginTop="3dp"
                         android:layout_marginEnd="8dp"
                         android:orientation="vertical"
-                        android:visibility="@{offerModel!=null?View.VISIBLE:View.GONE,default=gone}"
-                        >
+                        android:visibility="@{offerModel!=null?View.VISIBLE:View.GONE,default=gone}">
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textStyle="bold"
-                            android:textSize="18sp"
-                            android:textColor="@color/black"
-                            android:text="@{model.name}"
                             android:layout_marginTop="3dp"
-                            />
+                            android:text="@{model.name}"
+                            android:textColor="@color/black"
+                            android:textSize="18sp"
+                            android:textStyle="bold" />
 
                         <com.makeramen.roundedimageview.RoundedImageView
                             image="@{offerModel.image}"
                             android:layout_width="match_parent"
                             android:layout_height="150dp"
-                            app:riv_corner_radius="15dp"
                             android:layout_marginTop="8dp"
-                            />
+                            app:riv_corner_radius="15dp" />
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -144,14 +142,13 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginStart="8dp"
+                            android:layout_marginTop="12dp"
+                            android:layout_marginEnd="8dp"
                             android:text="@{offerModel.text}"
                             android:textColor="@color/gray5"
-                            android:textSize="12sp"
-                            android:layout_gravity="center_vertical"
-                            android:layout_marginTop="12dp"
-                            android:layout_marginStart="8dp"
-                            android:layout_marginEnd="8dp"
-                            />
+                            android:textSize="12sp" />
 
                         <LinearLayout
                             android:layout_width="wrap_content"
@@ -164,18 +161,18 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
                                 android:text="@{offerModel.price}"
                                 android:textColor="@color/colorAccent"
                                 android:textSize="15sp"
-                                android:layout_gravity="center_vertical"
 
                                 />
 
                             <ImageView
                                 android:layout_width="20dp"
                                 android:layout_height="20dp"
-                                android:src="@drawable/ic_money"
                                 android:layout_gravity="center_vertical"
+                                android:src="@drawable/ic_money"
 
                                 />
                         </LinearLayout>
@@ -251,10 +248,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginBottom="100dp"
                 android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
                 android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="100dp"
                 android:background="@drawable/rounded_primary"
                 android:minWidth="120dp"
                 android:text="@string/choose_day"

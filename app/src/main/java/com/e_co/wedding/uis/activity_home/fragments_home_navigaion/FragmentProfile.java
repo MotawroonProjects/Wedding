@@ -28,6 +28,7 @@ import com.e_co.wedding.R;
 import com.e_co.wedding.mvvm.FragmentProfileMvvm;
 import com.e_co.wedding.uis.activity_base.BaseFragment;
 import com.e_co.wedding.databinding.FragmentProfileBinding;
+import com.e_co.wedding.uis.activity_contact_us.ContactUsActivity;
 import com.e_co.wedding.uis.activity_home.HomeActivity;
 import com.e_co.wedding.uis.activity_language.LanguageActivity;
 import com.e_co.wedding.uis.activity_login.LoginActivity;
@@ -87,7 +88,8 @@ public class FragmentProfile extends BaseFragment {
         });
         binding.llContactUs.setOnClickListener(v -> {
 
-            Navigation.findNavController(v).navigate(R.id.activity_contact_us);
+            Intent intent = new Intent(activity, ContactUsActivity.class);
+            startActivity(intent);
         });
         binding.llAbout.setOnClickListener(v -> {
 

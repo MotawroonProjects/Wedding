@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
 
         <variable
             name="count"
             type="String" />
+
         <variable
             name="lang"
             type="String" />
@@ -16,15 +16,13 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        >
+        android:orientation="vertical">
 
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/appbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-
 
 
             >
@@ -34,7 +32,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="56dp"
                 android:background="@color/white"
-                app:layout_scrollFlags="scroll|enterAlways|snap"
+
                 >
 
                 <ImageView
@@ -65,26 +63,27 @@
                     android:layout_marginEnd="12dp"
 
                     >
+
                     <ImageView
                         android:id="@+id/imgNotification"
                         android:layout_width="24dp"
                         android:layout_height="24dp"
 
-                        android:src="@drawable/ic_notification"
                         android:layout_gravity="center"
-                        />
+                        android:src="@drawable/ic_notification" />
+
                     <TextView
                         android:layout_width="20dp"
                         android:layout_height="20dp"
                         android:background="@drawable/circle_color1"
+                        android:gravity="center"
+                        android:text='@{count??"0",default="0"}'
                         android:textColor="@color/white"
                         android:textSize="9sp"
-                        android:text='@{count??"0",default="0"}'
-                        android:gravity="center"
-                        tools:ignore="SmallSp" />
+
+                        />
 
                 </FrameLayout>
-
 
 
             </androidx.appcompat.widget.Toolbar>
@@ -98,9 +97,7 @@
             android:layout_height="0dp"
             android:layout_weight="1"
             app:defaultNavHost="true"
-            app:navGraph="@navigation/nav_graph"
-
-            />
+            app:navGraph="@navigation/nav_graph" />
 
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/bottomNav"
@@ -109,13 +106,12 @@
             android:layout_gravity="bottom"
             android:background="@color/white"
             app:elevation="5dp"
-            app:labelVisibilityMode="labeled"
-            app:menu="@menu/menu"
             app:itemIconTint="@drawable/bottom_nav_item_bg"
             app:itemTextColor="@drawable/bottom_nav_item_bg"
-            />
+            app:labelVisibilityMode="labeled"
+            app:menu="@menu/menu" />
 
 
-</LinearLayout>
+    </LinearLayout>
 </layout>
 

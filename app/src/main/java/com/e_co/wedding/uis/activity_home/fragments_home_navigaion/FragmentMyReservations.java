@@ -51,19 +51,12 @@ public class FragmentMyReservations extends BaseFragment {
             @Override
             public void onActivityResult(ActivityResult result) {
                 if (req == 1 && result.getResultCode() == Activity.RESULT_OK) {
-                    titles.add(getString(R.string.current));
-                    titles.add(getString(R.string.prev));
-                    fragments.add(FragmentCurrentReservation.newInstance());
-                    fragments.add(FragmentPreviousReservation.newInstance());
-
-                    adapter = new MyPagerAdapter(getChildFragmentManager(), FragmentStatePagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT, fragments, titles);
-                    binding.pager.setAdapter(adapter);
-                    binding.tab.setupWithViewPager(binding.pager);
-                    binding.pager.setOffscreenPageLimit(fragments.size());
+                    updateUi();
                 }
             }
         });
     }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -81,34 +74,33 @@ public class FragmentMyReservations extends BaseFragment {
 
     private void initView() {
         activityHomeShareModelMvvm = ViewModelProviders.of(activity).get(ActivityHomeShareModelMvvm.class);
-        activityHomeShareModelMvvm.getIsDataRefreshed().observe(activity, new Observer<Boolean>() {
-            @Override
-            public void onChanged(Boolean aBoolean) {
-                if (aBoolean) {
-                    updateData();
-                }
+        activityHomeShareModelMvvm.getIsDataRefreshed().observe(activity, aBoolean -> {
+            if (aBoolean) {
+                updateData();
             }
         });
         titles = new ArrayList<>();
         fragments = new ArrayList<>();
+        updateUi();
 
-        if (getUserModel() != null) {
-            titles.add(getString(R.string.current));
-            titles.add(getString(R.string.prev));
-            fragments.add(FragmentCurrentReservation.newInstance());
-            fragments.add(FragmentPreviousReservation.newInstance());
 
-            adapter = new MyPagerAdapter(getChildFragmentManager(), FragmentStatePagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT, fragments, titles);
-            binding.pager.setAdapter(adapter);
-            binding.tab.setupWithViewPager(binding.pager);
-            binding.pager.setOffscreenPageLimit(fragments.size());
-        } else {
+        if (getUserModel() == null) {
             Intent intent = new Intent(activity, LoginActivity.class);
             launcher.launch(intent);
-
         }
 
+    }
 
+    private void updateUi() {
+        titles.add(getString(R.string.current));
+        titles.add(getString(R.string.prev));
+        fragments.add(FragmentCurrentReservation.newInstance());
+        fragments.add(FragmentPreviousReservation.newInstance());
+
+        adapter = new MyPagerAdapter(getChildFragmentManager(), FragmentStatePagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT, fragments, titles);
+        binding.pager.setAdapter(adapter);
+        binding.tab.setupWithViewPager(binding.pager);
+        binding.pager.setOffscreenPageLimit(fragments.size());
     }
 
     public void updateData() {

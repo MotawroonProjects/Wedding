@@ -114,7 +114,11 @@ public class FragmentNearby extends BaseFragment implements OnMapReadyCallback {
 
     private void initView() {
         fragmentNearMvvm = ViewModelProviders.of(this).get(FragmentNearMvvm.class);
-        fragmentNearMvvm.getWeddingHall().observe(activity, weddingHallModels -> adapter.updateList(fragmentNearMvvm.getWeddingHall().getValue()));
+        fragmentNearMvvm.getWeddingHall().observe(activity, weddingHallModels -> {
+            if (adapter!=null&&weddingHallModels!=null){
+                adapter.updateList(fragmentNearMvvm.getWeddingHall().getValue());
+            }
+        });
 
         fragmentNearMvvm.getIsLoading().observe(activity, isLoading -> {
             if (isLoading) {

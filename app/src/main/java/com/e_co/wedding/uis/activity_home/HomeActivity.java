@@ -88,14 +88,7 @@ public class HomeActivity extends BaseActivity implements Listeners.Verification
 
             }
         });
-        binding.imgNotification.setOnClickListener(v -> {
-            NavOptions navOptions = new NavOptions.Builder()
-                    .setEnterAnim(R.anim.enter_anim)
-                    .setPopExitAnim(R.anim.exit_anim)
-                    .build();
-            navController.navigate(R.id.activity_notification, null, navOptions);
 
-        });
         homeActivityMvvm.firebase.observe(this, token -> {
             if (getUserModel() != null) {
                 UserModel userModel = getUserModel();

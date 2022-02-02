@@ -70,11 +70,17 @@ public class FragmentPreviousReservation extends BaseFragment {
 
         fragmentCurrentReservisonMvvm.getReservionList().observe(activity, weddingHallModels -> {
             if (weddingHallModels.size() > 0) {
-                previousReservionAdapter.updateList(fragmentCurrentReservisonMvvm.getReservionList().getValue());
+                if (previousReservionAdapter != null) {
+                    previousReservionAdapter.updateList(fragmentCurrentReservisonMvvm.getReservionList().getValue());
+                }
                 binding.cardNoData.setVisibility(View.GONE);
 
+
             } else {
-                previousReservionAdapter.updateList(null);
+                if (previousReservionAdapter != null) {
+                    previousReservionAdapter.updateList(null);
+
+                }
 
                 binding.cardNoData.setVisibility(View.VISIBLE);
 
@@ -87,7 +93,6 @@ public class FragmentPreviousReservation extends BaseFragment {
 
 
         binding.swipeRefresh.setColorSchemeResources(R.color.colorPrimary);
-        getData();
         binding.recView.setLayoutManager(new LinearLayoutManager(activity));
         previousReservionAdapter = new PreviousReservionAdapter(activity, this);
         binding.recView.setAdapter(previousReservionAdapter);
@@ -96,10 +101,6 @@ public class FragmentPreviousReservation extends BaseFragment {
 
     }
 
-
-    private void getData() {
-        binding.cardNoData.setVisibility(View.VISIBLE);
-    }
 
     public void createSheetDialog(ResevisionModel model) {
         BottomSheetDialog dialog = new BottomSheetDialog(activity);

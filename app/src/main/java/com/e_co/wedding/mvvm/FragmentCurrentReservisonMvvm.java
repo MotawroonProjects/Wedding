@@ -21,6 +21,7 @@ import com.e_co.wedding.remote.Api;
 import com.e_co.wedding.share.Common;
 import com.e_co.wedding.tags.Tags;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.SingleObserver;
@@ -66,6 +67,13 @@ public class FragmentCurrentReservisonMvvm extends AndroidViewModel {
 
 
     public void getReservionData(UserModel userModel) {
+
+        if (userModel==null){
+            isLoadingLivData.setValue(false);
+            listMutableLiveData.setValue(new ArrayList<>());
+
+            return;
+        }
         isLoadingLivData.setValue(true);
 
 

@@ -184,7 +184,7 @@ public class ServiceDetailsFragment extends BaseFragment {
                         timer.scheduleAtFixedRate(timerTask, 6000, 6000);
                     }
                 }
-                if (singleWeddingHallDataModel.getData().getVideo_link() != null) {
+                if (singleWeddingHallDataModel.getData().getVideo_link() != null&&!singleWeddingHallDataModel.getData().getVideo_link().isEmpty()) {
                     binding.webView.loadUrl(singleWeddingHallDataModel.getData().getVideo_link());
                 }
 

@@ -23,6 +23,7 @@ import com.e_co.wedding.model.DepartmentModel;
 import com.e_co.wedding.model.FilterModel;
 import com.e_co.wedding.model.FilterRangeModel;
 import com.e_co.wedding.model.FilterRateModel;
+import com.e_co.wedding.model.WeddingHallModel;
 import com.e_co.wedding.mvvm.FragmentHomeMvvm;
 import com.e_co.wedding.uis.activity_base.BaseFragment;
 import com.e_co.wedding.databinding.FragmentHomeBinding;
@@ -30,7 +31,9 @@ import com.e_co.wedding.uis.activity_home.HomeActivity;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import java.text.NumberFormat;
+import java.util.ArrayList;
 import java.util.Currency;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
@@ -110,7 +113,20 @@ public class FragmentHome extends BaseFragment {
 
         fragmentHomeMvvm.getWeddingHall().observe(activity, weddingHallModels -> {
             if (weddingHallModels.size() > 0) {
-                weddingHallAdapter.updateList(fragmentHomeMvvm.getWeddingHall().getValue());
+                List<WeddingHallModel> list = new ArrayList<>();;
+                list.addAll(weddingHallModels);
+                list.addAll(weddingHallModels);
+                list.addAll(weddingHallModels);
+                list.addAll(weddingHallModels);
+                list.addAll(weddingHallModels);
+                list.addAll(weddingHallModels);
+                list.addAll(weddingHallModels);
+                list.addAll(weddingHallModels);
+                list.addAll(weddingHallModels);
+                list.addAll(weddingHallModels);
+                list.addAll(weddingHallModels);
+
+                weddingHallAdapter.updateList(list);
                 binding.cardNoData.setVisibility(View.GONE);
 
             } else {

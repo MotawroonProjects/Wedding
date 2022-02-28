@@ -11,8 +11,8 @@ android {
         applicationId "com.e_co.wedding"
         minSdk 19
         targetSdk 31
-        versionCode 6
-        versionName "1.5"
+        versionCode 9
+        versionName "1.8"
         multiDexEnabled true
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"

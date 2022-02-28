@@ -114,42 +114,59 @@ public class FragmentNearby extends BaseFragment implements OnMapReadyCallback {
 
     private void initView() {
         fragmentNearMvvm = ViewModelProviders.of(this).get(FragmentNearMvvm.class);
-        fragmentNearMvvm.getWeddingHall().observe(activity, weddingHallModels -> {
-            if (adapter!=null&&weddingHallModels!=null){
-                adapter.updateList(fragmentNearMvvm.getWeddingHall().getValue());
-            }
-        });
 
-        fragmentNearMvvm.getIsLoading().observe(activity, isLoading -> {
-            if (isLoading) {
-                binding.flLoading.setClickable(true);
-                binding.flLoading.setFocusable(true);
-                binding.progBar.setVisibility(View.VISIBLE);
-                binding.flLoading.setVisibility(View.VISIBLE);
-                binding.cardNoData.setVisibility(View.GONE);
-                adapter.updateList(null);
 
-            }
-        });
+        try {
+            fragmentNearMvvm.getWeddingHall().observe(activity, weddingHallModels -> {
+                if (adapter!=null&&weddingHallModels!=null){
+                    adapter.updateList(fragmentNearMvvm.getWeddingHall().getValue());
+                }
+            });
 
-        fragmentNearMvvm.getWeddingHall().observe(activity, weddingHallModels -> {
-            if (weddingHallModels.size() > 0) {
-                adapter.updateList(fragmentNearMvvm.getWeddingHall().getValue());
-                updateMapData(weddingHallModels);
-                binding.cardNoData.setVisibility(View.GONE);
-                binding.flLoading.setVisibility(View.GONE);
+            fragmentNearMvvm.getIsLoading().observe(activity, isLoading -> {
+                if (isLoading) {
+                    binding.flLoading.setClickable(true);
+                    binding.flLoading.setFocusable(true);
+                    binding.progBar.setVisibility(View.VISIBLE);
+                    binding.flLoading.setVisibility(View.VISIBLE);
+                    binding.cardNoData.setVisibility(View.GONE);
+                    if (adapter!=null){
+                        adapter.updateList(null);
 
-            } else {
-                binding.flLoading.setVisibility(View.VISIBLE);
-                binding.progBar.setVisibility(View.GONE);
-                binding.cardNoData.setVisibility(View.VISIBLE);
-                adapter.updateList(null);
-                mMap.clear();
-                binding.flLoading.setClickable(false);
-                binding.flLoading.setFocusable(false);
-            }
+                    }
 
-        });
+                }
+            });
+
+            fragmentNearMvvm.getWeddingHall().observe(activity, weddingHallModels -> {
+                if (weddingHallModels.size() > 0) {
+                    if (fragmentNearMvvm.getWeddingHall()!=null&&fragmentNearMvvm.getWeddingHall().getValue()!=null){
+                        if (adapter!=null){
+                            adapter.updateList(fragmentNearMvvm.getWeddingHall().getValue());
+                            updateMapData(weddingHallModels);
+                            binding.cardNoData.setVisibility(View.GONE);
+                            binding.flLoading.setVisibility(View.GONE);
+                        }
+
+                    }
+
+
+                } else {
+                    binding.flLoading.setVisibility(View.VISIBLE);
+                    binding.progBar.setVisibility(View.GONE);
+                    binding.cardNoData.setVisibility(View.VISIBLE);
+                    adapter.updateList(null);
+                    mMap.clear();
+                    binding.flLoading.setClickable(false);
+                    binding.flLoading.setFocusable(false);
+                }
+
+            });
+
+
+        }catch (Exception e){
+
+        }
 
 
         SnapHelper snapHelper = new PagerSnapHelper();
@@ -171,7 +188,7 @@ public class FragmentNearby extends BaseFragment implements OnMapReadyCallback {
 
     private void updateUI() {
         SupportMapFragment supportMapFragment = SupportMapFragment.newInstance();
-        getChildFragmentManager().beginTransaction().replace(R.id.map, supportMapFragment).commit();
+        getChildFragmentManager().beginTransaction().replace(R.id.map, supportMapFragment).commitAllowingStateLoss();
         supportMapFragment.getMapAsync(this);
 
 
@@ -191,7 +208,14 @@ public class FragmentNearby extends BaseFragment implements OnMapReadyCallback {
     }
 
     private void addMarker(double lat, double lng) {
-        mMap.addMarker(new MarkerOptions().position(new LatLng(lat, lng)).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
+        if (mMap!=null){
+            try {
+                mMap.addMarker(new MarkerOptions().position(new LatLng(lat, lng)).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
+
+            }catch (Exception e){
+
+            }
+        }
 
     }
 
@@ -279,14 +303,19 @@ public class FragmentNearby extends BaseFragment implements OnMapReadyCallback {
             addMarker(Double.parseDouble(weddingHallModel.getLatitude()), Double.parseDouble(weddingHallModel.getLongitude()));
         }
 
-        if (data.size() >= 2) {
-            mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds.build(), 100));
+        if (mMap!=null){
+           try {
+               if (data.size() >= 2) {
+                   mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds.build(), 100));
 
-        } else if (data.size() == 1) {
-            LatLng latLng = new LatLng(Double.parseDouble(data.get(0).getLatitude()), Double.parseDouble(data.get(0).getLongitude()));
-            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom));
+               } else if (data.size() == 1) {
+                   LatLng latLng = new LatLng(Double.parseDouble(data.get(0).getLatitude()), Double.parseDouble(data.get(0).getLongitude()));
+                   mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom));
 
+               }
+           }catch (Exception e){}
         }
+
 
 
     }

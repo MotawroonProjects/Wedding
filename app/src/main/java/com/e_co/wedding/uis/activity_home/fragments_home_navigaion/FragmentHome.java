@@ -113,20 +113,8 @@ public class FragmentHome extends BaseFragment {
 
         fragmentHomeMvvm.getWeddingHall().observe(activity, weddingHallModels -> {
             if (weddingHallModels.size() > 0) {
-                List<WeddingHallModel> list = new ArrayList<>();;
-                list.addAll(weddingHallModels);
-                list.addAll(weddingHallModels);
-                list.addAll(weddingHallModels);
-                list.addAll(weddingHallModels);
-                list.addAll(weddingHallModels);
-                list.addAll(weddingHallModels);
-                list.addAll(weddingHallModels);
-                list.addAll(weddingHallModels);
-                list.addAll(weddingHallModels);
-                list.addAll(weddingHallModels);
-                list.addAll(weddingHallModels);
 
-                weddingHallAdapter.updateList(list);
+                weddingHallAdapter.updateList(weddingHallModels);
                 binding.cardNoData.setVisibility(View.GONE);
 
             } else {

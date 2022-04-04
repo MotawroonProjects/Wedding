@@ -153,7 +153,8 @@ public class ActivityVerificationMvvm extends AndroidViewModel {
         ProgressDialog dialog = Common.createProgressDialog(activity, activity.getResources().getString(R.string.wait));
         dialog.setCancelable(false);
         dialog.show();
-        if (verificationId != null) {
+        login(activity,dialog);
+       /* if (verificationId != null) {
             PhoneAuthCredential credential = PhoneAuthProvider.getCredential(verificationId, code);
             mAuth.signInWithCredential(credential)
                     .addOnSuccessListener(authResult -> {
@@ -172,7 +173,7 @@ public class ActivityVerificationMvvm extends AndroidViewModel {
             Toast.makeText(activity, "Wait sms maybe take a few minutes", Toast.LENGTH_LONG).show();
             dialog.dismiss();
             // Toast.makeText(context, "wait sms", Toast.LENGTH_SHORT).show();
-        }
+        }*/
 
     }
 

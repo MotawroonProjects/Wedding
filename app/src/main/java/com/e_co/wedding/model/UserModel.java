@@ -21,6 +21,10 @@ public class UserModel extends StatusResponse {
         private double longitude;
         private String address;
         private String token;
+        private String facebook;
+        private String instagram;
+        private String twitter;
+
         private static String firebase_token;
 
         public int getId() {
@@ -73,6 +77,18 @@ public class UserModel extends StatusResponse {
 
         public void setFirebase_token(String firebase_token) {
             this.firebase_token = firebase_token;
+        }
+
+        public String getFacebook() {
+            return facebook;
+        }
+
+        public String getInstagram() {
+            return instagram;
+        }
+
+        public String getTwitter() {
+            return twitter;
         }
     }
 

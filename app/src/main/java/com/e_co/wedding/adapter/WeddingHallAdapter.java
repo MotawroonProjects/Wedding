@@ -2,6 +2,7 @@
 package com.e_co.wedding.adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 

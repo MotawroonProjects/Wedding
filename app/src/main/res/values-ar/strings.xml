@@ -77,5 +77,8 @@
     <string name="cnt_book">عفوا لايمكن الحجز الان</string>
     <string name="choose_language">تغيير اللغة</string>
     <string name="add_rate">تقييم الخدمة</string>
+    <string name="another_services">خدمات اخرى</string>
+    <string name="clear_filter">إلغاء التصفية</string>
+    <string name="phone_not_av">رقم الجوال غير متوفر الان</string>
 
 </resources>

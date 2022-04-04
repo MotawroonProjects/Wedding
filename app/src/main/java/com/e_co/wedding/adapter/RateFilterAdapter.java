@@ -2,6 +2,7 @@
 package com.e_co.wedding.adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
@@ -130,12 +131,15 @@ public class RateFilterAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     private int pos(String rate){
         int pos = -1;
         if (list!=null){
-            for (int index=0;index<list.size();index++){
-                if (list.get(index).getTitle().equals(rate)){
-                    pos = index;
-                    return pos;
+            if (rate!=null){
+                for (int index=0;index<list.size();index++){
+                    if (list.get(index).getTitle().equals(rate)){
+                        pos = index;
+                        return pos;
+                    }
                 }
             }
+
         }
 
         return pos;

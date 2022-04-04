@@ -1,7 +1,10 @@
 package com.e_co.wedding.uis.activity_home.fragments;
 
 import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -20,10 +23,12 @@ import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.Toast;
 
 import com.e_co.wedding.R;
 import com.e_co.wedding.adapter.OfferAdapter;
 import com.e_co.wedding.adapter.SliderAdapter;
+import com.e_co.wedding.adapter.WeddingHallAnotherAdapter;
 import com.e_co.wedding.databinding.FragmentServiceDetailsBinding;
 import com.e_co.wedding.model.SingleWeddingHallDataModel;
 import com.e_co.wedding.model.WeddingHallModel;
@@ -62,6 +67,8 @@ public class ServiceDetailsFragment extends BaseFragment {
     private SingleWeddingHallDataModel singleWeddingHallDataModel;
     private String service_id = "";
     private OfferAdapter offerAdapter;
+    private WeddingHallAnotherAdapter adapter;
+
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -170,9 +177,15 @@ public class ServiceDetailsFragment extends BaseFragment {
         snapHelper.attachToRecyclerView(binding.recView);
         binding.recView.setAdapter(offerAdapter);
 
+        adapter = new WeddingHallAnotherAdapter(activity, this);
+        binding.recViewAnother.setLayoutManager(new LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false));
+        binding.recViewAnother.setAdapter(adapter);
+
+
         fragmentServiceDetialsMvvm.getSingleWedding().observe(activity, s -> {
             singleWeddingHallDataModel = s;
             binding.setModel(singleWeddingHallDataModel.getData());
+            adapter.updateList(singleWeddingHallDataModel.getData().getOther_services());
             if (singleWeddingHallDataModel != null && singleWeddingHallDataModel.getData() != null) {
                 if (singleWeddingHallDataModel.getData().getService_images() != null && singleWeddingHallDataModel.getData().getService_images().size() > 0) {
                     sliderAdapter = new SliderAdapter(singleWeddingHallDataModel.getData().getService_images(), activity);
@@ -184,7 +197,7 @@ public class ServiceDetailsFragment extends BaseFragment {
                         timer.scheduleAtFixedRate(timerTask, 6000, 6000);
                     }
                 }
-                if (singleWeddingHallDataModel.getData().getVideo_link() != null&&!singleWeddingHallDataModel.getData().getVideo_link().isEmpty()) {
+                if (singleWeddingHallDataModel.getData().getVideo_link() != null && !singleWeddingHallDataModel.getData().getVideo_link().isEmpty()) {
                     binding.webView.loadUrl(singleWeddingHallDataModel.getData().getVideo_link());
                 }
 
@@ -201,9 +214,60 @@ public class ServiceDetailsFragment extends BaseFragment {
         });
         fragmentServiceDetialsMvvm.getSingleWeddingHallData(service_id);
 
-
         binding.btnBook.setOnClickListener(view -> confirmReservation());
 
+        binding.call.setOnClickListener(v -> {
+            WeddingHallModel model = singleWeddingHallDataModel.getData();
+            if (model.getProvider_obj() != null && model.getProvider_obj().getPhone() != null && !model.getProvider_obj().getPhone().isEmpty()) {
+                String phone = model.getProvider_obj().getPhone_code() + model.getProvider_obj().getPhone();
+                Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + phone));
+                startActivity(intent);
+            } else {
+                Toast.makeText(activity, R.string.phone_not_av, Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        binding.whatsapp.setOnClickListener(v -> {
+            WeddingHallModel model = singleWeddingHallDataModel.getData();
+            if (model.getProvider_obj() != null && model.getProvider_obj().getPhone() != null && !model.getProvider_obj().getPhone().isEmpty()) {
+                String phone = model.getProvider_obj().getPhone_code() + model.getProvider_obj().getPhone();
+                openWhatsApp(phone);
+            } else {
+                Toast.makeText(activity, R.string.phone_not_av, Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        binding.facebook.setOnClickListener(v -> {
+            openUrl(singleWeddingHallDataModel.getData().getProvider_obj().getFacebook());
+        });
+
+        binding.instagram.setOnClickListener(v -> {
+            openUrl(singleWeddingHallDataModel.getData().getProvider_obj().getInstagram());
+        });
+
+        binding.twiter.setOnClickListener(v -> {
+            openUrl(singleWeddingHallDataModel.getData().getProvider_obj().getTwitter());
+        });
+
+    }
+
+    private void openUrl(String url) {
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+        startActivity(intent);
+    }
+
+    private void openWhatsApp(String phone) {
+        String url = "https://api.whatsapp.com/send?phone=" + phone;
+        try {
+            PackageManager pm = activity.getPackageManager();
+            pm.getPackageInfo("com.whatsapp", PackageManager.GET_ACTIVITIES);
+            Intent i = new Intent(Intent.ACTION_VIEW);
+            i.setData(Uri.parse(url));
+            startActivity(i);
+        } catch (PackageManager.NameNotFoundException e) {
+            Toast.makeText(activity, "Whatsapp app not installed in your phone", Toast.LENGTH_SHORT).show();
+            e.printStackTrace();
+        }
     }
 
 
@@ -228,6 +292,11 @@ public class ServiceDetailsFragment extends BaseFragment {
         bundle.putSerializable("data", singleWeddingHallDataModel);
         bundle.putSerializable("data2", offerModel);
         Navigation.findNavController(binding.getRoot()).navigate(R.id.reservationConfirmFragment, bundle);
+    }
+
+    public void setItemWeddingDetails(String id) {
+        service_id = id;
+        fragmentServiceDetialsMvvm.getSingleWeddingHallData(service_id);
     }
 
     public class MyTask extends TimerTask {

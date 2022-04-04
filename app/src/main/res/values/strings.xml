@@ -77,5 +77,8 @@
     <string name="cnt_book">You cannot book now</string>
     <string name="choose_language">Change language</string>
     <string name="add_rate">Add rate</string>
+    <string name="another_services">Another services</string>
+    <string name="clear_filter">Clear filter</string>
+    <string name="phone_not_av">Phone number is not available now</string>
 
 </resources>

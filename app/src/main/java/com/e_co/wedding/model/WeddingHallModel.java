@@ -27,6 +27,8 @@ public class WeddingHallModel implements Serializable {
     private List<OfferModel> offer;
     private List<ServiceRate> service_rates;
     private ServiceRate service_rate;
+    private UserModel.Data provider_obj;
+    private List<WeddingHallModel> other_services;
 
 
     public String getId() {
@@ -119,6 +121,14 @@ public class WeddingHallModel implements Serializable {
 
     public ServiceRate getService_rate() {
         return service_rate;
+    }
+
+    public UserModel.Data getProvider_obj() {
+        return provider_obj;
+    }
+
+    public List<WeddingHallModel> getOther_services() {
+        return other_services;
     }
 
     public static class ServiceMainItem implements Serializable {
@@ -310,7 +320,6 @@ public class WeddingHallModel implements Serializable {
             return updated_at;
         }
     }
-
 
 
 }

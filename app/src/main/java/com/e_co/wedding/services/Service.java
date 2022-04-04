@@ -198,7 +198,11 @@ public interface Service {
                                              @Field("user_id") String user_id,
                                              @Field("service_id") String service_id,
                                              @Field("rate_value") int rate_value
-                                             );
+    );
 
+    @GET("api/show-services")
+    Single<Response<WeddingHallDataModel>> getAnotherService(@Query(value = "api_key") String api_key,
+                                                             @Query(value = "user_id") String user_id
+    );
 
 }

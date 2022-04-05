@@ -55,6 +55,7 @@ public class FragmentHome extends BaseFragment {
     private RateFilterAdapter rateFilterAdapter;
     private BottomSheetDialogBinding bottomSheetDialogBinding;
     private CompositeDisposable disposable = new CompositeDisposable();
+    private String rateNum = null;
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -136,18 +137,6 @@ public class FragmentHome extends BaseFragment {
             }
         });
 
-        fragmentHomeMvvm.getIsFilterRateSelected().observe(activity, aBoolean -> {
-            if (bottomSheetDialogBinding != null) {
-                if (aBoolean) {
-                    bottomSheetDialogBinding.tvClearFilter.setVisibility(View.VISIBLE);
-
-                } else {
-                    bottomSheetDialogBinding.tvClearFilter.setVisibility(View.GONE);
-
-                }
-            }
-        });
-
 
         binding.recViewCategory.setLayoutManager(new LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false));
         weddingHallDepartmentAdapter = new WeddingHallDepartmentAdapter(activity, this);
@@ -180,14 +169,17 @@ public class FragmentHome extends BaseFragment {
         bottomSheetDialogBinding = DataBindingUtil.inflate(LayoutInflater.from(activity), R.layout.bottom_sheet_dialog, null, false);
         dialog.setContentView(bottomSheetDialogBinding.getRoot());
 
-        bottomSheetDialogBinding.slider.setValues(fragmentHomeMvvm.getFilterRangeModel().getValue().getSelectedFromValue(), fragmentHomeMvvm.getFilterRangeModel().getValue().getSelectedToValue());
-        bottomSheetDialogBinding.slider.setValueFrom(fragmentHomeMvvm.getFilterRangeModel().getValue().getFromValue());
-        bottomSheetDialogBinding.slider.setValueTo(fragmentHomeMvvm.getFilterRangeModel().getValue().getToValue());
-        bottomSheetDialogBinding.slider.setStepSize(fragmentHomeMvvm.getFilterRangeModel().getValue().getStepValue());
+        FilterModel filterModel = fragmentHomeMvvm.getFilter().getValue();
 
 
-        bottomSheetDialogBinding.tvFrom.setText(fragmentHomeMvvm.getFilterRangeModel().getValue().getFromValue() + currency.getSymbol());
-        bottomSheetDialogBinding.tvTo.setText(fragmentHomeMvvm.getFilterRangeModel().getValue().getToValue() + currency.getSymbol());
+        bottomSheetDialogBinding.slider.setValues(Float.parseFloat(filterModel.getFromRange()), Float.parseFloat(filterModel.getToRange()));
+        bottomSheetDialogBinding.slider.setValueFrom(FragmentHomeMvvm.startRange);
+        bottomSheetDialogBinding.slider.setValueTo(FragmentHomeMvvm.endRange);
+        bottomSheetDialogBinding.slider.setStepSize(FragmentHomeMvvm.steps);
+
+
+        bottomSheetDialogBinding.tvFrom.setText(filterModel.getFromRange() + currency.getSymbol());
+        bottomSheetDialogBinding.tvTo.setText(filterModel.getToRange() + currency.getSymbol());
 
         bottomSheetDialogBinding.slider.setLabelFormatter(value -> {
             NumberFormat format = NumberFormat.getCurrencyInstance();
@@ -197,7 +189,6 @@ public class FragmentHome extends BaseFragment {
         });
 
         bottomSheetDialogBinding.imageClose.setOnClickListener(v -> {
-            fragmentHomeMvvm.clearFilterModel();
             dialog.dismiss();
         });
 
@@ -205,70 +196,50 @@ public class FragmentHome extends BaseFragment {
         rateFilterAdapter = new RateFilterAdapter(activity, this);
         bottomSheetDialogBinding.recView.setAdapter(rateFilterAdapter);
 
-        rateFilterAdapter.updateData(fragmentHomeMvvm.getFilterModelList().getValue(), fragmentHomeMvvm.getFilter().getValue().getRate());
+        rateFilterAdapter.updateData(fragmentHomeMvvm.getRateListData().getValue());
 
-        if (fragmentHomeMvvm.getIsFilterRateSelected().getValue() != null && fragmentHomeMvvm.getIsFilterRateSelected().getValue()) {
-            bottomSheetDialogBinding.tvClearFilter.setVisibility(View.VISIBLE);
+        if (filterModel.getRate() != null) {
+
+            bottomSheetDialogBinding.btnClear.setVisibility(View.VISIBLE);
         } else {
-            bottomSheetDialogBinding.tvClearFilter.setVisibility(View.GONE);
+            if (!filterModel.getFromRange().equals(String.valueOf(FragmentHomeMvvm.startRange)) ||
+                    !filterModel.getToRange().equals(String.valueOf(FragmentHomeMvvm.endRange))) {
+                bottomSheetDialogBinding.btnClear.setVisibility(View.VISIBLE);
+
+            } else {
+                bottomSheetDialogBinding.btnClear.setVisibility(View.GONE);
+
+            }
 
         }
 
-        bottomSheetDialogBinding.tvClearFilter.setOnClickListener(v -> {
-            fragmentHomeMvvm.getFilterRangeModel().getValue().setSelectedFromValue(FragmentHomeMvvm.startRange);
-            fragmentHomeMvvm.getFilterRangeModel().getValue().setSelectedToValue(FragmentHomeMvvm.endRange);
-            bottomSheetDialogBinding.slider.setValues(fragmentHomeMvvm.getFilterRangeModel().getValue().getSelectedFromValue(), fragmentHomeMvvm.getFilterRangeModel().getValue().getSelectedToValue());
+        bottomSheetDialogBinding.btnClear.setOnClickListener(v -> {
+            filterModel.setRate(null);
+            filterModel.setCategory_id(null);
+            filterModel.setFromRange(String.valueOf(FragmentHomeMvvm.startRange));
+            filterModel.setToRange(String.valueOf(FragmentHomeMvvm.endRange));
 
-            if (rateFilterAdapter != null && fragmentHomeMvvm.getFilterModelList().getValue() != null) {
 
-                rateFilterAdapter.updateData(fragmentHomeMvvm.getFilterModelList().getValue(), fragmentHomeMvvm.getFilter().getValue().getRate());
-            }
-            if (fragmentHomeMvvm.getFilter().getValue() != null) {
-                FilterRateModel model = fragmentHomeMvvm.getFilterRateModel().getValue();
-                model.setSelected(false);
-                model.setTitle(null);
-                fragmentHomeMvvm.getFilterRateModel().setValue(model);
+            bottomSheetDialogBinding.slider.setValues(FragmentHomeMvvm.startRange, FragmentHomeMvvm.endRange);
+
+            if (rateFilterAdapter != null) {
+
+                rateFilterAdapter.updateData(fragmentHomeMvvm.getRateListData().getValue());
             }
 
-
-            if (fragmentHomeMvvm.getFilter().getValue() != null) {
-                FilterModel filterModel = fragmentHomeMvvm.getFilter().getValue();
-                filterModel.setRate(null);
-                filterModel.setFromRange(String.valueOf(FragmentHomeMvvm.startRange));
-                filterModel.setToRange(String.valueOf(FragmentHomeMvvm.endRange));
-                fragmentHomeMvvm.getFilter().setValue(filterModel);
-
-            }
-
-            fragmentHomeMvvm.getIsFilterRateSelected().setValue(false);
             fragmentHomeMvvm.getWeddingHallData();
+            fragmentHomeMvvm.getFilter().setValue(filterModel);
             dialog.dismiss();
-        });
-
-        fragmentHomeMvvm.getFilterModelList().observe(activity, filterRateModels -> {
-            rateFilterAdapter.updateData(fragmentHomeMvvm.getFilterModelList().getValue(), fragmentHomeMvvm.getFilter().getValue().getRate());
-
         });
 
 
         bottomSheetDialogBinding.btnShowFilterResults.setOnClickListener(v -> {
+            filterModel.setRate(rateNum);
+            filterModel.setFromRange(bottomSheetDialogBinding.slider.getValues().get(0) + "");
+            filterModel.setToRange(bottomSheetDialogBinding.slider.getValues().get(1) + "");
 
-            float from = bottomSheetDialogBinding.slider.getValues().get(0);
-            float to = bottomSheetDialogBinding.slider.getValues().get(1);
-            FilterRangeModel filterRangeModel = fragmentHomeMvvm.getFilterRangeModel().getValue();
-            filterRangeModel.setSelectedFromValue(from);
-            filterRangeModel.setSelectedToValue(to);
-            fragmentHomeMvvm.getFilterRangeModel().setValue(filterRangeModel);
-
-
-            FilterModel filterModel = fragmentHomeMvvm.getFilter().getValue();
-            filterModel.setRate(fragmentHomeMvvm.getFilterRateModel().getValue().getTitle());
-            filterModel.setFromRange(filterRangeModel.getSelectedFromValue() + "");
-            filterModel.setToRange(filterRangeModel.getSelectedToValue() + "");
             fragmentHomeMvvm.getFilter().setValue(filterModel);
-
             fragmentHomeMvvm.getWeddingHallData();
-            fragmentHomeMvvm.clearFilterModel();
 
             dialog.dismiss();
         });
@@ -276,7 +247,7 @@ public class FragmentHome extends BaseFragment {
     }
 
     public void updateFilterRate(FilterRateModel model) {
-        fragmentHomeMvvm.updateFilterRateModel(model);
+        rateNum = model.getTitle();
 
     }
 

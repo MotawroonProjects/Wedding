@@ -14,7 +14,6 @@ import com.e_co.wedding.R;
 import com.e_co.wedding.model.DepartmentDataModel;
 import com.e_co.wedding.model.DepartmentModel;
 import com.e_co.wedding.model.FilterModel;
-import com.e_co.wedding.model.FilterRangeModel;
 import com.e_co.wedding.model.FilterRateModel;
 import com.e_co.wedding.model.WeddingHallDataModel;
 import com.e_co.wedding.model.WeddingHallModel;
@@ -36,15 +35,12 @@ public class FragmentHomeMvvm extends AndroidViewModel {
     private static final String TAG = "FragmentHomeMvvm";
     public static float startRange = 0.0f;
     public static float endRange = 100000.0f;
-    private float steps = 500.0f;
-    private String defaultRate =null;
+    public static float steps = 500.0f;
+    private String defaultRate = null;
     private Context context;
     private MutableLiveData<List<WeddingHallModel>> weddingHallModelMutableLiveData;
     private MutableLiveData<List<DepartmentModel>> departmentLivData;
-    private MutableLiveData<List<FilterRateModel>> filterModelListLiveData;
-    private MutableLiveData<FilterRateModel> filterRateModelMutableLiveData;
-    private MutableLiveData<FilterRangeModel> filterRangeModelMutableLiveData;
-    private MutableLiveData<Boolean> isFilterRateSelected ;
+    private MutableLiveData<List<FilterRateModel>> rateList;
 
     private MutableLiveData<FilterModel> filter;
     private MutableLiveData<Boolean> isLoadingLivData;
@@ -71,100 +67,54 @@ public class FragmentHomeMvvm extends AndroidViewModel {
         return departmentLivData;
     }
 
-    public MutableLiveData<FilterRangeModel> getFilterRangeModel() {
-        if (filterRangeModelMutableLiveData == null) {
-            filterRangeModelMutableLiveData = new MutableLiveData<>();
-            FilterRangeModel model = new FilterRangeModel(startRange, endRange, steps);
-            model.setSelectedFromValue(startRange);
-            model.setSelectedToValue(endRange);
-            filterRangeModelMutableLiveData.setValue(model);
-        }
-        return filterRangeModelMutableLiveData;
-    }
 
-
-    public MutableLiveData<FilterRateModel> getFilterRateModel() {
-        if (filterRateModelMutableLiveData == null) {
-            filterRateModelMutableLiveData = new MutableLiveData<>();
-            String rate = defaultRate;
-            if (getFilter() != null && getFilter().getValue() != null) {
-                rate = getFilter().getValue().getRate();
+    public MutableLiveData<List<FilterRateModel>> getRateListData() {
+        if (rateList == null) {
+            rateList = new MutableLiveData<>();
+            List<FilterRateModel> list = new ArrayList<>();
+            for (int x = 1; x < 6; x++) {
+                FilterRateModel model = new FilterRateModel(String.valueOf(x));
+                FilterModel filterModel = getFilter().getValue();
+                if (filterModel != null && filterModel.getRate() != null && filterModel.getRate().equals(model.getTitle())) {
+                    model.setSelected(true);
+                }
+                list.add(model);
             }
-            FilterRateModel model = new FilterRateModel(rate);
-            filterRateModelMutableLiveData.setValue(model);
+            rateList.setValue(list);
+
+        } else {
+            List<FilterRateModel> list = rateList.getValue();
+            FilterModel filterModel = getFilter().getValue();
+            if (list != null && filterModel != null) {
+                for (int x = 0; x < list.size(); x++) {
+                    FilterRateModel model = list.get(x);
+                    if (filterModel.getRate() != null && filterModel.getRate().equals(model.getTitle())) {
+                        model.setSelected(true);
+                        list.set(x, model);
+                    } else {
+                        model.setSelected(false);
+                    }
+                }
+                rateList.setValue(list);
+
+            }
+
         }
-        return filterRateModelMutableLiveData;
+        return rateList;
     }
 
-    public void updateFilterRateModel(FilterRateModel model) {
-        if (filterRateModelMutableLiveData == null) {
-            filterRateModelMutableLiveData = new MutableLiveData<>();
-        }
-
-        filterRateModelMutableLiveData.setValue(model);
-    }
 
     public MutableLiveData<FilterModel> getFilter() {
         if (filter == null) {
             filter = new MutableLiveData<>();
-            FilterModel filterModel = new FilterModel(null, getFilterRangeModel().getValue().getSelectedFromValue() + "", getFilterRangeModel().getValue().getSelectedToValue() + "", getFilterRateModel().getValue().getTitle());
+            FilterModel filterModel = new FilterModel(null, startRange + "", endRange + "", null);
             filter.setValue(filterModel);
         }
         return filter;
     }
 
-    public MutableLiveData<Boolean> getIsFilterRateSelected(){
-        if (isFilterRateSelected==null){
-            isFilterRateSelected = new MutableLiveData<>();
-        }
-        return isFilterRateSelected;
-    }
 
 
-    @SuppressLint("CheckResult")
-    public LiveData<List<FilterRateModel>> getFilterModelList() {
-        if (filterModelListLiveData == null) {
-            filterModelListLiveData = new MutableLiveData<>();
-            List<FilterRateModel> list = new ArrayList<>();
-            for (int x = 1; x < 6; x++) {
-                list.add(new FilterRateModel(String.valueOf(x)));
-            }
-            Observable.fromArray(list)
-                    .filter(list1 -> {
-                        int pos = -1;
-                        for (int index = 0; index < list1.size(); index++) {
-                            Log.e("rate",getFilter().getValue().getRate()+"");
-                            if (list1.get(index).getTitle().equals(getFilter().getValue().getRate())) {
-                                pos = index;
-                                break;
-                            }
-                        }
-                        if (pos!=-1){
-
-                            FilterRateModel model = list1.get(pos);
-                            model.setSelected(true);
-                            list1.set(pos, model);
-                        }
-
-                        return true;
-                    })
-                    .subscribeOn(Schedulers.computation())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(listData -> {
-                        filterModelListLiveData.setValue(listData);
-                    }, error -> {
-                        Log.e(TAG, "getFilterModelList: ", error);
-                    });
-         
-
-        }
-        return filterModelListLiveData;
-    }
-
-
-    public void clearFilterModel() {
-        filterModelListLiveData = null;
-    }
 
 
     public MutableLiveData<Boolean> getIsLoading() {
@@ -219,6 +169,8 @@ public class FragmentHomeMvvm extends AndroidViewModel {
         isLoadingLivData.postValue(true);
 
         filter = getFilter();
+        Log.e("cat_id", filter.getValue().getCategory_id() + "rate" + filter.getValue().getRate() + "from" + filter.getValue().getFromRange() + "to" + filter.getValue().getToRange());
+
 
         Api.getService(Tags.base_url)
                 .getWeddingHall(Tags.api_key, filter.getValue().getCategory_id(), filter.getValue().getRate(), filter.getValue().getFromRange(), filter.getValue().getToRange())
@@ -234,12 +186,7 @@ public class FragmentHomeMvvm extends AndroidViewModel {
                     @Override
                     public void onSuccess(@NonNull Response<WeddingHallDataModel> response) {
                         isLoadingLivData.postValue(false);
-                        if (filter.getValue()!=null&&filter.getValue().getRate()!=null&&Integer.parseInt(filter.getValue().getRate())>0){
-                            getIsFilterRateSelected().setValue(true);
-                        }else {
-                            getIsFilterRateSelected().setValue(false);
 
-                        }
                         if (response.isSuccessful() && response.body() != null) {
                             if (response.body().getStatus() == 200) {
                                 List<WeddingHallModel> list = response.body().getData();

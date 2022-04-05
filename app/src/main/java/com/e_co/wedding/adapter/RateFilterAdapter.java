@@ -25,8 +25,7 @@ public class RateFilterAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     private Context context;
     private LayoutInflater inflater;
     private Fragment fragment;
-    private int currentPos = 0;
-    private int oldPos = 0;
+    private MyHolder oldHolder;
 
 
     public RateFilterAdapter(Context context, Fragment fragment) {
@@ -51,40 +50,39 @@ public class RateFilterAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
         MyHolder myHolder = (MyHolder) holder;
         FilterRateModel model = list.get(position);
-        if (model.isSelected()){
-            myHolder.binding.icon.setColorFilter(ContextCompat.getColor(context,R.color.color1));
-        }else {
-            myHolder.binding.icon.setColorFilter(ContextCompat.getColor(context,R.color.black));
+        if (model.isSelected()) {
+            oldHolder = myHolder;
+            myHolder.binding.icon.setColorFilter(ContextCompat.getColor(context, R.color.color1));
+        } else {
+            myHolder.binding.icon.setColorFilter(ContextCompat.getColor(context, R.color.black));
 
         }
         myHolder.binding.setModel(model);
         myHolder.itemView.setOnClickListener(v -> {
-            currentPos = myHolder.getAdapterPosition();
-            if (oldPos != -1) {
-                FilterRateModel old = list.get(oldPos);
-                if (old.isSelected()) {
-                    old.setSelected(false);
-                    list.set(oldPos, old);
-                    notifyItemChanged(oldPos);
-                }
+
+            if (oldHolder != null) {
+                FilterRateModel oldModel = list.get(oldHolder.getAdapterPosition());
+                oldModel.setSelected(false);
+                oldHolder.binding.setModel(oldModel);
+                oldHolder.binding.icon.setColorFilter(ContextCompat.getColor(context, R.color.black));
+                list.set(oldHolder.getAdapterPosition(), oldModel);
 
             }
-            FilterRateModel currentModel = list.get(currentPos);
-            if (!currentModel.isSelected()) {
-                currentModel.setSelected(true);
-                list.set(currentPos, currentModel);
-                notifyItemChanged(currentPos);
-                oldPos = currentPos;
-            }
+            FilterRateModel selectedModel = list.get(myHolder.getAdapterPosition());
+            selectedModel.setSelected(true);
+            myHolder.binding.setModel(selectedModel);
+            myHolder.binding.icon.setColorFilter(ContextCompat.getColor(context, R.color.color1));
+            list.set(myHolder.getAdapterPosition(), selectedModel);
 
-            if (fragment instanceof FragmentHome){
+
+            if (fragment instanceof FragmentHome) {
                 FragmentHome fragmentHome = (FragmentHome) fragment;
-                fragmentHome.updateFilterRate(model);
+                fragmentHome.updateFilterRate(selectedModel);
+            } else if (fragment instanceof FragmentNearby) {
+                FragmentNearby fragmentNearby = (FragmentNearby) fragment;
+                fragmentNearby.updateFilterRate(selectedModel);
             }
-            else if(fragment instanceof FragmentNearby){
-                FragmentNearby fragmentNearby=(FragmentNearby) fragment;
-                fragmentNearby.updateFilterRate(model);
-            }
+            oldHolder = myHolder;
         });
 
 
@@ -111,29 +109,17 @@ public class RateFilterAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         }
     }
 
-    public void updateData(List<FilterRateModel> list, String rate) {
+    public void updateData(List<FilterRateModel> list) {
         this.list = list;
-        if (list!=null){
-            int pos = pos(rate);
-            if (pos!=-1){
-                currentPos = pos(rate);
-                oldPos = currentPos;
-                FilterRateModel model = this.list.get(currentPos);
-                model.setSelected(true);
-                this.list.set(currentPos,model);
-            }
-
-        }
-
         notifyDataSetChanged();
     }
 
-    private int pos(String rate){
+    private int pos(String rate) {
         int pos = -1;
-        if (list!=null){
-            if (rate!=null){
-                for (int index=0;index<list.size();index++){
-                    if (list.get(index).getTitle().equals(rate)){
+        if (list != null) {
+            if (rate != null) {
+                for (int index = 0; index < list.size(); index++) {
+                    if (list.get(index).getTitle().equals(rate)) {
                         pos = index;
                         return pos;
                     }

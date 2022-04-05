@@ -10,6 +10,7 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import com.e_co.wedding.model.DepartmentModel;
 import com.e_co.wedding.model.FilterModel;
 import com.e_co.wedding.model.FilterRangeModel;
 import com.e_co.wedding.model.FilterRateModel;
@@ -31,21 +32,21 @@ import retrofit2.Response;
 
 public class FragmentNearMvvm extends AndroidViewModel  {
     private static final String TAG = "FragmentNearMvvm";
-    private float startRange = 0.0f;
-    private float endRange = 100000.0f;
-    private float steps = 500.0f;
+    public static float startRange = 0.0f;
+    public static float endRange = 100000.0f;
+    public static float steps = 500.0f;
     private String defaultRate = null;
     private Context context;
 
 
     private MutableLiveData<List<WeddingHallModel>> weddingHallModelMutableLiveData;
-    private MutableLiveData<List<FilterRateModel>> filterModelListLiveData;
-    private MutableLiveData<FilterRateModel> filterRateModelMutableLiveData;
-    private MutableLiveData<FilterRangeModel> filterRangeModelMutableLiveData;
+    private MutableLiveData<List<FilterRateModel>> rateList;
+
     private MutableLiveData<FilterModel> filter;
     private MutableLiveData<Boolean> isLoadingLivData;
 
     private CompositeDisposable disposable = new CompositeDisposable();
+
 
 
     public FragmentNearMvvm(@NonNull Application application) {
@@ -64,92 +65,51 @@ public class FragmentNearMvvm extends AndroidViewModel  {
     }
 
 
-    public MutableLiveData<FilterRangeModel> getFilterRangeModel() {
-        if (filterRangeModelMutableLiveData == null) {
-            filterRangeModelMutableLiveData = new MutableLiveData<>();
-            FilterRangeModel model = new FilterRangeModel(startRange, endRange, steps);
-            model.setSelectedFromValue(startRange);
-            model.setSelectedToValue(endRange);
-            filterRangeModelMutableLiveData.setValue(model);
-        }
-        return filterRangeModelMutableLiveData;
-    }
 
-
-    public LiveData<FilterRateModel> getFilterRateModel() {
-        if (filterRateModelMutableLiveData == null) {
-            filterRateModelMutableLiveData = new MutableLiveData<>();
-            String rate = defaultRate;
-            if (getFilter() != null && getFilter().getValue() != null) {
-                rate = getFilter().getValue().getRate();
+    public MutableLiveData<List<FilterRateModel>> getRateListData() {
+        if (rateList == null) {
+            rateList = new MutableLiveData<>();
+            List<FilterRateModel> list = new ArrayList<>();
+            for (int x = 1; x < 6; x++) {
+                FilterRateModel model = new FilterRateModel(String.valueOf(x));
+                FilterModel filterModel = getFilter().getValue();
+                if (filterModel != null && filterModel.getRate() != null && filterModel.getRate().equals(model.getTitle())) {
+                    model.setSelected(true);
+                }
+                list.add(model);
             }
-            FilterRateModel model = new FilterRateModel(rate);
-            filterRateModelMutableLiveData.setValue(model);
+            rateList.setValue(list);
+
+        } else {
+            List<FilterRateModel> list = rateList.getValue();
+            FilterModel filterModel = getFilter().getValue();
+            if (list != null && filterModel != null) {
+                for (int x = 0; x < list.size(); x++) {
+                    FilterRateModel model = list.get(x);
+                    if (filterModel.getRate() != null && filterModel.getRate().equals(model.getTitle())) {
+                        model.setSelected(true);
+                        list.set(x, model);
+                    } else {
+                        model.setSelected(false);
+                    }
+                }
+                rateList.setValue(list);
+
+            }
+
         }
-        return filterRateModelMutableLiveData;
+        return rateList;
     }
 
-    public void updateFilterRateModel(FilterRateModel model) {
-        if (filterRateModelMutableLiveData == null) {
-            filterRateModelMutableLiveData = new MutableLiveData<>();
-        }
-
-        filterRateModelMutableLiveData.setValue(model);
-    }
 
     public MutableLiveData<FilterModel> getFilter() {
         if (filter == null) {
             filter = new MutableLiveData<>();
-            FilterModel filterModel = new FilterModel(null, getFilterRangeModel().getValue().getSelectedFromValue() + "", getFilterRangeModel().getValue().getSelectedToValue() + "", getFilterRateModel().getValue().getTitle());
+            FilterModel filterModel = new FilterModel(null, startRange + "", endRange + "", null);
             filter.setValue(filterModel);
         }
         return filter;
     }
-
-
-    @SuppressLint("CheckResult")
-    public LiveData<List<FilterRateModel>> getFilterModelList() {
-        if (filterModelListLiveData == null) {
-            filterModelListLiveData = new MutableLiveData<>();
-            List<FilterRateModel> list = new ArrayList<>();
-            for (int x = 1; x < 6; x++) {
-                list.add(new FilterRateModel(String.valueOf(x)));
-            }
-            Observable.fromArray(list)
-                    .filter(list1 -> {
-                        int pos = -1;
-                        for (int index = 0; index < list1.size(); index++) {
-                            if (list1.get(index).getTitle().equals(getFilter().getValue().getRate())) {
-                                pos = index;
-                                break;
-                            }
-                        }
-                        if (pos != -1) {
-                            FilterRateModel model = list1.get(pos);
-                            model.setSelected(true);
-                            list1.set(pos, model);
-                        }
-
-                        return true;
-                    })
-                    .subscribeOn(Schedulers.computation())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(listData -> {
-                        filterModelListLiveData.setValue(listData);
-                    }, error -> {
-                        Log.e(TAG, "getFilterModelList: ", error);
-                    });
-
-
-        }
-        return filterModelListLiveData;
-    }
-
-
-    public void clearFilterModel() {
-        filterModelListLiveData = null;
-    }
-
 
     public MutableLiveData<Boolean> getIsLoading() {
         if (isLoadingLivData == null) {

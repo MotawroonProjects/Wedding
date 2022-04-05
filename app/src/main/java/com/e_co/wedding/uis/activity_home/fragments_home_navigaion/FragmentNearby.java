@@ -26,6 +26,7 @@ import com.e_co.wedding.model.FilterModel;
 import com.e_co.wedding.model.FilterRangeModel;
 import com.e_co.wedding.model.FilterRateModel;
 import com.e_co.wedding.model.WeddingHallModel;
+import com.e_co.wedding.mvvm.FragmentHomeMvvm;
 import com.e_co.wedding.mvvm.FragmentNearMvvm;
 import com.e_co.wedding.uis.activity_base.BaseFragment;
 import com.e_co.wedding.databinding.FragmentNearbyBinding;
@@ -60,9 +61,11 @@ public class FragmentNearby extends BaseFragment implements OnMapReadyCallback {
     private float zoom = 15.0f;
     private ActivityResultLauncher<String> permissionLauncher;
     private FragmentNearMvvm fragmentNearMvvm;
+    private BottomSheetDialogBinding bottomSheetDialogBinding;
     private MapWeddingHallAdapter adapter;
     private RateFilterAdapter rateFilterAdapter;
     private CompositeDisposable disposable = new CompositeDisposable();
+    private String rateNum = null;
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -118,7 +121,7 @@ public class FragmentNearby extends BaseFragment implements OnMapReadyCallback {
 
         try {
             fragmentNearMvvm.getWeddingHall().observe(activity, weddingHallModels -> {
-                if (adapter!=null&&weddingHallModels!=null){
+                if (adapter != null && weddingHallModels != null) {
                     adapter.updateList(fragmentNearMvvm.getWeddingHall().getValue());
                 }
             });
@@ -130,7 +133,7 @@ public class FragmentNearby extends BaseFragment implements OnMapReadyCallback {
                     binding.progBar.setVisibility(View.VISIBLE);
                     binding.flLoading.setVisibility(View.VISIBLE);
                     binding.cardNoData.setVisibility(View.GONE);
-                    if (adapter!=null){
+                    if (adapter != null) {
                         adapter.updateList(null);
 
                     }
@@ -140,8 +143,8 @@ public class FragmentNearby extends BaseFragment implements OnMapReadyCallback {
 
             fragmentNearMvvm.getWeddingHall().observe(activity, weddingHallModels -> {
                 if (weddingHallModels.size() > 0) {
-                    if (fragmentNearMvvm.getWeddingHall()!=null&&fragmentNearMvvm.getWeddingHall().getValue()!=null){
-                        if (adapter!=null){
+                    if (fragmentNearMvvm.getWeddingHall() != null && fragmentNearMvvm.getWeddingHall().getValue() != null) {
+                        if (adapter != null) {
                             adapter.updateList(fragmentNearMvvm.getWeddingHall().getValue());
                             updateMapData(weddingHallModels);
                             binding.cardNoData.setVisibility(View.GONE);
@@ -164,7 +167,7 @@ public class FragmentNearby extends BaseFragment implements OnMapReadyCallback {
             });
 
 
-        }catch (Exception e){
+        } catch (Exception e) {
 
         }
 
@@ -187,9 +190,13 @@ public class FragmentNearby extends BaseFragment implements OnMapReadyCallback {
 
 
     private void updateUI() {
-        SupportMapFragment supportMapFragment = SupportMapFragment.newInstance();
-        getChildFragmentManager().beginTransaction().replace(R.id.map, supportMapFragment).commitAllowingStateLoss();
-        supportMapFragment.getMapAsync(this);
+        try {
+            SupportMapFragment supportMapFragment = SupportMapFragment.newInstance();
+            getChildFragmentManager().beginTransaction().replace(R.id.map, supportMapFragment).commitAllowingStateLoss();
+            supportMapFragment.getMapAsync(this);
+
+        }catch (Exception e){}
+
 
 
     }
@@ -208,11 +215,11 @@ public class FragmentNearby extends BaseFragment implements OnMapReadyCallback {
     }
 
     private void addMarker(double lat, double lng) {
-        if (mMap!=null){
+        if (mMap != null) {
             try {
                 mMap.addMarker(new MarkerOptions().position(new LatLng(lat, lng)).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
 
-            }catch (Exception e){
+            } catch (Exception e) {
 
             }
         }
@@ -228,63 +235,82 @@ public class FragmentNearby extends BaseFragment implements OnMapReadyCallback {
 
 
     private void createSheetDialog() {
-
-
         Currency currency = Currency.getInstance("EGP");
         BottomSheetDialog dialog = new BottomSheetDialog(activity);
-        BottomSheetDialogBinding binding = DataBindingUtil.inflate(LayoutInflater.from(activity), R.layout.bottom_sheet_dialog, null, false);
-        dialog.setContentView(binding.getRoot());
+        bottomSheetDialogBinding = DataBindingUtil.inflate(LayoutInflater.from(activity), R.layout.bottom_sheet_dialog, null, false);
+        dialog.setContentView(bottomSheetDialogBinding.getRoot());
 
-        binding.slider.setValues(fragmentNearMvvm.getFilterRangeModel().getValue().getSelectedFromValue(), fragmentNearMvvm.getFilterRangeModel().getValue().getSelectedToValue());
-        binding.slider.setValueFrom(fragmentNearMvvm.getFilterRangeModel().getValue().getFromValue());
-        binding.slider.setValueTo(fragmentNearMvvm.getFilterRangeModel().getValue().getToValue());
-        binding.slider.setStepSize(fragmentNearMvvm.getFilterRangeModel().getValue().getStepValue());
+        FilterModel filterModel = fragmentNearMvvm.getFilter().getValue();
 
 
-        binding.tvFrom.setText(fragmentNearMvvm.getFilterRangeModel().getValue().getFromValue() + currency.getSymbol());
-        binding.tvTo.setText(fragmentNearMvvm.getFilterRangeModel().getValue().getToValue() + currency.getSymbol());
+        bottomSheetDialogBinding.slider.setValues(Float.parseFloat(filterModel.getFromRange()), Float.parseFloat(filterModel.getToRange()));
+        bottomSheetDialogBinding.slider.setValueFrom(FragmentHomeMvvm.startRange);
+        bottomSheetDialogBinding.slider.setValueTo(FragmentHomeMvvm.endRange);
+        bottomSheetDialogBinding.slider.setStepSize(FragmentHomeMvvm.steps);
 
-        binding.slider.setLabelFormatter(value -> {
+
+        bottomSheetDialogBinding.tvFrom.setText(filterModel.getFromRange() + currency.getSymbol());
+        bottomSheetDialogBinding.tvTo.setText(filterModel.getToRange() + currency.getSymbol());
+
+        bottomSheetDialogBinding.slider.setLabelFormatter(value -> {
             NumberFormat format = NumberFormat.getCurrencyInstance();
             format.setMaximumFractionDigits(0);
             format.setCurrency(currency);
             return format.format(value);
         });
 
-        binding.imageClose.setOnClickListener(v -> {
-            fragmentNearMvvm.clearFilterModel();
+        bottomSheetDialogBinding.imageClose.setOnClickListener(v -> {
             dialog.dismiss();
         });
 
-        binding.recView.setLayoutManager(new LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false));
+        bottomSheetDialogBinding.recView.setLayoutManager(new LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false));
         rateFilterAdapter = new RateFilterAdapter(activity, this);
-        binding.recView.setAdapter(rateFilterAdapter);
-        rateFilterAdapter.updateData(fragmentNearMvvm.getFilterModelList().getValue(), fragmentNearMvvm.getFilter().getValue().getRate());
+        bottomSheetDialogBinding.recView.setAdapter(rateFilterAdapter);
+
+        rateFilterAdapter.updateData(fragmentNearMvvm.getRateListData().getValue());
+
+        if (filterModel.getRate() != null) {
+
+            bottomSheetDialogBinding.btnClear.setVisibility(View.VISIBLE);
+        } else {
+            if (!filterModel.getFromRange().equals(String.valueOf(FragmentHomeMvvm.startRange)) ||
+                    !filterModel.getToRange().equals(String.valueOf(FragmentHomeMvvm.endRange))) {
+                bottomSheetDialogBinding.btnClear.setVisibility(View.VISIBLE);
+
+            } else {
+                bottomSheetDialogBinding.btnClear.setVisibility(View.GONE);
+
+            }
+
+        }
+
+        bottomSheetDialogBinding.btnClear.setOnClickListener(v -> {
+            filterModel.setRate(null);
+            filterModel.setCategory_id(null);
+            filterModel.setFromRange(String.valueOf(FragmentHomeMvvm.startRange));
+            filterModel.setToRange(String.valueOf(FragmentHomeMvvm.endRange));
 
 
-        fragmentNearMvvm.getFilterModelList().observe(activity, filterRateModels -> {
-            rateFilterAdapter.updateData(fragmentNearMvvm.getFilterModelList().getValue(), fragmentNearMvvm.getFilter().getValue().getRate());
+            bottomSheetDialogBinding.slider.setValues(FragmentHomeMvvm.startRange, FragmentHomeMvvm.endRange);
 
-        });
+            if (rateFilterAdapter != null) {
 
-        binding.btnShowFilterResults.setOnClickListener(v -> {
-
-            float from = binding.slider.getValues().get(0);
-            float to = binding.slider.getValues().get(1);
-            FilterRangeModel filterRangeModel = fragmentNearMvvm.getFilterRangeModel().getValue();
-            filterRangeModel.setSelectedFromValue(from);
-            filterRangeModel.setSelectedToValue(to);
-            fragmentNearMvvm.getFilterRangeModel().setValue(filterRangeModel);
-
-
-            FilterModel filterModel = fragmentNearMvvm.getFilter().getValue();
-            filterModel.setRate(fragmentNearMvvm.getFilterRateModel().getValue().getTitle());
-            filterModel.setFromRange(filterRangeModel.getSelectedFromValue() + "");
-            filterModel.setToRange(filterRangeModel.getSelectedToValue() + "");
-            fragmentNearMvvm.getFilter().setValue(filterModel);
+                rateFilterAdapter.updateData(fragmentNearMvvm.getRateListData().getValue());
+            }
 
             fragmentNearMvvm.getWeddingHallData();
-            fragmentNearMvvm.clearFilterModel();
+            fragmentNearMvvm.getFilter().setValue(filterModel);
+            dialog.dismiss();
+        });
+
+
+        bottomSheetDialogBinding.btnShowFilterResults.setOnClickListener(v -> {
+            filterModel.setRate(rateNum);
+            filterModel.setFromRange(bottomSheetDialogBinding.slider.getValues().get(0) + "");
+            filterModel.setToRange(bottomSheetDialogBinding.slider.getValues().get(1) + "");
+
+            fragmentNearMvvm.getFilter().setValue(filterModel);
+            fragmentNearMvvm.getWeddingHallData();
 
             dialog.dismiss();
         });
@@ -292,7 +318,7 @@ public class FragmentNearby extends BaseFragment implements OnMapReadyCallback {
     }
 
     public void updateFilterRate(FilterRateModel model) {
-        fragmentNearMvvm.updateFilterRateModel(model);
+        rateNum = model.getTitle();
     }
 
     private void updateMapData(List<WeddingHallModel> data) {
@@ -303,19 +329,19 @@ public class FragmentNearby extends BaseFragment implements OnMapReadyCallback {
             addMarker(Double.parseDouble(weddingHallModel.getLatitude()), Double.parseDouble(weddingHallModel.getLongitude()));
         }
 
-        if (mMap!=null){
-           try {
-               if (data.size() >= 2) {
-                   mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds.build(), 100));
+        if (mMap != null) {
+            try {
+                if (data.size() >= 2) {
+                    mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds.build(), 100));
 
-               } else if (data.size() == 1) {
-                   LatLng latLng = new LatLng(Double.parseDouble(data.get(0).getLatitude()), Double.parseDouble(data.get(0).getLongitude()));
-                   mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom));
+                } else if (data.size() == 1) {
+                    LatLng latLng = new LatLng(Double.parseDouble(data.get(0).getLatitude()), Double.parseDouble(data.get(0).getLongitude()));
+                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom));
 
-               }
-           }catch (Exception e){}
+                }
+            } catch (Exception e) {
+            }
         }
-
 
 
     }

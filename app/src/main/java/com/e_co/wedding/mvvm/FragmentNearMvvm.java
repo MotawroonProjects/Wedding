@@ -30,7 +30,7 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import retrofit2.Response;
 
-public class FragmentNearMvvm extends AndroidViewModel  {
+public class FragmentNearMvvm extends AndroidViewModel {
     private static final String TAG = "FragmentNearMvvm";
     public static float startRange = 0.0f;
     public static float endRange = 100000.0f;
@@ -48,13 +48,10 @@ public class FragmentNearMvvm extends AndroidViewModel  {
     private CompositeDisposable disposable = new CompositeDisposable();
 
 
-
     public FragmentNearMvvm(@NonNull Application application) {
         super(application);
         context = application.getApplicationContext();
     }
-
-
 
 
     public LiveData<List<WeddingHallModel>> getWeddingHall() {
@@ -63,7 +60,6 @@ public class FragmentNearMvvm extends AndroidViewModel  {
         }
         return weddingHallModelMutableLiveData;
     }
-
 
 
     public MutableLiveData<List<FilterRateModel>> getRateListData() {
@@ -125,7 +121,7 @@ public class FragmentNearMvvm extends AndroidViewModel  {
 
         filter = getFilter();
 
-        Log.e("sada",filter.getValue().getRate()+"__"+filter.getValue().getFromRange()+"__"+filter.getValue().getToRange());
+        Log.e("sada", filter.getValue().getRate() + "__" + filter.getValue().getFromRange() + "__" + filter.getValue().getToRange());
         Api.getService(Tags.base_url)
                 .getWeddingHall(Tags.api_key, null, filter.getValue().getRate(), filter.getValue().getFromRange(), filter.getValue().getToRange())
                 .subscribeOn(Schedulers.io())
@@ -145,7 +141,7 @@ public class FragmentNearMvvm extends AndroidViewModel  {
                             if (response.body().getStatus() == 200) {
                                 List<WeddingHallModel> list = response.body().getData();
                                 weddingHallModelMutableLiveData.setValue(list);
-                                Log.e("size",list.size()+"");
+                                Log.e("size", list.size() + "");
                             }
                         }
                     }

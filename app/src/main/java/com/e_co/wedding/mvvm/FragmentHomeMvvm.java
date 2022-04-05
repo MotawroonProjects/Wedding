@@ -114,9 +114,6 @@ public class FragmentHomeMvvm extends AndroidViewModel {
     }
 
 
-
-
-
     public MutableLiveData<Boolean> getIsLoading() {
         if (isLoadingLivData == null) {
             isLoadingLivData = new MutableLiveData<>();

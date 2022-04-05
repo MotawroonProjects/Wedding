@@ -195,8 +195,8 @@ public class FragmentNearby extends BaseFragment implements OnMapReadyCallback {
             getChildFragmentManager().beginTransaction().replace(R.id.map, supportMapFragment).commitAllowingStateLoss();
             supportMapFragment.getMapAsync(this);
 
-        }catch (Exception e){}
-
+        } catch (Exception e) {
+        }
 
 
     }
